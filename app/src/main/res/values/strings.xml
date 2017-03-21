@@ -1,8 +1,98 @@
 <resources>
-    <string name="app_name">LalaJiKiDukan</string>
+    <string name="app_name">E Shop</string>
+    <string name="action_settings">Settings</string>
 
+    <!-- Nav Drawer related strings BEGIN -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_home">Home</string>
+    <string name="action_information">My Information</string>
+    <string name="action_addresses">My Addresses</string>
+    <string name="action_orders">My Orders</string>
+    <string name="action_order_details">Order Details</string>
+    <string name="action_cart">My Cart</string>
+    <string name="action_other">Others</string>
+    <string name="action_help_support">Help &amp; Support</string>
+    <string name="action_share">Share</string>
+    <string name="action_rate">Rate</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_view_cart">View Cart</string>
+    <string name="action_search">Search</string>
+    <string name="action_expand">Expand</string>
+    <string name="action_collapse">Collapse</string>
+    <string name="action_wishlist">Wishlist</string>
+    <!-- Nav Drawer related strings END -->
 
-    <string name="action_settings">Settings</string>
+    <!-- Network & Location Strings BEGIN -->
+    <string name="network_alert_title">Internet Connection Disabled</string>
+    <string name="network_alert_message">Turn on Internet Connection</string>
+    <string name="location_alert_title">Location off!</string>
+    <string name="location_alert_message">Turn on location</string>
+    <!-- Network & Location Strings END -->
+
+    <!-- Activities & Fragments related strings BEGIN -->
+    <string name="title_login_activity">Welcome</string>
+    <string name="title_login_fragment">Login</string>
+    <string name="title_register_fragment">Register</string>
+    <!-- Activities & Fragments related strings END -->
+
+    <!-- Login Activity related strings BEGIN -->
+    <string name="login_mobile_no">Mobile Number</string>
+    <string name="login_password">Password</string>
+    <string name="register_first_name">First Name</string>
+    <string name="register_last_name">Last Name</string>
+    <string name="register_email">Email Address</string>
+    <string name="register_confirm_password">Confirm Password</string>
+    <string name="register_country">Country</string>
+    <string name="register_state">State</string>
+    <string name="register_city">City</string>
+    <!-- Login Activity related strings END -->
+
+    <!-- Internet Connection related string BEGIN -->
+    <string name="device_offline">Turn on Internet Connection</string>
+    <string name="cant_connect_to_server">Couldn\'t reach to server</string>
+    <!-- Internet Connection related string END -->
+
+    <!-- Dummy strings BEGIN -->
+    <string name="cat_1">Household Needs</string>
+    <string name="cat_2">Fitness Devices</string>
+    <string name="cat_3">Vegetables</string>
+    <string name="delivery_by">Delivery by</string>
+    <string name="delivery_in">Delivery in</string>
+    <string name="delivery_time">Today</string>
+    <string name="dummy_location">Hill Drive, Bhavnagar</string>
+    <string name="add_to_cart">Add</string>
+    <string name="cart">Cart</string>
+    <string name="select_quantity">Quantity</string>
+    <string name="zero">0</string>
+    <string name="one">1</string>
+    <string name="no_item">No Items found</string>
+    <!-- Dummy strings END -->
+
+    <!-- Search fragment's strings BEGIN -->
+    <string name="search_hint">Search your Item</string>
+    <string name="search_clear">Clear</string>
+    <!-- Search fragment's strings END -->
+
+    <!-- Order fragment's strings BEGIN -->
+    <string name="order_id">Order ID:</string>
+    <string name="order_date">Date:</string>
+    <string name="order_price">Price:</string>
+    <string name="order_status">Status:</string>
+    <!-- Order fragment's strings END -->
+
+    <!-- Intro Activity's strings BEGIN -->
+    <string name="slide_1_african_story_books">New African Story Books</string>
+    <string name="slide_2_volunteer_professionals">Created by Volunteer Professionals</string>
+    <string name="slide_3_download_and_go">Download and Read on the go</string>
+    <string name="slide_4_different_languages">Available in different languages</string>
+    <string name="slide_1_african_story_books_subtitle">That anyone can freely translate and distribute.</string>
+    <string name="slide_2_volunteer_professionals_subtitle">On a single day, designers, writers and illustrators meet to create cool books.</string>
+    <string name="slide_3_download_and_go_subtitle">On the bus, in a train, wherever you are - the books are there too.</string>
+    <string name="slide_4_different_languages_subtitle">English, Zulu, Afrikaans, Xhosa and more!</string>
+    <!-- Intro Activity's strings END -->
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_splash">SplashActivity</string>
 </resources>

@@ -5,13 +5,23 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:fitsSystemWindows="true"
+    tools:context="com.grocery.hr.lalajikidukan.MainActivity"
     tools:openDrawer="start">
 
-    <include
-        layout="@layout/app_bar_home"
+
+   <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/flContentMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!--<include layout="@layout/include_cart" />-->
+    </FrameLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
@@ -19,7 +29,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_home"
-        app:menu="@menu/activity_home_drawer" />
+        app:menu="@menu/nav_main" />
 
 </android.support.v4.widget.DrawerLayout>
+
+
+
