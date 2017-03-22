@@ -7,7 +7,7 @@ public class AppPrefs extends BasePrefs {
     public static final String TAG = AppPrefs.class.getSimpleName();
     private final String FirstLaunch = "FirstLaunch";
     private final String LoggedIn = "LoggedIn";
-    private final String UserID = "UserID";
+    private final String Password = "Password";
     private final String MobileNo = "MobileNo";
     private final String CartTotal = "CartTotal";
     private final String CartItem = "CartItem";
@@ -35,16 +35,16 @@ public class AppPrefs extends BasePrefs {
         putBoolean(LoggedIn, loggedIn);
     }
 
-    public String getUserID() {
-        return getString(UserID, "0");
+    public String getPassword() {
+        return "vipul";
     }
 
-    public void setUserID(String userID) {
-        putString(UserID, userID);
+    public void setPassword(String password) {
+        putString(Password, password);
     }
 
     public String getMobileNo() {
-        return getString(MobileNo);
+        return "9729012780";
     }
 
     public void setMobileNo(String mobileNo) {

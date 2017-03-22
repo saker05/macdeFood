@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <!--<include layout="@layout/include_cart" />-->
+        <include layout="@layout/include_cart" />
     </FrameLayout>
 
     <android.support.design.widget.NavigationView
@@ -32,6 +32,4 @@
         app:menu="@menu/nav_main" />
 
 </android.support.v4.widget.DrawerLayout>
-
-
 
