@@ -1,15 +1,22 @@
 package com.grocery.hr.lalajikidukan.utils;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.util.Log;
 import android.util.TypedValue;
 
 import com.grocery.hr.lalajikidukan.R;
+import com.grocery.hr.lalajikidukan.backend.LocationService;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -39,12 +46,12 @@ public class Utils {
         return (networkInfo != null && networkInfo.isConnected());
     }
 
-    public String getToServer(String url, Map<String,String> pairs) throws Exception {
+    public String getToServer(String url, Map<String, String> pairs) throws Exception {
         okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
         okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
 
-        if(pairs!=null){
-            String encoding = Base64.encodeToString((pairs.get("user")+":"+pairs.get("passwd")).getBytes("UTF-8"),Base64.NO_WRAP);
+        if (pairs != null) {
+            String encoding = Base64.encodeToString((pairs.get("user") + ":" + pairs.get("passwd")).getBytes("UTF-8"), Base64.NO_WRAP);
             builder.addHeader("Authorization", "Basic " + encoding);
         }
         // Log.i(TAG, "getToServer: url is: " + url);
@@ -54,7 +61,7 @@ public class Utils {
         if (!response.isSuccessful()) {
             throw new IOException(response.message() + " " + response.toString());
         }
-        String responses=response.body().string();
+        String responses = response.body().string();
         return responses;
     }
 
@@ -65,6 +72,98 @@ public class Utils {
                     activity.getResources().getDisplayMetrics());
         }
         return (int) 56d;
+    }
+
+    public AlertDialog showMessage(Context context,
+                                   String title,
+                                   String message,
+                                   String positiveButton,
+                                   DialogInterface.OnClickListener positiveButtonListener) {
+        return new AlertDialog.Builder(context, R.style.AppAlertDialogTheme)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(positiveButton, positiveButtonListener)
+                .setCancelable(false)
+                .show();
+    }
+
+    public AlertDialog showMessage(Context context,
+                                   String title,
+                                   String message,
+                                   String positiveButton,
+                                   DialogInterface.OnClickListener positiveButtonListener,
+                                   String negativeButton,
+                                   DialogInterface.OnClickListener negativeButtonListener) {
+        return new AlertDialog.Builder(context, R.style.AppAlertDialogTheme)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(positiveButton, positiveButtonListener)
+                .setNegativeButton(negativeButton, negativeButtonListener)
+                .setCancelable(false)
+                .show();
+    }
+
+
+    public AlertDialog checkLocationSettings(final Context context) {
+        if (isGPSLocationEnabled(context)) {
+            LocationService.start(context);
+        } else {
+            return showLocationMessage(context);
+        }
+        return null;
+    }
+
+    public boolean isGPSLocationEnabled(final Context context) {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        try {
+            return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "isGPSLocationEnabled(): " + e.getMessage());
+        }
+        return false;
+    }
+
+    private AlertDialog showLocationMessage(final Context context) {
+        return showMessage(context, context.getString(R.string.location_alert_title),
+                context.getString(R.string.location_alert_message),
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                        context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                }, "No", null);
+    }
+
+    public boolean isNetworkLocationEnabled(final Context context) {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        try {
+            return lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "isNetworkLocationEnabled(): " + e.getMessage());
+        }
+        return false;
+    }
+
+    public String postToServer(String url, List<Pair<String, String>> pairs) throws Exception {
+        okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
+        okhttp3.Request.Builder builder = new okhttp3.Request.Builder().url(url);
+
+        if (pairs != null) {
+            okhttp3.FormBody.Builder postData = new okhttp3.FormBody.Builder();
+            for (Pair<String, String> pair : pairs) {
+                postData.add(pair.first, pair.second);
+            }
+            builder.post(postData.build());
+        }
+        okhttp3.Request request = builder.build();
+        okhttp3.Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) {
+            throw new IOException(response.message() + " " + response.toString());
+        }
+        return response.body().string();
     }
 
 }
