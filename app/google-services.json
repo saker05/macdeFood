@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "37685467271",
+    "firebase_url": "https://lala-ji-ki-dukan.firebaseio.com",
+    "project_id": "lala-ji-ki-dukan",
+    "storage_bucket": "lala-ji-ki-dukan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37685467271:android:44a5c2b5d0057407",
+        "android_client_info": {
+          "package_name": "com.grocery.hr.lalajikidukan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "37685467271-o8alji8nhnbf88f4ff00b4sg26qn8anh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlnvZsm5GcJrUWxtVZnJtBk1rxa6blCjE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

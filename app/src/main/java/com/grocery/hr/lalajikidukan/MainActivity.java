@@ -1,5 +1,9 @@
 package com.grocery.hr.lalajikidukan;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -21,6 +25,7 @@ import com.grocery.hr.lalajikidukan.fragments.CartFragment;
 import com.grocery.hr.lalajikidukan.manager.CartManager;
 import com.grocery.hr.lalajikidukan.preferences.AppPrefs;
 import com.grocery.hr.lalajikidukan.preferences.AppSharedPreference;
+import com.grocery.hr.lalajikidukan.service.MyFirebaseInstanceIdService;
 import com.grocery.hr.lalajikidukan.utils.Utils;
 
 import butterknife.BindView;
@@ -61,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog mNetworkAlert;
     private AlertDialog mLocationAlert;
 
+    private BroadcastReceiver broadcastReceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
         cartManager = CartManager.getInstance(this);
         mHandler = new Handler();
         mHandler = new Handler();
-        mUtils=  Utils.getInstance();
-        appPrefs=AppPrefs.getInstance();
+        mUtils = Utils.getInstance();
+        appPrefs = AppPrefs.getInstance();
     }
 
     @Override
@@ -83,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 setUpNavView();
                 /*setupView();*/
                 showCart();
+                doesNotificationClicked();
             }
         });
     }
@@ -236,6 +244,14 @@ public class MainActivity extends AppCompatActivity {
         mLocationAlert = mUtils.checkLocationSettings(this);
     }
 
-
+    public void doesNotificationClicked() {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String action = extras.getString("action");
+            if (AppConstants.Notification.NOTIFICATION_ACTION_CART.equals("cart")) {
+                loadFragment(2);
+            }
+        }
+    }
 
 }

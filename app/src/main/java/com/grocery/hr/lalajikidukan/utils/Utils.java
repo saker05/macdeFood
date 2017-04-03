@@ -18,10 +18,15 @@ import android.util.TypedValue;
 import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.backend.LocationService;
 
+import org.json.JSONArray;
+
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 /**
  * Created by vipul on 19/3/17.
@@ -30,8 +35,8 @@ import java.util.Map;
 public class Utils {
 
     public static final String TAG = Utils.class.getSimpleName();
-    public static final String baseURL = "http://192.168.1.7:8080/GroceryApp";
     private static Utils ourInstance = new Utils();
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private Utils() {
     }
@@ -46,24 +51,6 @@ public class Utils {
         return (networkInfo != null && networkInfo.isConnected());
     }
 
-    public String getToServer(String url, Map<String, String> pairs) throws Exception {
-        okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
-        okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
-
-        if (pairs != null) {
-            String encoding = Base64.encodeToString((pairs.get("user") + ":" + pairs.get("passwd")).getBytes("UTF-8"), Base64.NO_WRAP);
-            builder.addHeader("Authorization", "Basic " + encoding);
-        }
-        // Log.i(TAG, "getToServer: url is: " + url);
-        builder.url(url);
-        okhttp3.Request request = builder.build();
-        okhttp3.Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) {
-            throw new IOException(response.message() + " " + response.toString());
-        }
-        String responses = response.body().string();
-        return responses;
-    }
 
     public int getActionBarSize(AppCompatActivity activity) {
         TypedValue value = new TypedValue();
@@ -147,17 +134,35 @@ public class Utils {
         return false;
     }
 
-    public String postToServer(String url, List<Pair<String, String>> pairs) throws Exception {
+    public String postToServer(String url, Map<String, String> pairs, String data) throws Exception {
         okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
         okhttp3.Request.Builder builder = new okhttp3.Request.Builder().url(url);
 
         if (pairs != null) {
-            okhttp3.FormBody.Builder postData = new okhttp3.FormBody.Builder();
-            for (Pair<String, String> pair : pairs) {
-                postData.add(pair.first, pair.second);
-            }
-            builder.post(postData.build());
+            String encoding = Base64.encodeToString((pairs.get("user") + ":" + pairs.get("passwd")).getBytes("UTF-8"), Base64.NO_WRAP);
+            builder.addHeader("Authorization", "Basic " + encoding);
         }
+        RequestBody body = RequestBody.create(JSON, data);
+        builder.put(body);
+        okhttp3.Request request = builder.build();
+        okhttp3.Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) {
+            throw new IOException(response.message() + " " + response.toString());
+        }
+        return response.body().string();
+    }
+
+
+    public  String getFromServer(String url, Map<String, String> pairs) throws Exception {
+        okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
+        okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
+
+        if (pairs != null) {
+            String encoding = Base64.encodeToString((pairs.get("user") + ":" + pairs.get("passwd")).getBytes("UTF-8"), Base64.NO_WRAP);
+            builder.addHeader("Authorization", "Basic " + encoding);
+        }
+        // Log.i(TAG, "getToServer: url is: " + url);
+        builder.url(url);
         okhttp3.Request request = builder.build();
         okhttp3.Response response = client.newCall(request).execute();
         if (!response.isSuccessful()) {

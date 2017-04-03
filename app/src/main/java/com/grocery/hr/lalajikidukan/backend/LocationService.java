@@ -213,7 +213,7 @@ public class LocationService extends Service
         @Override
         protected String doInBackground(LatLng... latLng) {
             try {
-                return mUtils.postToServer("http://maps.googleapis.com/maps/api/geocode/json?latlng="
+                return mUtils.getFromServer("http://maps.googleapis.com/maps/api/geocode/json?latlng="
                         + latLng[0].latitude + "," + latLng[0].longitude + "&sensor=true", null);
             } catch (Exception e) {
                 Log.e(TAG, "GetAddressFromLatLng::doInBackground::Exception" + e.getMessage());
