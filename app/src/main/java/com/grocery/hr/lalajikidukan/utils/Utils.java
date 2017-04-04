@@ -17,11 +17,14 @@ import android.util.TypedValue;
 
 import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.backend.LocationService;
+import com.grocery.hr.lalajikidukan.constants.AppConstants;
+import com.grocery.hr.lalajikidukan.preferences.AppSharedPreference;
 
 import org.json.JSONArray;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -170,5 +173,17 @@ public class Utils {
         }
         return response.body().string();
     }
+
+    public Map<String,String> getUerPasswordMap(Context context){
+        if(AppSharedPreference.getString(context, AppConstants.User.MOBILE_NO, "abc").equals("abc") ){ // no use name password store in shared preference
+            return null;
+        }
+        Map<String, String> pairs = new HashMap<>();
+        pairs.put("user",AppSharedPreference.getString(context,AppConstants.User.MOBILE_NO));
+        pairs.put("passwd",AppSharedPreference.getString(context,AppConstants.User.PASSWORD));
+
+        return pairs;
+    }
+
 
 }

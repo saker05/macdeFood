@@ -11,17 +11,18 @@ public interface AppConstants {
         public static final String PASSWORD = "password";
     }
 
-    public interface Notification{
-        public static final String KEY_ACCESS_TOKEN= "token";
-        public static final String TOKEN_BROADCAST =  "tokenBroadCast";
-        public static final String NOTIFICATION_ACTION_CART="cart";
-        public static final String NOTIFICATION_ACTION_ORDER="order";
+    public interface Notification {
+        public static final String KEY_ACCESS_TOKEN = "token";
+        public static final String TOKEN_BROADCAST = "tokenBroadCast";
+        public static final String NOTIFICATION_ACTION_CART = "cart";
+        public static final String NOTIFICATION_ACTION_ORDER = "order";
     }
 
-    public  interface Url{
-        public static final String BASE_URL="http://192.168.1.7:8080/groceryApp";
+    public interface Url {
+        public static final String BASE_URL = "http://192.168.1.5:8080/groceryApp";
+        public static final String ANONYMOUS_TOKEN_PATH = "/fcmtoken/anonymous";
+        public static final String TOKEN_PATH = "/fcmtoken";
     }
-
 
 
 }
