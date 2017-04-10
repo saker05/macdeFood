@@ -24,5 +24,14 @@ public interface AppConstants {
         public static final String TOKEN_PATH = "/fcmtoken";
     }
 
+    public interface Cloudinary{
+        public static final String CLOUD_NAME_VALUE="da34xgchr";
+        public static final String API_KEY_VALUE = "733193466466665";
+        public static final String API_SECRET_VALUE="Ie1FpU4q6XZaqn_k_1PyweFg8D8";
+        public static final String CLOUD_NAME="cloud_name";
+        public static final String API_KEY= "api_key";
+        public static final String API_SECRET="api_secret";
+    }
+
 
 }

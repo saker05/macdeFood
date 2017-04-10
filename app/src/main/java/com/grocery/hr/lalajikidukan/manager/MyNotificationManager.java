@@ -13,6 +13,7 @@ import android.support.v7.app.NotificationCompat;
 
 import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
+import com.grocery.hr.lalajikidukan.utils.CloudinaryUtility;
 
 /**
  * Created by vipul on 26/3/17.
@@ -23,13 +24,14 @@ public class MyNotificationManager {
     private Context context;
 
     public static final int NOTIFICATION_ID=234;  // any random value
+    public PicassoManager picassoManager;
 
     public MyNotificationManager(Context context){
         this.context=context;
-
+        picassoManager=PicassoManager.getInstance();
     }
 
-    public void showNotification(String from, String notification, Intent intent){
+    public void showNotification(String from, String notification, Intent intent,String image){
 
         PendingIntent pendingIntent=PendingIntent.getActivity(context,NOTIFICATION_ID,intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -40,6 +42,7 @@ public class MyNotificationManager {
                 .setContentTitle(from)
                 .setContentText(notification)
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.mipmap.ic_local_grocery_store_black_24dp))
+                .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(picassoManager.getbitmapOfImage(context,CloudinaryUtility.getImageUrl(image)) ))
                 .build();
 
         mnotification.flags=Notification.FLAG_AUTO_CANCEL;

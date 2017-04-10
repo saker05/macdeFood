@@ -44,15 +44,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a notification payload.
 
 
-        notifyUser(remoteMessage.getData().get("notification_title"), remoteMessage.getData().get("notification_body") , notificationIntent);
+        notifyUser(remoteMessage.getData().get("notification_title"), remoteMessage.getData().get("notification_body") , notificationIntent,remoteMessage.getData().get("image"));
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
 
-    public void notifyUser(String notificationTitle, String notificationBody,Intent notificationIntent) {
+    public void notifyUser(String notificationTitle, String notificationBody,Intent notificationIntent,String image) {
         MyNotificationManager myNotificationManager = new MyNotificationManager(getApplicationContext());
-        myNotificationManager.showNotification(notificationTitle, notificationBody, notificationIntent);
+        myNotificationManager.showNotification(notificationTitle, notificationBody, notificationIntent,image);
     }
 
 }
