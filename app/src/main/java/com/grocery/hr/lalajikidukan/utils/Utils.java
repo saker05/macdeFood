@@ -18,12 +18,15 @@ import android.util.TypedValue;
 import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.backend.LocationService;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
+import com.grocery.hr.lalajikidukan.entity.CartDO;
+import com.grocery.hr.lalajikidukan.models.CartModel;
 import com.grocery.hr.lalajikidukan.preferences.AppSharedPreference;
 
 import org.json.JSONArray;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -146,7 +149,7 @@ public class Utils {
             builder.addHeader("Authorization", "Basic " + encoding);
         }
         RequestBody body = RequestBody.create(JSON, data);
-        builder.put(body);
+        builder.post(body);
         okhttp3.Request request = builder.build();
         okhttp3.Response response = client.newCall(request).execute();
         if (!response.isSuccessful()) {
@@ -183,6 +186,17 @@ public class Utils {
         pairs.put("passwd",AppSharedPreference.getString(context,AppConstants.User.PASSWORD));
 
         return pairs;
+    }
+
+    public static List<CartModel> convertCartDosTOCartModel(List<CartDO> cartDOs){
+        List<CartModel> cartModelList=new ArrayList<>();
+        for(CartDO cartDO:cartDOs){
+            CartModel cartModel=new CartModel();
+            cartModel.setUpc(cartDO.getUpc());
+            cartModel.setNoOfUnits(cartDO.getNoOfUnits());
+            cartModelList.add(cartModel);
+        }
+        return cartModelList;
     }
 
 

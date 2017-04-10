@@ -19,7 +19,6 @@ public class JsonParserUtils {
     public static List<CartModel> cartParser(String jsonString){
         try {
             List<CartModel> cartModelList=new ArrayList<CartModel>() ;
-
             JSONArray cartList = new JSONObject(jsonString)
                     .optJSONArray("data");
 
@@ -43,9 +42,9 @@ public class JsonParserUtils {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return null;
-
     }
+
+
 
 }

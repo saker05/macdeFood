@@ -57,12 +57,14 @@ public class CartManager {
         cursor.moveToFirst();
         while (cursor.isAfterLast() == false){
             CartDO cartDO=new CartDO();
-            cartDO.setNoOfUnits(cursor.getInt(2));
-            cartDO.setUpc(cursor.getString(1));
+            cartDO.setNoOfUnits(cursor.getInt(1));
+            cartDO.setUpc(cursor.getString(0));
             cartDOs.add(cartDO);
             cursor.moveToNext();
         }
         return cartDOs;
     }
+
+
 
 }
