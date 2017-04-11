@@ -15,14 +15,14 @@ import java.util.List;
 
 public class CartService {
 
-    private CartService instance=null;
-    private CartManager cartManager;
+    private static CartService instance=null;
+    private static CartManager cartManager;
 
     private CartService(){
 
     }
 
-    public CartService getInstance(Context context){
+    public static CartService getInstance(Context context){
         if(instance==null){
             instance= new CartService();
             cartManager=CartManager.getInstance(context);
@@ -42,7 +42,7 @@ public class CartService {
                 }
             }
         }
-        return String.valueOf(totalPrice);
+            return String.valueOf(totalPrice);
     }
 
 }
