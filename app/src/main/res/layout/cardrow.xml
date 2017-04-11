@@ -1,22 +1,133 @@
-<android.support.v7.widget.CardView
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/card"
-    android:layout_marginTop="5dp"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    card_view:cardCornerRadius="5dp">
 
-    <TextView
-        android:id="@+id/tv_country"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_gravity="center"
-        android:textSize="18sp"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout"
+        android:padding="20dp"
+        android:paddingTop="2.5dp"
+        android:paddingLeft="2.5dp"
+        android:paddingBottom="2.5dp">
 
-</android.support.v7.widget.CardView>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:id="@+id/imageView"
+            android:src="@drawable/switchbook" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/linearLayout"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="240dp"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/content"
+                android:paddingTop="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="jfhkdjfhdskjfh"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2.5dp"
+            android:textSize="16sp"
+            android:text="jfhkdjfhdskjfh"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="30dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id = "@+id/rupee"
+                android:layout_alignParentBottom="true"
+                android:textSize="20sp"
+                android:text="$343"/>
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/linearLayout"
+        android:layout_alignParentEnd="true">
+
+        <LinearLayout
+            android:layout_width="30dp"
+            android:layout_height="70dp"
+            android:orientation="horizontal"
+
+            android:id="@+id/ll2">
+
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="45dp"
+                android:paddingBottom="12dp"
+                android:background="@drawable/ic_minus" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="30dp"
+            android:layout_height="70dp"
+
+            android:orientation="horizontal"
+            android:id="@+id/ll3">
+
+            <TextView
+                android:layout_width="20dp"
+                android:id="@+id/Noofunits"
+                android:layout_height="45dp"
+                android:paddingBottom="12dp"
+                android:layout_gravity="center"
+                android:textStyle="normal"
+                android:textSize="18sp"
+                android:text="12"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="30dp"
+            android:layout_height="70dp"
+
+            android:orientation="horizontal"
+            android:id="@+id/ll4">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="45dp"
+                android:paddingBottom="12dp"
+                android:background="@drawable/ic_minus" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
