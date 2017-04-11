@@ -15,34 +15,49 @@ import java.util.List;
 
 public class CartService {
 
-    private static CartService instance=null;
+    private static CartService instance = null;
     private static CartManager cartManager;
 
-    private CartService(){
+    private CartService() {
 
     }
 
-    public static CartService getInstance(Context context){
-        if(instance==null){
-            instance= new CartService();
-            cartManager=CartManager.getInstance(context);
+    public static CartService getInstance(Context context) {
+        if (instance == null) {
+            instance = new CartService();
+            cartManager = CartManager.getInstance(context);
             return instance;
         }
         return instance;
     }
 
-    public String getCartTotalPrice(List<CartModel> cartModels){
-        int totalPrice=0;
-        List<CartDO> cartDOs=cartManager.getCartItems();
-
-        for(CartDO cartDO:cartDOs){
-            for(CartModel cartModel:cartModels){
-                if(cartDO.getUpc().equals(cartModel.getUpc()) && cartModel.getStatus().equals(AppConstants.ProductStatusEnum.AVAILABLE)){
-                        totalPrice +=  (cartModel.getUnitAmount()*cartDO.getNoOfUnits());
-                }
+    public String getCartTotalPrice(List<CartModel> cartModels) {
+        int totalPrice = 0;
+        for (CartModel cartModel : cartModels) {
+            if (cartModel.getStatus().equals(AppConstants.ProductStatusEnum.AVAILABLE)) {
+                totalPrice += (cartModel.getUnitAmount() * cartModel.getNoOfUnits());
             }
+
         }
-            return String.valueOf(totalPrice);
+        return String.valueOf(totalPrice);
+    }
+
+    public void syncCartModelAndCartDo(List<CartModel> cartModels) {
+        List<CartDO> cartDOs = cartManager.getCartItems();
+          for(int i = cartModels.size() - 1; i>=0; i--){
+              CartModel cartModel=cartModels.get(i);
+              Boolean isInCartDo=false;
+              for(CartDO cartDO:cartDOs){
+                  if(cartDO.getUpc().equals(cartModel.getUpc())){
+                      cartModel.setNoOfUnits(cartDO.getNoOfUnits());
+                      isInCartDo=true;
+                      break;
+                  }
+              }
+              if(!isInCartDo){
+                  cartModels.remove(cartModel);
+              }
+          }
     }
 
 }

@@ -67,4 +67,19 @@ public class CartModel {
                 + ", unitQuantityInGm=" + unitQuantityInGm + ", unitAmount=" + unitAmount + "]";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CartModel cartModel = (CartModel) o;
+
+        return upc.equals(cartModel.upc);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return upc.hashCode();
+    }
 }

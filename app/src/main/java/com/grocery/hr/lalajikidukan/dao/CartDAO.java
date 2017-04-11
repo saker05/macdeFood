@@ -72,7 +72,7 @@ public class CartDAO {
     }
 
     public void deleteCartItem(CartDO cartDO) {
-        baseDBHelper.delete(TABLE_USER_CART, UPC + " ?",
+        baseDBHelper.delete(TABLE_USER_CART, UPC + "=?",
                 new String[]{cartDO.getUpc()});
     }
 
