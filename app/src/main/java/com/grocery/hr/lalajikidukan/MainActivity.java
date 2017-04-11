@@ -217,6 +217,23 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void hideCart() {
+        getCart().post(new Runnable() {
+            @Override
+            public void run() {
+                getCart().setVisibility(View.GONE);
+            }
+        });
+        getFrameLayout().post(new Runnable() {
+            @Override
+            public void run() {
+                FrameLayout.LayoutParams layoutParams =
+                        (FrameLayout.LayoutParams) getFrameLayout().getLayoutParams();
+                layoutParams.bottomMargin = 0;
+            }
+        });
+    }
+
     public CardView getCart() {
         return mCart;
     }
