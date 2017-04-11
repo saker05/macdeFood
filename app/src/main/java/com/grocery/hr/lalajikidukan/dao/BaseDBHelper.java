@@ -51,6 +51,7 @@ public class BaseDBHelper extends SQLiteOpenHelper implements DBTables {
         return true;
     }
 
+
     public synchronized void delete(String tableName, String whereClause, String[] whereAgs) {
         try {
             SQLiteDatabase db = this.getWritableDatabase();
@@ -59,6 +60,7 @@ public class BaseDBHelper extends SQLiteOpenHelper implements DBTables {
             e.printStackTrace();
         }
     }
+
 
     public synchronized void deleteTableItems(String tableName) {
         SQLiteDatabase db = this.getWritableDatabase();

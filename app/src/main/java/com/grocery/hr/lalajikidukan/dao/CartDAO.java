@@ -49,7 +49,7 @@ public class CartDAO {
         return instance;
     }
 
-    public void insertCartItems(List<CartDO> cartDOs) {
+  /*  public void insertCartItems(List<CartDO> cartDOs) {
         for (CartDO cartDO : cartDOs) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(UPC, cartDO.getUpc());
@@ -57,7 +57,7 @@ public class CartDAO {
 
             baseDBHelper.insert(contentValues, TABLE_USER_CART);
         }
-    }
+    }*/
 
     public void insertCartItem(CartDO cartDO) {
         ContentValues contentValues = new ContentValues();
@@ -80,7 +80,7 @@ public class CartDAO {
         ContentValues contentValues = new ContentValues();
         contentValues.put(UPC, cartDO.getUpc());
         contentValues.put(NO_OF_UNIT, cartDO.getNoOfUnits());
-        baseDBHelper.update(TABLE_USER_CART, contentValues, UPC + " ?",
+        baseDBHelper.update(TABLE_USER_CART, contentValues, UPC + "=?",
                 new String[]{cartDO.getUpc()});
     }
 
@@ -89,5 +89,9 @@ public class CartDAO {
         return baseDBHelper.executeRawQuery(sql,null);
     }
 
+    public Cursor getCartItem(String upc){
+        String sql="select " +UPC+","+NO_OF_UNIT +" from "+TABLE_USER_CART+" where "+UPC+"='"+upc+"'";
+        return baseDBHelper.executeRawQuery(sql,null);
+    }
 
 }

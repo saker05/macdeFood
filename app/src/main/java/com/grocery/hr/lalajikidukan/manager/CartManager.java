@@ -35,16 +35,30 @@ public class CartManager {
         return cursor.getCount();
     }
 
-    public void insertCartItem(CartDO cartDO){
-        cartDAO.insertCartItem(cartDO);
+    public void insertByOne(String upc) {
+        CartDO cartDO=getCartDOfromCursor(cartDAO.getCartItem(upc));
+        if(cartDO==null){
+            cartDO=new CartDO();
+            cartDO.setUpc(upc);
+            cartDO.setNoOfUnits(1);
+            cartDAO.insertCartItem(cartDO);
+        }else{
+            cartDO.setNoOfUnits(cartDO.getNoOfUnits()+1);
+            cartDAO.updateCartItem(cartDO);
+        }
     }
 
-    public void updateCartItem(CartDO cartDO){
-        cartDAO.updateCartItem(cartDO);
-    }
-
-    public void deleteCartItem(CartDO cartDO){
-        cartDAO.deleteCartItem(cartDO);
+    public void removeByOne(String upc){
+        CartDO cartDO=getCartDOfromCursor(cartDAO.getCartItem(upc));
+        if(cartDO!=null){
+            int noOfItem=cartDO.getNoOfUnits();
+            if(noOfItem<=1){
+                cartDAO.deleteCartItem(cartDO);
+            }else{
+                cartDO.setNoOfUnits(cartDO.getNoOfUnits()-1);
+                cartDAO.updateCartItem(cartDO);
+            }
+        }
     }
 
     public void deleteAllCartItems(){
@@ -65,6 +79,17 @@ public class CartManager {
         return cartDOs;
     }
 
+    private CartDO getCartDOfromCursor(Cursor cursor){
+        CartDO cartDO=null;
+        cursor.moveToFirst();
+        while (cursor.isAfterLast() == false){
+            cartDO=new CartDO();
+            cartDO.setNoOfUnits(cursor.getInt(1));
+            cartDO.setUpc(cursor.getString(0));
+            break;
+        }
+        return cartDO;
+    }
 
 
 }
