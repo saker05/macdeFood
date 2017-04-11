@@ -21,6 +21,7 @@ import com.grocery.hr.lalajikidukan.constants.AppConstants;
 import com.grocery.hr.lalajikidukan.entity.CartDO;
 import com.grocery.hr.lalajikidukan.models.CartModel;
 import com.grocery.hr.lalajikidukan.preferences.AppSharedPreference;
+import com.malinskiy.superrecyclerview.SuperRecyclerView;
 
 import org.json.JSONArray;
 
@@ -199,5 +200,17 @@ public class Utils {
         return cartModelList;
     }
 
+    public void hideRefreshing(final SuperRecyclerView recyclerView) {
+        if (recyclerView.getSwipeToRefresh().isRefreshing()) {
+            recyclerView.getSwipeToRefresh().post(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            recyclerView.getSwipeToRefresh().setRefreshing(false);
+                        }
+                    }
+            );
+        }
+    }
 
 }

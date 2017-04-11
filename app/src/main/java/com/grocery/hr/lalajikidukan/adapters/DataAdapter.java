@@ -1,8 +1,11 @@
+/*
 package com.grocery.hr.lalajikidukan.adapters;
 
+*/
 /**
  * Created by rohit on 22/3/17.
- */
+ *//*
+
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -52,3 +55,4 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
 
 
+*/

@@ -32,9 +32,11 @@ import com.grocery.hr.lalajikidukan.preferences.AppSharedPreference;
 import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
+import com.squareup.picasso.Picasso;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -67,7 +69,7 @@ public class CartFragment extends Fragment {
 
 
 
-    private CartFragment() {
+    public CartFragment() {
         // Required empty public constructor
     }
 
@@ -83,7 +85,17 @@ public class CartFragment extends Fragment {
         mUtils = Utils.getInstance();
         gson=new Gson();
         cartManager = CartManager.getInstance(getContext());
-        mAdapter = new CartAdapter();
+        mAdapter = new CartAdapter(new ArrayList<CartModel>());
+       /* CartDO cartDo=new CartDO();
+        cartDo.setUpc("abc");
+        cartDo.setNoOfUnits(6);
+        CartDO cartDO1=new CartDO();
+        cartDO1.setUpc("ac");
+        cartDO1.setNoOfUnits(10);
+        cartManager.insertCartItem(cartDo);
+        cartManager.insertCartItem(cartDO1);*/
+        AppSharedPreference.putString(getContext(), AppConstants.User.MOBILE_NO, "9729012780");
+        AppSharedPreference.putString(getContext(), AppConstants.User.PASSWORD, "vipul");
         setHasOptionsMenu(true);
     }
 
@@ -165,7 +177,12 @@ public class CartFragment extends Fragment {
 
     class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
 
+        private List<CartModel> cart;
 
+        public CartAdapter(List<CartModel> cart) {
+            super();
+            this.cart = cart;
+        }
 
         @Override
         public CartViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -177,9 +194,9 @@ public class CartFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(CartViewHolder holder, int position) {
-            CartModel item = cartItems.get(position);
-            /*Picasso.with(mActivity)
-                    .load(item.getLogo())
+            CartModel item = cart.get(position);
+           /* Picasso.with(mActivity)
+                    .load(R.drawable.placeholder)
                     .into(holder.getLogo());*/
             holder.getName().setText(item.getName());
            // holder.getDeliveryTime().setText(item.getDeliveryTime());
@@ -202,15 +219,20 @@ public class CartFragment extends Fragment {
             return cartItems.size();
         }
 
+        public List<CartModel> getCartItems() {
+            return cart;
+        }
+
+        public void setCartItems(List<CartModel> cart){this.cart=cart;}
 
     }
 
     class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 
-
+/*
         @BindView(R.id.imageView)
-       AppCompatImageView mLogo;
+       AppCompatImageView mLogo;*/
 
         @BindView(R.id.content)
         AppCompatTextView mcontent;
@@ -246,9 +268,9 @@ public class CartFragment extends Fragment {
                     .commit();*/
         }
 
-        public AppCompatImageView getLogo() {
+       /* public AppCompatImageView getLogo() {
             return mLogo;
-        }
+        }*/
 
         public AppCompatTextView getName() {
             return mcontent;
@@ -316,6 +338,9 @@ public class CartFragment extends Fragment {
                 }
             } else if (result != null && result.trim().length() != 0) {
                 cartItems = JsonParserUtils.cartParser(result);
+                mCartList.setAdapter(mAdapter);
+                mAdapter.getCartItems().clear();
+               mAdapter.setCartItems(cartItems);
                 mAdapter.notifyDataSetChanged();
             } else {
                 try {
