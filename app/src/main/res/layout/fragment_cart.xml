@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,7 +12,12 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:fitsSystemWindows="true"
-    tools:context="com.grocery.hr.lalajikidukan.fragments.CartFragment">
+    tools:context="com.grocery.hr.lalajikidukan.fragments.CartFragment"
+    android:layout_above="@+id/bottomBox"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentStart="true">
+
+
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -36,5 +46,134 @@
         app:scrollbarStyle="insideInset" />
 
 
-
 </android.support.design.widget.CoordinatorLayout>
+
+
+
+
+
+    <LinearLayout
+        android:id="@+id/bottomBox"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_above="@+id/bottomBox1"
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+
+        <LinearLayout
+
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/subtotal"
+                android:textColorHighlight="#F5F5F5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:gravity="center_vertical|center_horizontal|center"
+                android:text="sub total"
+
+
+                />
+            #9E9E9E
+            <TextView
+                android:id="@+id/price"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:gravity="center_vertical|center_horizontal|center"
+                android:text="Rs.234"
+                android:textColor="#000000"
+
+                />
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+
+        android:textsize="12sp"
+        android:text="Delivery charges"
+        android:gravity="center"
+        />
+            <TextView
+                android:id="@+id/dcfree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#8BC34A"
+
+                android:text="Free"
+                android:textSize="16sp"
+
+                android:gravity="center"
+                />
+
+</LinearLayout>
+
+    <LinearLayout
+
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/promo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="promo"
+            android:textColor="#000000" />
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
+    <!-- android:layout_alignParentBottom="true"-->
+
+    <LinearLayout
+        android:id="@+id/bottomBox1"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:backgroundTint="#B2FF59"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+
+
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:background="?attr/selectableItemBackground"
+        android:onclick="LoginCheckout"
+        android:text="Checkout" />
+
+    </LinearLayout>
+</RelativeLayout>

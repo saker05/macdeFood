@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import com.google.gson.Gson;
 import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
+import com.grocery.hr.lalajikidukan.Test.CartTest;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
 import com.grocery.hr.lalajikidukan.entity.CartDO;
 import com.grocery.hr.lalajikidukan.manager.CartManager;
@@ -337,7 +338,8 @@ public class CartFragment extends Fragment {
                     e.printStackTrace();
                 }
             } else if (result != null && result.trim().length() != 0) {
-                cartItems = JsonParserUtils.cartParser(result);
+               // cartItems = JsonParserUtils.cartParser(result);
+                cartItems= CartTest.getCartItems();
                 mCartList.setAdapter(mAdapter);
                 mAdapter.getCartItems().clear();
                mAdapter.setCartItems(cartItems);
