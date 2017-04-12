@@ -31,7 +31,7 @@ public class CartService {
         return instance;
     }
 
-    public String getCartTotalPrice(List<CartModel> cartModels) {
+    public int getCartTotalPrice(List<CartModel> cartModels) {
         int totalPrice = 0;
         for (CartModel cartModel : cartModels) {
             if (cartModel.getStatus().equals(AppConstants.ProductStatusEnum.AVAILABLE)) {
@@ -39,7 +39,7 @@ public class CartService {
             }
 
         }
-        return String.valueOf(totalPrice);
+        return totalPrice;
     }
 
     public void syncCartModelAndCartDo(List<CartModel> cartModels) {

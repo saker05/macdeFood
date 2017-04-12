@@ -75,7 +75,7 @@
                 android:textColorHighlight="#F5F5F5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize ="12sp"
                 android:gravity="center_vertical|center_horizontal|center"
                 android:text="sub total"
 
@@ -112,7 +112,7 @@
         android:layout_height="wrap_content"
         android:textColor="#000000"
 
-        android:textsize="12sp"
+        android:textSize ="12sp"
         android:text="Delivery charges"
         android:gravity="center"
         />
@@ -172,7 +172,7 @@
         android:layout_height="match_parent"
 
         android:background="?attr/selectableItemBackground"
-        android:onclick="LoginCheckout"
+
         android:text="Checkout" />
 
     </LinearLayout>

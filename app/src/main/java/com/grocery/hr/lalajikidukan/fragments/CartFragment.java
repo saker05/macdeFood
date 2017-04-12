@@ -20,6 +20,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.grocery.hr.lalajikidukan.MainActivity;
@@ -30,6 +32,7 @@ import com.grocery.hr.lalajikidukan.entity.CartDO;
 import com.grocery.hr.lalajikidukan.manager.CartManager;
 import com.grocery.hr.lalajikidukan.models.CartModel;
 import com.grocery.hr.lalajikidukan.preferences.AppSharedPreference;
+import com.grocery.hr.lalajikidukan.service.CartService;
 import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
@@ -42,6 +45,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CartFragment extends Fragment {
 
@@ -56,6 +60,9 @@ public class CartFragment extends Fragment {
     @BindView(R.id.rvCart)
     SuperRecyclerView mCartList;
 
+    @BindView(R.id.price)
+    TextView mCartTotal;
+
     private CartAdapter mAdapter;
     private MainActivity mActivity;
     private Handler mHandler;
@@ -64,10 +71,7 @@ public class CartFragment extends Fragment {
     private List<CartModel> cartItems;
     private CartManager cartManager;
     private String cartModelJson;
-
-
-
-
+    private CartService cartService;
 
 
     public CartFragment() {
@@ -84,17 +88,14 @@ public class CartFragment extends Fragment {
         mActivity = (MainActivity) getActivity();
         mHandler = new Handler();
         mUtils = Utils.getInstance();
-        gson=new Gson();
+        gson = new Gson();
         cartManager = CartManager.getInstance(getContext());
-        mAdapter = new CartAdapter(new ArrayList<CartModel>());
-       /* CartDO cartDo=new CartDO();
-        cartDo.setUpc("abc");
-        cartDo.setNoOfUnits(6);
-        CartDO cartDO1=new CartDO();
-        cartDO1.setUpc("ac");
-        cartDO1.setNoOfUnits(10);
-        cartManager.insertCartItem(cartDo);
-        cartManager.insertCartItem(cartDO1);*/
+        mAdapter = new CartAdapter();
+        cartService = CartService.getInstance(getContext());
+
+        cartManager.insertByOne("ab");
+        cartManager.insertByOne("asdf");
+
         AppSharedPreference.putString(getContext(), AppConstants.User.MOBILE_NO, "9729012780");
         AppSharedPreference.putString(getContext(), AppConstants.User.PASSWORD, "vipul");
         setHasOptionsMenu(true);
@@ -119,6 +120,7 @@ public class CartFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+        mActivity.hideCart();
         setUpViews();
     }
 
@@ -178,12 +180,7 @@ public class CartFragment extends Fragment {
 
     class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
 
-        private List<CartModel> cart;
 
-        public CartAdapter(List<CartModel> cart) {
-            super();
-            this.cart = cart;
-        }
 
         @Override
         public CartViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -195,12 +192,12 @@ public class CartFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(CartViewHolder holder, int position) {
-            CartModel item = cart.get(position);
+            CartModel item = cartItems.get(position);
            /* Picasso.with(mActivity)
                     .load(R.drawable.placeholder)
                     .into(holder.getLogo());*/
             holder.getName().setText(item.getName());
-           // holder.getDeliveryTime().setText(item.getDeliveryTime());
+            // holder.getDeliveryTime().setText(item.getDeliveryTime());
             holder.getQtyRate().setText(String.valueOf(
                     item.getUnitAmount()
             ));
@@ -208,10 +205,10 @@ public class CartFragment extends Fragment {
                     item.getNoOfUnits()
             ));
 
-            if(item.getUnitQuantityInGm()==null){
+            if (item.getUnitQuantityInGm() == null) {
                 holder.getQuantity().setText("1 unit");
-            }else{
-                holder.getQuantity().setText(String.valueOf(item.getUnitQuantityInGm())+"gm");
+            } else {
+                holder.getQuantity().setText(String.valueOf(item.getUnitQuantityInGm()) + "gm");
             }
         }
 
@@ -219,12 +216,6 @@ public class CartFragment extends Fragment {
         public int getItemCount() {
             return cartItems.size();
         }
-
-        public List<CartModel> getCartItems() {
-            return cart;
-        }
-
-        public void setCartItems(List<CartModel> cart){this.cart=cart;}
 
     }
 
@@ -247,14 +238,43 @@ public class CartFragment extends Fragment {
         @BindView(R.id.Noofunits)
         AppCompatTextView munits;
 
-     //   @BindView(R.id.tvCartTotal)
-       // AppCompatTextView mTotal;
+        @BindView(R.id.cart_plus)
+        ImageView mPlus;
+
+        @BindView(R.id.cart_minus)
+        ImageView mMinus;
+
+        //   @BindView(R.id.tvCartTotal)
+        // AppCompatTextView mTotal;
 
         public CartViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-         //   mHeader.setVisibility(View.GONE);
-            itemView.setOnClickListener(this);
+            //   mHeader.setVisibility(View.GONE);
+           // itemView.setOnClickListener(this);
+        }
+
+        @OnClick(R.id.cart_plus)
+        public void onPlusClick(){
+            CartModel item = cartItems.get(getAdapterPosition());
+            cartManager.insertByOne(item.getUpc());
+            item.setNoOfUnits(item.getNoOfUnits()+1);
+            refreshTotalCartPrice();
+            mAdapter.notifyDataSetChanged();
+
+        }
+
+        @OnClick(R.id.cart_minus)
+        public void onMinusClick(){
+            CartModel item = cartItems.get(getAdapterPosition());
+            cartManager.removeByOne(item.getUpc());
+            if(item.getNoOfUnits()==1){
+                cartItems.remove(getAdapterPosition());
+            }else{
+                item.setNoOfUnits(item.getNoOfUnits()-1);
+            }
+            refreshTotalCartPrice();
+            mAdapter.notifyDataSetChanged();
         }
 
         @Override
@@ -278,7 +298,6 @@ public class CartFragment extends Fragment {
         }
 
 
-
         public AppCompatTextView getQtyRate() {
             return mQtyRate;
         }
@@ -287,8 +306,9 @@ public class CartFragment extends Fragment {
             return mquantity;
         }
 
-        public AppCompatTextView getMunits()
-        {return munits;}
+        public AppCompatTextView getMunits() {
+            return munits;
+        }
 
     }
 
@@ -338,11 +358,10 @@ public class CartFragment extends Fragment {
                     e.printStackTrace();
                 }
             } else if (result != null && result.trim().length() != 0) {
-               // cartItems = JsonParserUtils.cartParser(result);
-                cartItems= CartTest.getCartItems();
+                // cartItems = JsonParserUtils.cartParser(result);
+                cartItems = JsonParserUtils.cartParser(result);
                 mCartList.setAdapter(mAdapter);
-                mAdapter.getCartItems().clear();
-               mAdapter.setCartItems(cartItems);
+                refreshTotalCartPrice();
                 mAdapter.notifyDataSetChanged();
             } else {
                 try {
@@ -355,10 +374,16 @@ public class CartFragment extends Fragment {
                 }
             }
         }
-
-
     }
 
+    public void refreshTotalCartPrice(){
+        int cartToalPrice =cartService.getCartTotalPrice(cartItems);
+        mCartTotal.setText(String.valueOf(cartToalPrice));
+    }
+
+    public void delivertCharge(){
+
+    }
 
 }
 
