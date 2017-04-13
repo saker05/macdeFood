@@ -6,6 +6,7 @@ import com.grocery.hr.lalajikidukan.constants.AppConstants;
 import com.grocery.hr.lalajikidukan.entity.CartDO;
 import com.grocery.hr.lalajikidukan.manager.CartManager;
 import com.grocery.hr.lalajikidukan.models.CartModel;
+import com.grocery.hr.lalajikidukan.models.DeliveryChargeModel;
 
 import java.util.List;
 
@@ -60,4 +61,10 @@ public class CartService {
           }
     }
 
+    public int getDeliveryCharge(DeliveryChargeModel deliveryChargeModel,int cartTotalPrice){
+        return (cartTotalPrice<deliveryChargeModel.getMinOrderForFreeDelivery())
+                ?
+                Math.min(deliveryChargeModel.getMinOrderForFreeDelivery(),(deliveryChargeModel.getDeliveryCharge()+cartTotalPrice))-cartTotalPrice
+                :0;
+    }
 }

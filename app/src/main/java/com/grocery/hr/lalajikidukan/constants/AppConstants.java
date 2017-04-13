@@ -19,11 +19,13 @@ public interface AppConstants {
     }
 
     public interface Url {
-        public static final String BASE_URL = "http://192.168.1.5:8080/groceryApp";
+        public static final String BASE_URL = "http://192.168.1.10:8080/groceryApp";
         public static final String ANONYMOUS_TOKEN_PATH = "/fcmtoken/anonymous";
         public static final String TOKEN_PATH = "/fcmtoken";
         public static final String ADD_CART   = "/cart";
         public static final String CART_PRODUCT_INFO="/cart/productInfoForNotLoggedInUser";
+        public static final String GET_CATEGORY="/category";
+        public static final String GET_PRODUCT ="/category/?/product";
     }
 
     public interface Cloudinary{
