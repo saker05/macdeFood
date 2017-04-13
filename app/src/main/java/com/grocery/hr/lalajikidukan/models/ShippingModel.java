@@ -4,7 +4,7 @@ package com.grocery.hr.lalajikidukan.models;
  * Created by vipul on 14/4/17.
  */
 
-public class ShippingChargeModel {
+public class ShippingModel {
 
     public int minOrderForFreeDelivery;
     public int deliveryCharge;
@@ -27,7 +27,7 @@ public class ShippingChargeModel {
 
     @Override
     public String toString() {
-        return "ShippingChargeModel [minFreeDeliveryOrder=" + minOrderForFreeDelivery + ", deliveryCharge="
+        return "ShippingModel [minFreeDeliveryOrder=" + minOrderForFreeDelivery + ", deliveryCharge="
                 + deliveryCharge + "]";
     }
 
