@@ -68,13 +68,13 @@ public class JsonParserUtils {
     }
 
 
-    public static List<ProductModel> productParser(String jsonString){
-        try{
-            List<ProductModel> productModelList=new ArrayList<>();
-            JSONArray productList=new JSONObject(jsonString).optJSONArray("data");
-            for(int i=0 ;  i<productList.length() ; i+=){
-                ProductModel productModel=new ProductModel();
-                JSONObject product=productList.getJSONObject(i);
+    public static List<ProductModel> productParser(String jsonString) {
+        try {
+            List<ProductModel> productModelList = new ArrayList<>();
+            JSONArray productList = new JSONObject(jsonString).optJSONArray("data");
+            for (int i = 0; i < productList.length(); i ++) {
+                ProductModel productModel = new ProductModel();
+                JSONObject product = productList.getJSONObject(i);
                 productModel.setImageUrl(product.getString("imageUrl"));
                 productModel.setUpc(product.getString("upc"));
                 productModel.setStatus(product.getString("status"));
@@ -82,9 +82,11 @@ public class JsonParserUtils {
                 productModel.setName(product.getString("name"));
                 productModel.setCategoryId(product.getInt("categoryId"));
                 productModel.setDescription(product.getString("description"));
-                productModel.setUnitQuantityInGm(product.getJSONObject("unitQuantityInGm")==null ? null : product.getInt("unitQuantityInGm"));
+                productModel.setUnitQuantityInGm(product.getJSONObject("unitQuantityInGm") == null ? null : product.getInt("unitQuantityInGm"));
+                productModelList.add(productModel);
             }
-        }catch (JSONException e){
+            return productModelList;
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
