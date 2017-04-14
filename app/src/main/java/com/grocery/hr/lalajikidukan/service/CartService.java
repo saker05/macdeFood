@@ -62,6 +62,7 @@ public class CartService {
     }
 
     public int getShippingCharge(ShippingModel deliveryChargeModel, int cartTotalPrice){
+        if(deliveryChargeModel==null) return 0;
         return (cartTotalPrice<deliveryChargeModel.getMinOrderForFreeDelivery())
                 ?
                 Math.min(deliveryChargeModel.getMinOrderForFreeDelivery(),(deliveryChargeModel.getDeliveryCharge()+cartTotalPrice))-cartTotalPrice

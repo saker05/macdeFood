@@ -4,176 +4,167 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/clRootCart"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:fitsSystemWindows="true"
-    tools:context="com.grocery.hr.lalajikidukan.fragments.CartFragment"
-    android:layout_above="@+id/bottomBox"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentStart="true">
-
-
-
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/tbToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <com.malinskiy.superrecyclerview.SuperRecyclerView
-        android:id="@+id/rvCart"
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/clRootCart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_empty="@layout/view_empty"
-        app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"
-        app:recyclerClipToPadding="false"
-        app:scrollbarStyle="insideInset" />
+        android:layout_above="@+id/shippingDetailLayout"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:animateLayoutChanges="true"
+        android:fitsSystemWindows="true"
+        tools:context="com.grocery.hr.lalajikidukan.fragments.CartFragment">
 
 
-</android.support.design.widget.CoordinatorLayout>
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/tbToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <com.malinskiy.superrecyclerview.SuperRecyclerView
+            android:id="@+id/rvCart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_empty="@layout/view_empty"
+            app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"
+            app:recyclerClipToPadding="false"
+            app:scrollbarStyle="insideInset" />
 
 
-
-
+    </android.support.design.widget.CoordinatorLayout>
 
     <LinearLayout
-        android:id="@+id/bottomBox"
+        android:id="@+id/shippingDetailLayout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_above="@+id/bottomBox1"
+        android:layout_above="@+id/checkoutButtonLayout"
+        android:layout_weight="1"
         android:background="@android:color/white"
-        android:orientation="horizontal"
-        android:layout_weight="1">
+        android:orientation="horizontal">
 
 
         <LinearLayout
 
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical"
-            android:layout_weight="1">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/subtotal"
-                android:textColorHighlight="#F5F5F5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize ="12sp"
                 android:gravity="center_vertical|center_horizontal|center"
                 android:text="sub total"
+                android:textColorHighlight="#F5F5F5"
+                android:textSize="12sp"
 
 
                 />
             #9E9E9E
+
             <TextView
                 android:id="@+id/price"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
                 android:gravity="center_vertical|center_horizontal|center"
-                android:text="Rs.234"
+                android:text="Rs.-"
                 android:textColor="#000000"
+                android:textSize="16sp"
 
                 />
-
 
 
         </LinearLayout>
 
         <LinearLayout
 
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/dc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000000"
+            <TextView
+                android:id="@+id/dc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
 
-        android:textSize ="12sp"
-        android:text="Delivery charges"
-        android:gravity="center"
-        />
+                android:text="Delivery charges"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
             <TextView
                 android:id="@+id/dcfree"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#8BC34A"
+                android:gravity="center"
 
                 android:text="Free"
-                android:textSize="16sp"
+                android:textColor="#8BC34A"
 
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/promo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                />
+                android:text="promo"
+                android:textColor="#000000" />
 
-</LinearLayout>
 
-    <LinearLayout
-
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
-
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/promo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="promo"
-            android:textColor="#000000" />
+        </LinearLayout>
 
 
     </LinearLayout>
-
-
-
-</LinearLayout>
     <!-- android:layout_alignParentBottom="true"-->
 
     <LinearLayout
-        android:id="@+id/bottomBox1"
+        android:id="@+id/checkoutButtonLayout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:backgroundTint="#B2FF59"
         android:layout_alignParentBottom="true"
         android:background="@android:color/white"
+        android:backgroundTint="#B2FF59"
         android:orientation="vertical">
 
 
+        <Button
+            android:id="@+id/checkoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
 
+            android:background="?attr/selectableItemBackground"
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        android:background="?attr/selectableItemBackground"
-
-        android:text="Checkout" />
+            android:text="Checkout" />
 
     </LinearLayout>
 </RelativeLayout>

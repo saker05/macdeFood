@@ -213,4 +213,12 @@ public class Utils {
         }
     }
 
+    public boolean isUserLoggedIn(Context context){
+        if((AppSharedPreference.getString(context, AppConstants.User.MOBILE_NO, "abc")).equals("abc")){
+            return false;
+        }
+        return true;
+    }
+
+
 }

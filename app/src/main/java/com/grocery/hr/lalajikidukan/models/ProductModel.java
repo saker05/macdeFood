@@ -11,10 +11,13 @@ public class ProductModel {
     private String description;
     private Integer categoryId;
     private String status;
-    private Integer unitQuantityInGm; // if it is null mean product will be sold per piece
+    private Integer unitQuantityInGm; // if it is null mean product will be sold
+    // per
+    // piece
     private int unitAmount;
+    private String addedBy;
     private String imageUrl;
-    private int noOfItemInCart;
+    private int noOfItemInCart; // this is using in android app
 
     public String getUpc() {
         return upc;
@@ -72,6 +75,13 @@ public class ProductModel {
         this.unitAmount = unitAmount;
     }
 
+    public String getAddedBy() {
+        return addedBy;
+    }
+
+    public void setAddedBy(String addedBy) {
+        this.addedBy = addedBy;
+    }
 
     public String getImageUrl() {
         return imageUrl;
@@ -93,7 +103,8 @@ public class ProductModel {
     public String toString() {
         return "ProductModel [upc=" + upc + ", name=" + name + ", description=" + description + ", categoryId="
                 + categoryId + ", status=" + status + ", unitQuantityInGm=" + unitQuantityInGm + ", unitAmount="
-                + unitAmount + ", imageUrl=" + imageUrl + "]";
+                + unitAmount + ", addedBy=" + addedBy + ", imageUrl=" + imageUrl + "]";
     }
+
 
 }

@@ -20,7 +20,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -31,6 +33,7 @@ import com.grocery.hr.lalajikidukan.constants.AppConstants;
 import com.grocery.hr.lalajikidukan.entity.CartDO;
 import com.grocery.hr.lalajikidukan.manager.CartManager;
 import com.grocery.hr.lalajikidukan.models.CartModel;
+import com.grocery.hr.lalajikidukan.models.ShippingModel;
 import com.grocery.hr.lalajikidukan.preferences.AppSharedPreference;
 import com.grocery.hr.lalajikidukan.service.CartService;
 import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
@@ -63,12 +66,22 @@ public class CartFragment extends Fragment {
     @BindView(R.id.price)
     TextView mCartTotal;
 
+    @BindView(R.id.dcfree)
+    TextView mDeliveryCharge;
+
+    @BindView(R.id.checkoutButtonLayout)
+    LinearLayout checkoutButtonLayout;
+
+    @BindView(R.id.shippingDetailLayout)
+    LinearLayout shippingDetailLayout;
+
     private CartAdapter mAdapter;
     private MainActivity mActivity;
     private Handler mHandler;
     private Gson gson;
     private Utils mUtils;
     private List<CartModel> cartItems;
+    private ShippingModel   shippingDetail;
     private CartManager cartManager;
     private String cartModelJson;
     private CartService cartService;
@@ -94,7 +107,7 @@ public class CartFragment extends Fragment {
         cartService = CartService.getInstance(getContext());
 
         cartManager.insertByOne("ab");
-        cartManager.insertByOne("asdf");
+        cartManager.insertByOne("ac");
 
         AppSharedPreference.putString(getContext(), AppConstants.User.MOBILE_NO, "9729012780");
         AppSharedPreference.putString(getContext(), AppConstants.User.PASSWORD, "vipul");
@@ -175,14 +188,15 @@ public class CartFragment extends Fragment {
             @Override
             public void run() {
                 new GetCart().execute();
+                new GetShippingDetail().execute();
             }
         });
+
+
     }
 
+
     class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
-
-
-
         @Override
         public CartViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return new CartViewHolder(
@@ -215,14 +229,18 @@ public class CartFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return cartItems.size();
+            if(cartItems==null ){
+                return 0;
+            }else{
+                return cartItems.size();
+            }
+
         }
 
     }
 
+
     class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-
 /*
         @BindView(R.id.imageView)
        AppCompatImageView mLogo;*/
@@ -260,7 +278,7 @@ public class CartFragment extends Fragment {
             CartModel item = cartItems.get(getAdapterPosition());
             cartManager.insertByOne(item.getUpc());
             item.setNoOfUnits(item.getNoOfUnits()+1);
-            refreshTotalCartPrice();
+            refreshBottomDetail();
             mAdapter.notifyDataSetChanged();
 
         }
@@ -274,7 +292,7 @@ public class CartFragment extends Fragment {
             }else{
                 item.setNoOfUnits(item.getNoOfUnits()-1);
             }
-            refreshTotalCartPrice();
+            refreshBottomDetail();
             mAdapter.notifyDataSetChanged();
         }
 
@@ -314,6 +332,30 @@ public class CartFragment extends Fragment {
     }
 
 
+    class GetShippingDetail extends AsyncTask<Void ,Void,String>{
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                return mUtils.getFromServer(AppConstants.Url.BASE_URL+AppConstants.Url.GET_SHIPPING_DETAIL,null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.e(TAG, "GetShippingDetail::onPostExecute(): result is: " + result);
+            if (result != null && result.trim().length() != 0){
+                shippingDetail=JsonParserUtils.shippingParser(result);
+            }
+        }
+
+
+    }
+
     class GetCart extends AsyncTask<Void, Void, String> {
 
         @Override
@@ -321,14 +363,16 @@ public class CartFragment extends Fragment {
             super.onPreExecute();
             List<CartDO> cartDOs = cartManager.getCartItems();
             List<CartModel> cartModelList = mUtils.convertCartDosTOCartModel(cartDOs);
-            cartModelJson = gson.toJson(cartModelList);
+            if(cartModelList!=null && !cartModelList.isEmpty()){
+                cartModelJson = gson.toJson(cartModelList);
+            }
         }
 
         @Override
         protected String doInBackground(Void... params) {
             if (cartModelJson == null || cartModelJson.isEmpty()) {
                 return null;
-            } else if ((AppSharedPreference.getString(getContext(), AppConstants.User.MOBILE_NO, "abc")).equals("abc")) {
+            } else if (!mUtils.isUserLoggedIn(getContext())) {
                 try {
                     return mUtils.postToServer(AppConstants.Url.BASE_URL + AppConstants.Url.CART_PRODUCT_INFO, null, cartModelJson);
                 } catch (Exception e) {
@@ -349,20 +393,10 @@ public class CartFragment extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             Log.e(TAG, "GetCart::onPostExecute(): result is: " + result);
-            if (cartModelJson == null || cartModelJson.isEmpty()) {
-                try {
-                    Snackbar.make(mRootWidget,
-                            getString(R.string.empty_cart),
-                            Snackbar.LENGTH_LONG)
-                            .show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else if (result != null && result.trim().length() != 0) {
-                // cartItems = JsonParserUtils.cartParser(result);
+            if ((cartModelJson == null || cartModelJson.isEmpty()) || (result != null && result.trim().length() != 0)) {
                 cartItems = JsonParserUtils.cartParser(result);
                 mCartList.setAdapter(mAdapter);
-                refreshTotalCartPrice();
+                refreshBottomDetail();
                 mAdapter.notifyDataSetChanged();
             } else {
                 try {
@@ -377,13 +411,23 @@ public class CartFragment extends Fragment {
         }
     }
 
-    public void refreshTotalCartPrice(){
-        int cartToalPrice =cartService.getCartTotalPrice(cartItems);
-        mCartTotal.setText(String.valueOf(cartToalPrice));
-    }
 
-    public void delivertCharge(){
 
+    public void refreshBottomDetail(){
+        if(cartItems==null || cartItems.size()==0){
+            shippingDetailLayout.setVisibility(View.GONE);
+            checkoutButtonLayout.setVisibility(View.GONE);
+        }else{
+            int cartToalPrice =cartService.getCartTotalPrice(cartItems);
+            mCartTotal.setText(String.valueOf(cartToalPrice));
+
+            int deliveryCharge = cartService.getShippingCharge(shippingDetail,cartToalPrice);
+            if(deliveryCharge!=0){
+                mDeliveryCharge.setText(String.valueOf(deliveryCharge));
+            }else {
+                mDeliveryCharge.setText("Free");
+            }
+        }
     }
 
 }
