@@ -81,10 +81,11 @@ public class CartFragment extends Fragment {
     private Gson gson;
     private Utils mUtils;
     private List<CartModel> cartItems;
-    private ShippingModel   shippingDetail;
+    private ShippingModel shippingDetail;
     private CartManager cartManager;
     private String cartModelJson;
     private CartService cartService;
+
 
 
     public CartFragment() {
@@ -229,9 +230,9 @@ public class CartFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            if(cartItems==null ){
+            if (cartItems == null) {
                 return 0;
-            }else{
+            } else {
                 return cartItems.size();
             }
 
@@ -270,27 +271,27 @@ public class CartFragment extends Fragment {
             super(itemView);
             ButterKnife.bind(this, itemView);
             //   mHeader.setVisibility(View.GONE);
-           // itemView.setOnClickListener(this);
+            // itemView.setOnClickListener(this);
         }
 
         @OnClick(R.id.cart_plus)
-        public void onPlusClick(){
+        public void onPlusClick() {
             CartModel item = cartItems.get(getAdapterPosition());
             cartManager.insertByOne(item.getUpc());
-            item.setNoOfUnits(item.getNoOfUnits()+1);
+            item.setNoOfUnits(item.getNoOfUnits() + 1);
             refreshBottomDetail();
             mAdapter.notifyDataSetChanged();
 
         }
 
         @OnClick(R.id.cart_minus)
-        public void onMinusClick(){
+        public void onMinusClick() {
             CartModel item = cartItems.get(getAdapterPosition());
             cartManager.removeByOne(item.getUpc());
-            if(item.getNoOfUnits()==1){
+            if (item.getNoOfUnits() == 1) {
                 cartItems.remove(getAdapterPosition());
-            }else{
-                item.setNoOfUnits(item.getNoOfUnits()-1);
+            } else {
+                item.setNoOfUnits(item.getNoOfUnits() - 1);
             }
             refreshBottomDetail();
             mAdapter.notifyDataSetChanged();
@@ -332,12 +333,12 @@ public class CartFragment extends Fragment {
     }
 
 
-    class GetShippingDetail extends AsyncTask<Void ,Void,String>{
+    class GetShippingDetail extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... params) {
             try {
-                return mUtils.getFromServer(AppConstants.Url.BASE_URL+AppConstants.Url.GET_SHIPPING_DETAIL,null);
+                return mUtils.getFromServer(AppConstants.Url.BASE_URL + AppConstants.Url.GET_SHIPPING_DETAIL, null);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -348,8 +349,9 @@ public class CartFragment extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             Log.e(TAG, "GetShippingDetail::onPostExecute(): result is: " + result);
-            if (result != null && result.trim().length() != 0){
-                shippingDetail=JsonParserUtils.shippingParser(result);
+            if (result != null && result.trim().length() != 0) {
+                shippingDetail = JsonParserUtils.shippingParser(result);
+                refreshBottomDetail();
             }
         }
 
@@ -363,7 +365,7 @@ public class CartFragment extends Fragment {
             super.onPreExecute();
             List<CartDO> cartDOs = cartManager.getCartItems();
             List<CartModel> cartModelList = mUtils.convertCartDosTOCartModel(cartDOs);
-            if(cartModelList!=null && !cartModelList.isEmpty()){
+            if (cartModelList != null && !cartModelList.isEmpty()) {
                 cartModelJson = gson.toJson(cartModelList);
             }
         }
@@ -396,7 +398,6 @@ public class CartFragment extends Fragment {
             if ((cartModelJson == null || cartModelJson.isEmpty()) || (result != null && result.trim().length() != 0)) {
                 cartItems = JsonParserUtils.cartParser(result);
                 mCartList.setAdapter(mAdapter);
-                refreshBottomDetail();
                 mAdapter.notifyDataSetChanged();
             } else {
                 try {
@@ -412,19 +413,18 @@ public class CartFragment extends Fragment {
     }
 
 
-
-    public void refreshBottomDetail(){
-        if(cartItems==null || cartItems.size()==0){
+    public void refreshBottomDetail() {
+        if (cartItems == null || cartItems.size() == 0) {
             shippingDetailLayout.setVisibility(View.GONE);
             checkoutButtonLayout.setVisibility(View.GONE);
-        }else{
-            int cartToalPrice =cartService.getCartTotalPrice(cartItems);
+        } else {
+            int cartToalPrice = cartService.getCartTotalPrice(cartItems);
             mCartTotal.setText(String.valueOf(cartToalPrice));
 
-            int deliveryCharge = cartService.getShippingCharge(shippingDetail,cartToalPrice);
-            if(deliveryCharge!=0){
+            int deliveryCharge = cartService.getShippingCharge(shippingDetail, cartToalPrice);
+            if (deliveryCharge != 0) {
                 mDeliveryCharge.setText(String.valueOf(deliveryCharge));
-            }else {
+            } else {
                 mDeliveryCharge.setText("Free");
             }
         }
