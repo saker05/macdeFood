@@ -197,6 +197,7 @@ public class CartFragment extends Fragment {
 
 
     class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
+
         @Override
         public CartViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return new CartViewHolder(
@@ -240,7 +241,10 @@ public class CartFragment extends Fragment {
     }
 
 
+
     class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+
 /*
         @BindView(R.id.imageView)
        AppCompatImageView mLogo;*/
@@ -270,27 +274,28 @@ public class CartFragment extends Fragment {
             super(itemView);
             ButterKnife.bind(this, itemView);
             //   mHeader.setVisibility(View.GONE);
-           // itemView.setOnClickListener(this);
+            // itemView.setOnClickListener(this);
         }
 
         @OnClick(R.id.cart_plus)
-        public void onPlusClick(){
+        public void onPlusClick() {
             CartModel item = cartItems.get(getAdapterPosition());
             cartManager.insertByOne(item.getUpc());
             item.setNoOfUnits(item.getNoOfUnits()+1);
             refreshBottomDetail();
+
             mAdapter.notifyDataSetChanged();
 
         }
 
         @OnClick(R.id.cart_minus)
-        public void onMinusClick(){
+        public void onMinusClick() {
             CartModel item = cartItems.get(getAdapterPosition());
             cartManager.removeByOne(item.getUpc());
-            if(item.getNoOfUnits()==1){
+            if (item.getNoOfUnits() == 1) {
                 cartItems.remove(getAdapterPosition());
-            }else{
-                item.setNoOfUnits(item.getNoOfUnits()-1);
+            } else {
+                item.setNoOfUnits(item.getNoOfUnits() - 1);
             }
             refreshBottomDetail();
             mAdapter.notifyDataSetChanged();
@@ -413,18 +418,18 @@ public class CartFragment extends Fragment {
 
 
 
-    public void refreshBottomDetail(){
-        if(cartItems==null || cartItems.size()==0){
+    public void refreshBottomDetail() {
+        if (cartItems == null || cartItems.size() == 0) {
             shippingDetailLayout.setVisibility(View.GONE);
             checkoutButtonLayout.setVisibility(View.GONE);
-        }else{
-            int cartToalPrice =cartService.getCartTotalPrice(cartItems);
+        } else {
+            int cartToalPrice = cartService.getCartTotalPrice(cartItems);
             mCartTotal.setText(String.valueOf(cartToalPrice));
 
-            int deliveryCharge = cartService.getShippingCharge(shippingDetail,cartToalPrice);
-            if(deliveryCharge!=0){
+            int deliveryCharge = cartService.getShippingCharge(shippingDetail, cartToalPrice);
+            if (deliveryCharge != 0) {
                 mDeliveryCharge.setText(String.valueOf(deliveryCharge));
-            }else {
+            } else {
                 mDeliveryCharge.setText("Free");
             }
         }

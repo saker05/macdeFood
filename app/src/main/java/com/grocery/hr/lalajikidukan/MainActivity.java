@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
 import com.grocery.hr.lalajikidukan.fragments.CartFragment;
+import com.grocery.hr.lalajikidukan.fragments.HomeFragment;
+import com.grocery.hr.lalajikidukan.fragments.ProductFragment;
 import com.grocery.hr.lalajikidukan.manager.CartManager;
 import com.grocery.hr.lalajikidukan.preferences.AppPrefs;
 import com.grocery.hr.lalajikidukan.preferences.AppSharedPreference;
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 setUpNavView();
-                /*setupView();*/
+                setupView();
                 showCart();
                 doesNotificationClicked();
             }
@@ -122,6 +124,9 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
+    public void setupView() {
+        loadFragment(appPrefs.getActivityDrawerItemPosition());
+    }
 
     public void setUpNavView() {
         Menu menu = mNavigationView.getMenu();
@@ -171,11 +176,12 @@ public class MainActivity extends AppCompatActivity {
         appPrefs.setActivityDrawerItemPosition(currentSelectedPosition);
         clearBackStack();
         if (currentSelectedPosition == 0) {
-          /*  getSupportFragmentManager()
+            getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.flContentMain, HomeFragment.newInstance(),
+                    .replace(R.id.flContentMain, HomeFragment
+                                    .newInstance(),
                             HomeFragment.TAG)
-                    .commit();*/
+                    .commit();
         } else if (currentSelectedPosition == 1) {
            /* getSupportFragmentManager()
                     .beginTransaction()
@@ -216,6 +222,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    public DrawerLayout getDrawerLayout() {
+        return mDrawerLayout;
+    }
+
 
     public void hideCart() {
         getCart().post(new Runnable() {
