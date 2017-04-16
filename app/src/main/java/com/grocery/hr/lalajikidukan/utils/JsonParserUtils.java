@@ -64,6 +64,7 @@ public class JsonParserUtils {
                 categoryModel.setName(category.getString("name"));
                 categoryModel.setId(category.getInt("id"));
                 categoryModel.setImageUrl(category.getString("imageUrl"));
+                categoryModel.setDescription(category.getString("description"));
                 categoryModelList.add(categoryModel);
             }
             return categoryModelList;
@@ -91,7 +92,7 @@ public class JsonParserUtils {
                 productModel.setName(product.getString("name"));
                 productModel.setCategoryId(product.getInt("categoryId"));
                 productModel.setDescription(product.getString("description"));
-                productModel.setUnitQuantityInGm(product.getJSONObject("unitQuantityInGm") == null ? null : product.getInt("unitQuantityInGm"));
+                productModel.setUnitQuantityInGm(product.getInt("unitQuantityInGm"));
                 productModelList.add(productModel);
             }
             return productModelList;

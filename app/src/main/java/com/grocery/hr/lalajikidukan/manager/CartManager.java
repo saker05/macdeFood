@@ -61,6 +61,10 @@ public class CartManager {
         }
     }
 
+    public CartDO getCartItem(String upc){
+        return getCartDOfromCursor(cartDAO.getCartItem(upc));
+    }
+
     public void deleteAllCartItems(){
         cartDAO.deleteAllCartItems();
     }

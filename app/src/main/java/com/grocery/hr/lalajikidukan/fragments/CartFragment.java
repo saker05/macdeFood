@@ -107,9 +107,6 @@ public class CartFragment extends Fragment {
         mAdapter = new CartAdapter();
         cartService = CartService.getInstance(getContext());
 
-        cartManager.insertByOne("ab");
-        cartManager.insertByOne("ac");
-
         AppSharedPreference.putString(getContext(), AppConstants.User.MOBILE_NO, "9729012780");
         AppSharedPreference.putString(getContext(), AppConstants.User.PASSWORD, "vipul");
         setHasOptionsMenu(true);
@@ -198,6 +195,7 @@ public class CartFragment extends Fragment {
 
 
     class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
+
         @Override
         public CartViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return new CartViewHolder(
@@ -221,7 +219,7 @@ public class CartFragment extends Fragment {
                     item.getNoOfUnits()
             ));
 
-            if (item.getUnitQuantityInGm() == null) {
+            if (item.getUnitQuantityInGm() == 0) {
                 holder.getQuantity().setText("1 unit");
             } else {
                 holder.getQuantity().setText(String.valueOf(item.getUnitQuantityInGm()) + "gm");
@@ -241,7 +239,10 @@ public class CartFragment extends Fragment {
     }
 
 
+
     class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+
 /*
         @BindView(R.id.imageView)
        AppCompatImageView mLogo;*/
@@ -280,6 +281,7 @@ public class CartFragment extends Fragment {
             cartManager.insertByOne(item.getUpc());
             item.setNoOfUnits(item.getNoOfUnits() + 1);
             refreshBottomDetail();
+
             mAdapter.notifyDataSetChanged();
 
         }
@@ -316,7 +318,6 @@ public class CartFragment extends Fragment {
         public AppCompatTextView getName() {
             return mcontent;
         }
-
 
         public AppCompatTextView getQtyRate() {
             return mQtyRate;
@@ -411,7 +412,6 @@ public class CartFragment extends Fragment {
             }
         }
     }
-
 
     public void refreshBottomDetail() {
         if (cartItems == null || cartItems.size() == 0) {

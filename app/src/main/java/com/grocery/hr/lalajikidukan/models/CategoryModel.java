@@ -9,6 +9,7 @@ public class CategoryModel {
     private String name;
     private String status;
     private String imageUrl;
+    private String description;
 
     public int getId() {
         return id;
@@ -42,11 +43,20 @@ public class CategoryModel {
         this.imageUrl = imageUrl;
     }
 
-    @Override
-    public String toString() {
-        return "CategoryModel [id=" + id + ", name=" + name + ", status=" + status + ", imageUrl=" + imageUrl + "]";
+
+    public String getDescription() {
+        return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "CategoryModel [id=" + id + ", name=" + name + ", status=" + status + ", imageUrl=" + imageUrl
+                + ", description=" + description + "]";
+    }
 
 
 }

@@ -25,8 +25,9 @@ public interface AppConstants {
         public static final String ADD_CART   = "/cart";
         public static final String CART_PRODUCT_INFO="/cart/productInfoForNotLoggedInUser";
         public static final String GET_CATEGORY="/category";
-        public static final String GET_PRODUCT ="/category/?/product";
+        public static final String GET_PRODUCT ="/category/?/products";
         public static final String GET_SHIPPING_DETAIL="/shipping";
+        public static final String GET_HIGHLIGHTED_PRODUCT="/product/highlighted";
     }
 
     public interface Cloudinary{
