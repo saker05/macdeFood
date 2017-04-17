@@ -139,7 +139,6 @@ public class CartFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         mActivity.showCart();
-
     }
 
     @Override

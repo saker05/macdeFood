@@ -210,7 +210,7 @@ public class HomeFragment extends Fragment {
                     .beginTransaction()
                     .replace(R.id.flContentMain, ProductFragment
                                     .newInstance(category.getId()),
-                            ProductFragment.TAG)
+                            ProductFragment.TAG).addToBackStack(null)
                     .commit();
         }
         public TextView getMCategoryName()

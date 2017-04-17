@@ -44,7 +44,7 @@ import butterknife.OnClick;
 
 public class ProductFragment extends Fragment {
 
-    public static final String TAG = CartFragment.class.getSimpleName();
+    public static final String TAG = ProductFragment.class.getSimpleName();
 
     @BindView(R.id.clRootproduct)
     CoordinatorLayout mRootWidget;
@@ -119,7 +119,6 @@ public class ProductFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
     }
 
     @Override

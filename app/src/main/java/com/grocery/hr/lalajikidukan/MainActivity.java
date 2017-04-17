@@ -115,6 +115,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else if (getSupportFragmentManager().getBackStackEntryCount() == 0
+                && appPrefs.getActivityDrawerItemPosition() != 0) {
+            loadFragment(0);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     @OnClick(R.id.cvBottomCart)
     public void onCart() {
         getSupportFragmentManager()
@@ -189,11 +201,11 @@ public class MainActivity extends AppCompatActivity {
                             AddressFragment.TAG)
                     .commit();*/
         } else if (currentSelectedPosition == 2) {
-            getSupportFragmentManager()
+            /*getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.flContentMain, CartFragment.newInstance(),
                             CartFragment.TAG)
-                    .commit();
+                    .commit();*/
         }
     }
 
