@@ -1,5 +1,6 @@
 package com.grocery.hr.lalajikidukan.fragments;
 
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,16 +43,21 @@ import butterknife.ButterKnife;
 public class HomeFragment extends Fragment {
 
     public static final String TAG = HomeFragment.class.getSimpleName();
+
     private ActionBarDrawerToggle mDrawerToggle;
+    private MainActivity mActivity;
+    private SliderAdapter mSliderAdapter;
+    private CategoryAdapter mCategoryAdapter;
+    private List<ProductModel> highlightedProductItems;
+    private List<CategoryModel> categoryItems;
+    private Handler mHandler;
+    private Utils mUtils;
 
-    MainActivity mActivity;
-
+    // Xml field
+    Toolbar mToolbar;
 
     @BindView(R.id.sliderRootHome)
     CoordinatorLayout mRootWidget;
-
-    @BindView(R.id.sliderToolbar)
-    Toolbar mToolbar;
 
     @BindView(R.id.cardslider)
     SuperRecyclerView mCardSlider;
@@ -58,21 +65,6 @@ public class HomeFragment extends Fragment {
     @BindView(R.id.categoryslider)
     SuperRecyclerView mcategoryslider;
 
-    SliderAdapter mSliderAdapter;
-
-    CategoryAdapter mCategoryAdapter;
-
-    private Utils mUtils;
-
-    List<ProductModel> highlightedProductItems;
-    List<CategoryModel> categoryItems;
-
-    private Handler mHandler;
-
-
-    public HomeFragment() {
-        // Required empty public constructor
-    }
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -82,19 +74,22 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = (MainActivity) getActivity();
-        mSliderAdapter=new SliderAdapter();
-        mCategoryAdapter=new CategoryAdapter();
+        mSliderAdapter = new SliderAdapter();
+        mCategoryAdapter = new CategoryAdapter();
         mUtils = Utils.getInstance();
-        mHandler=new Handler();
+        mHandler = new Handler();
         setHasOptionsMenu(true);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        if (!mUtils.isDeviceOnline(getContext())) {
+            return inflater.inflate(R.layout.no_internet_connection, container, false);
+        } else {
+            return inflater.inflate(R.layout.fragment_home, container, false);
+        }
+
     }
 
     @Override
@@ -109,8 +104,15 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
-        setUpViews();
+        if(mUtils.isDeviceOnline(getContext())){
+            ButterKnife.bind(this, view);
+            mToolbar=(Toolbar)getActivity().findViewById(R.id.homeToolbar);
+            setUpToolbar();
+            setUpViews();
+        }else{
+            mToolbar=(Toolbar)getActivity().findViewById(R.id.noInternetConnectionToolbar);
+            setUpToolbar();
+        }
     }
 
     @Override
@@ -119,15 +121,16 @@ public class HomeFragment extends Fragment {
 
     }
 
-    public void setUpViews() {
-
+    public void setUpToolbar() {
         mActivity.setSupportActionBar(mToolbar);
         mActivity.setTitle(getString(R.string.app_name));
         mDrawerToggle = new ActionBarDrawerToggle(mActivity, mActivity.getDrawerLayout(), mToolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mActivity.getDrawerLayout().addDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
+    }
 
+    public void setUpViews() {
         final LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(getActivity());
         linearLayoutManager1.setOrientation(LinearLayoutManager.HORIZONTAL);
         mCardSlider.setLayoutManager(linearLayoutManager1);
@@ -135,7 +138,6 @@ public class HomeFragment extends Fragment {
         final LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getActivity());
         linearLayoutManager2.setOrientation(LinearLayoutManager.VERTICAL);
         mcategoryslider.setLayoutManager(linearLayoutManager2);
-
         mcategoryslider.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -143,7 +145,6 @@ public class HomeFragment extends Fragment {
             }
         });
         baseGetCategoryAndHighlihtedProducts();
-
     }
 
 
@@ -158,7 +159,6 @@ public class HomeFragment extends Fragment {
     }
 
 
-
     class CategoryAdapter extends RecyclerView.Adapter<CategorySliderViewHolder> {
 
         @Override
@@ -171,14 +171,14 @@ public class HomeFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(CategorySliderViewHolder holder, int position) {
-            CategoryModel categoryModel= categoryItems.get(position);
+            CategoryModel categoryModel = categoryItems.get(position);
             holder.getMCategoryName().setText(categoryModel.getName());
             holder.getMDescription().setText(categoryModel.getDescription());
         }
 
         @Override
         public int getItemCount() {
-            if(categoryItems !=null){
+            if (categoryItems != null) {
                 return categoryItems.size();
             }
             return 0;
@@ -191,7 +191,7 @@ public class HomeFragment extends Fragment {
             super(itemView);
             ButterKnife.bind(this, itemView);
             //   mHeader.setVisibility(View.GONE);
-             itemView.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @BindView(R.id.categoryImage)
@@ -205,21 +205,20 @@ public class HomeFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-               CategoryModel category= categoryItems.get(getAdapterPosition());
-               mActivity.getSupportFragmentManager()
+            CategoryModel category = categoryItems.get(getAdapterPosition());
+            mActivity.getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.flContentMain, ProductFragment
                                     .newInstance(category.getId()),
                             ProductFragment.TAG).addToBackStack(null)
                     .commit();
         }
-        public TextView getMCategoryName()
-        {
+
+        public TextView getMCategoryName() {
             return mCategoryName;
         }
 
-        public TextView getMDescription()
-        {
+        public TextView getMDescription() {
             return mDescription;
         }
 
@@ -245,7 +244,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            if(highlightedProductItems !=null){
+            if (highlightedProductItems != null) {
                 return highlightedProductItems.size();
             }
             return 0;
@@ -257,8 +256,6 @@ public class HomeFragment extends Fragment {
         public SliderCardViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            //   mHeader.setVisibility(View.GONE);
-            // itemView.setOnClickListener(this);
         }
 
         @BindView(R.id.category_slider_image)
@@ -278,7 +275,6 @@ public class HomeFragment extends Fragment {
     }
 
 
-
     class GetHighlightedProducts extends AsyncTask<Void, Void, String> {
 
         @Override
@@ -296,10 +292,10 @@ public class HomeFragment extends Fragment {
             super.onPostExecute(result);
             Log.e(TAG, "GetHighLightedProduct::onGetExecte(): result is: " + result);
             if ((result != null && result.trim().length() != 0)) {
-                highlightedProductItems =JsonParserUtils.productParser(result);
+                highlightedProductItems = JsonParserUtils.productParser(result);
                 mCardSlider.setAdapter(mSliderAdapter);
                 mSliderAdapter.notifyDataSetChanged();
-            }else {
+            } else {
                 try {
                     Snackbar.make(mRootWidget,
                             getString(R.string.cant_connect_to_server),
@@ -330,10 +326,10 @@ public class HomeFragment extends Fragment {
             super.onPostExecute(result);
             Log.e(TAG, "GetCategories::onGetExecte(): result is: " + result);
             if ((result != null && result.trim().length() != 0)) {
-               categoryItems =JsonParserUtils.categoryParser(result);
+                categoryItems = JsonParserUtils.categoryParser(result);
                 mcategoryslider.setAdapter(mCategoryAdapter);
                 mCategoryAdapter.notifyDataSetChanged();
-            }else {
+            } else {
                 try {
                     Snackbar.make(mRootWidget,
                             getString(R.string.cant_connect_to_server),
@@ -345,7 +341,6 @@ public class HomeFragment extends Fragment {
             }
         }
     }
-
 
 
 }

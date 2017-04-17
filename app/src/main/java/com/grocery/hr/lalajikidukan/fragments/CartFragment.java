@@ -54,11 +54,23 @@ public class CartFragment extends Fragment {
 
     public static final String TAG = CartFragment.class.getSimpleName();
 
+    private CartAdapter mAdapter;
+    private MainActivity mActivity;
+    private Handler mHandler;
+    private Gson gson;
+    private Utils mUtils;
+    private List<CartModel> cartItems;
+    private ShippingModel shippingDetail;
+    private CartManager cartManager;
+    private String cartModelJson;
+    private CartService cartService;
+
+    //XML View
+
+    Toolbar mToolbar;
+
     @BindView(R.id.clRootCart)
     CoordinatorLayout mRootWidget;
-
-    @BindView(R.id.tbToolbar)
-    Toolbar mToolbar;
 
     @BindView(R.id.rvCart)
     SuperRecyclerView mCartList;
@@ -75,22 +87,6 @@ public class CartFragment extends Fragment {
     @BindView(R.id.shippingDetailLayout)
     LinearLayout shippingDetailLayout;
 
-    private CartAdapter mAdapter;
-    private MainActivity mActivity;
-    private Handler mHandler;
-    private Gson gson;
-    private Utils mUtils;
-    private List<CartModel> cartItems;
-    private ShippingModel shippingDetail;
-    private CartManager cartManager;
-    private String cartModelJson;
-    private CartService cartService;
-
-
-
-    public CartFragment() {
-        // Required empty public constructor
-    }
 
     public static CartFragment newInstance() {
         return new CartFragment();
@@ -106,9 +102,6 @@ public class CartFragment extends Fragment {
         cartManager = CartManager.getInstance(getContext());
         mAdapter = new CartAdapter();
         cartService = CartService.getInstance(getContext());
-
-        AppSharedPreference.putString(getContext(), AppConstants.User.MOBILE_NO, "9729012780");
-        AppSharedPreference.putString(getContext(), AppConstants.User.PASSWORD, "vipul");
         setHasOptionsMenu(true);
     }
 
@@ -123,16 +116,26 @@ public class CartFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cart, container, false);
+        if (!mUtils.isDeviceOnline(getContext())) {
+            return inflater.inflate(R.layout.no_internet_connection, container, false);
+        } else {
+            return inflater.inflate(R.layout.fragment_cart, container, false);
+        }
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
         mActivity.hideCart();
-        setUpViews();
+        if(mUtils.isDeviceOnline(getContext())){
+            ButterKnife.bind(this, view);
+            mToolbar=(Toolbar)getActivity().findViewById(R.id.cartToolbar);
+            setUpToolbar();
+            setUpViews();
+        }else{
+            mToolbar=(Toolbar)getActivity().findViewById(R.id.noInternetConnectionToolbar);
+            setUpToolbar();
+        }
     }
 
     @Override
@@ -147,7 +150,7 @@ public class CartFragment extends Fragment {
 //        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    public void setUpViews() {
+    public void setUpToolbar() {
         mActivity.setSupportActionBar(mToolbar);
         ActionBar actionBar = mActivity.getSupportActionBar();
         if (actionBar != null) {
@@ -160,13 +163,11 @@ public class CartFragment extends Fragment {
                 mActivity.onBackPressed();
             }
         });
-
-//        mDrawerToggle = new ActionBarDrawerToggle(mActivity, mActivity.getDrawerLayout(), mToolbar,
-//                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        mActivity.getDrawerLayout().addDrawerListener(mDrawerToggle);
-//        mDrawerToggle.syncState();
-
         mActivity.setTitle(getString(R.string.action_cart));
+    }
+
+
+    public void setUpViews() {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mCartList.setLayoutManager(linearLayoutManager);
@@ -188,13 +189,9 @@ public class CartFragment extends Fragment {
                 new GetShippingDetail().execute();
             }
         });
-
-
     }
 
-
     class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
-
         @Override
         public CartViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return new CartViewHolder(
@@ -232,16 +229,11 @@ public class CartFragment extends Fragment {
             } else {
                 return cartItems.size();
             }
-
         }
-
     }
 
 
-
     class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-
 /*
         @BindView(R.id.imageView)
        AppCompatImageView mLogo;*/
@@ -354,9 +346,8 @@ public class CartFragment extends Fragment {
                 refreshBottomDetail();
             }
         }
-
-
     }
+
 
     class GetCart extends AsyncTask<Void, Void, String> {
 

@@ -46,36 +46,28 @@ public class ProductFragment extends Fragment {
 
     public static final String TAG = ProductFragment.class.getSimpleName();
 
+    private List<ProductModel> productItems;
+    private ProductAdapter mAdapter;
+    private MainActivity mActivity;
+    private int category;
+    private Utils mUtils;
+    private Handler mHandler;
+    private ProductService productService;
+    private CartManager cartManager;
+
+    //XML VIEW
+
+    Toolbar mToolbar;
+
     @BindView(R.id.clRootproduct)
     CoordinatorLayout mRootWidget;
-
-    @BindView(R.id.pToolbar)
-    Toolbar mToolbar;
 
     @BindView(R.id.rvproduct)
     SuperRecyclerView mProductList;
 
-    private List<ProductModel> productItems;
-
-    private ProductAdapter mAdapter;
-
-    private MainActivity mActivity;
-
-    private int category;
-
-    private Utils mUtils;
-
-    private Handler mHandler;
-
-    private ProductService productService;
-
-    private CartManager cartManager;
-
-
 
     public ProductFragment(int category) {
         this.category = category;
-        // Required empty public constructor
     }
 
     public static ProductFragment newInstance(int category) {
@@ -105,15 +97,25 @@ public class ProductFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.product, container, false);
+        if (!mUtils.isDeviceOnline(getContext())) {
+            return inflater.inflate(R.layout.no_internet_connection, container, false);
+        } else {
+            return inflater.inflate(R.layout.product, container, false);
+        }
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
-        setUpViews();
+        if (mUtils.isDeviceOnline(getContext())) {
+            ButterKnife.bind(this, view);
+            mToolbar = (Toolbar) getActivity().findViewById(R.id.productToolbar);
+            setUpToolbar();
+            setUpViews();
+        } else {
+            mToolbar = (Toolbar) getActivity().findViewById(R.id.noInternetConnectionToolbar);
+            setUpToolbar();
+        }
     }
 
     @Override
@@ -127,7 +129,7 @@ public class ProductFragment extends Fragment {
 //        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    public void setUpViews() {
+    public void setUpToolbar() {
         mActivity.setSupportActionBar(mToolbar);
         ActionBar actionBar = mActivity.getSupportActionBar();
         if (actionBar != null) {
@@ -140,17 +142,13 @@ public class ProductFragment extends Fragment {
                 mActivity.onBackPressed();
             }
         });
-
-//        mDrawerToggle = new ActionBarDrawerToggle(mActivity, mActivity.getDrawerLayout(), mToolbar,
-//                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        mActivity.getDrawerLayout().addDrawerListener(mDrawerToggle);
-//        mDrawerToggle.syncState();
-
         mActivity.setTitle("Product");
+    }
+
+    public void setUpViews() {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mProductList.setLayoutManager(linearLayoutManager);
-
         mProductList.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -158,7 +156,6 @@ public class ProductFragment extends Fragment {
             }
         });
         baseGetProducts();
-
     }
 
     public void baseGetProducts() {
@@ -172,7 +169,6 @@ public class ProductFragment extends Fragment {
 
 
     class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
-
 
         @Override
         public ProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -217,8 +213,6 @@ public class ProductFragment extends Fragment {
 
 
     class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-
 /*
         @BindView(R.id.imageView)
        AppCompatImageView mLogo;*/
@@ -265,7 +259,7 @@ public class ProductFragment extends Fragment {
             ProductModel product = productItems.get(getAdapterPosition());
             cartManager.removeByOne(product.getUpc());
             if (product.getNoOfItemInCart() > 0) {
-                product.setNoOfItemInCart(product.getNoOfItemInCart()-1);
+                product.setNoOfItemInCart(product.getNoOfItemInCart() - 1);
             }
             mActivity.showCart();
             mAdapter.notifyDataSetChanged();
