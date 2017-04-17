@@ -1,9 +1,12 @@
 package com.grocery.hr.lalajikidukan.utils;
 
+import com.grocery.hr.lalajikidukan.models.AddressModel;
 import com.grocery.hr.lalajikidukan.models.CartModel;
 import com.grocery.hr.lalajikidukan.models.CategoryModel;
 import com.grocery.hr.lalajikidukan.models.ProductModel;
 import com.grocery.hr.lalajikidukan.models.ShippingModel;
+import com.grocery.hr.lalajikidukan.models.UserOrderModel;
+import com.grocery.hr.lalajikidukan.models.UserSubOrderModel;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.json.JSONArray;
@@ -112,6 +115,80 @@ public class JsonParserUtils {
             shippingModel.setDeliveryCharge(shippingDetail.getInt("deliveryCharge"));
             shippingModel.setMinOrderForFreeDelivery(shippingDetail.getInt("minOrderForFreeDelivery"));
             return shippingModel;
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static List<AddressModel> addressParser(String jsonString){
+        if(jsonString==null || jsonString.isEmpty()){
+            return  null;
+        }
+        try{
+            List<AddressModel> addressModelList = new ArrayList<>();
+            JSONArray addresses = new JSONObject(jsonString).optJSONArray("data");
+            for (int i = 0; i < addresses.length(); i ++) {
+                AddressModel addressModel = new AddressModel();
+                JSONObject address = addresses.getJSONObject(i);
+                addressModel.setAddress(address.getString("address"));
+                addressModel.setCity(address.getString("city"));
+                addressModel.setId(address.getInt("id"));
+                addressModel.setName(address.getString("name"));
+                addressModel.setPincode(address.getInt("pincode"));
+                addressModel.setState(address.getString("state"));
+                addressModel.setUser(address.getString("user"));
+                addressModelList.add(addressModel);
+            }
+            return addressModelList;
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static List<UserOrderModel> orderParser(String jsonString){
+        if(jsonString==null || jsonString.isEmpty()){
+            return  null;
+        }
+        try {
+            List<UserOrderModel> orderModelList = new ArrayList<>();
+            JSONArray orders = new JSONObject(jsonString).optJSONArray("data");
+            for (int i = 0; i < orders.length(); i ++) {
+                UserOrderModel orderModel=new UserOrderModel();
+                JSONObject order= orders.getJSONObject(i);
+                orderModel.setUser(order.getString("user"));
+                orderModel.setOrderDate(order.getString("orderDate"));
+                orderModel.setOrderTotalAmount(order.getInt("orderTotalAmount"));
+                orderModel.setStatus(order.getString("status"));
+                orderModel.setUoc(order.getString("uoc"));
+                orderModelList.add(orderModel);
+            }
+            return orderModelList;
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static List<UserSubOrderModel> subOrderParser(String jsonString){
+        if(jsonString==null || jsonString.isEmpty()){
+            return  null;
+        }
+        try {
+            List<UserSubOrderModel> subOrderModelList = new ArrayList<>();
+            JSONArray subOrders = new JSONObject(jsonString).optJSONArray("data");
+            for (int i = 0; i < subOrders.length(); i ++) {
+                UserSubOrderModel subOrderModel=new UserSubOrderModel();
+                JSONObject subOrder= subOrders.getJSONObject(i);
+                subOrderModel.setUoc(subOrder.getString("uoc"));
+                subOrderModel.setUpc(subOrder.getString("upc"));
+                subOrderModel.setNoOfUnits(subOrder.getInt("noOfUnits"));
+                subOrderModel.setUnitAmount(subOrder.getInt("unitAmount"));
+                subOrderModel.setUnitQuantityInGm(subOrder.getInt("unitQuantityInGm"));
+                subOrderModelList.add(subOrderModel);
+            }
+            return subOrderModelList;
         }catch (JSONException e) {
             e.printStackTrace();
         }
