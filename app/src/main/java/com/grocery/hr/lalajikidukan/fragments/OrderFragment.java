@@ -2,13 +2,21 @@ package com.grocery.hr.lalajikidukan.fragments;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.grocery.hr.lalajikidukan.R;
+import com.grocery.hr.lalajikidukan.constants.AppConstants;
+import com.grocery.hr.lalajikidukan.models.UserOrderModel;
+import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
+import com.grocery.hr.lalajikidukan.utils.Utils;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +35,11 @@ public class OrderFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private Utils mUtils;
+    private List<UserOrderModel> orders;
+
+    public static final String TAG = OrderFragment.class.getSimpleName();
 
     private OnFragmentInteractionListener mListener;
 
@@ -112,4 +125,41 @@ public class OrderFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    class GetOrder extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                return mUtils.getFromServer(AppConstants.Url.BASE_URL + AppConstants.Url.GET_ORDERS, mUtils.getUerPasswordMap(getContext()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.e(TAG, "GetOrder::onPostExecute(): result is: " + result);
+            if ((result != null && result.trim().length() != 0)) {
+                orders=JsonParserUtils.orderParser(result);
+                /*mCartList.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();*/
+            } else {
+              /*  try {
+                    Snackbar.make(mRootWidget,
+                            getString(R.string.cant_connect_to_server),
+                            Snackbar.LENGTH_LONG)
+                            .show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }*/
+            }
+        }
+    }
+
+
+
 }
