@@ -7,6 +7,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_home">Home</string>
     <string name="action_information">My Information</string>
+    <string name="action_information_other">Others</string>
     <string name="action_addresses">My Addresses</string>
     <string name="action_orders">My Orders</string>
     <string name="action_order_details">Order Details</string>
@@ -16,6 +17,7 @@
     <string name="action_share">Share</string>
     <string name="action_rate">Rate</string>
     <string name="action_logout">Logout</string>
+    <string name="action_login">Login</string>
     <string name="action_view_cart">View Cart</string>
     <string name="action_search">Search</string>
     <string name="action_expand">Expand</string>

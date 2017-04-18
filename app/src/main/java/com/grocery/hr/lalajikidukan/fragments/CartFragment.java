@@ -180,6 +180,10 @@ public class CartFragment extends Fragment {
         baseGetCart();
     }
 
+    @OnClick(R.id.checkoutButton)
+    public void checkout(){
+
+    }
 
     public void baseGetCart() {
         mHandler.post(new Runnable() {

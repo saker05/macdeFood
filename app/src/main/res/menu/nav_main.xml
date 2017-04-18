@@ -17,6 +17,10 @@
         <item android:title="@string/action_information">
             <menu>
                 <item
+                    android:id="@+id/action_login"
+                    android:icon="@mipmap/ic_person_black_24dp"
+                    android:title="@string/action_login" />
+                <item
                     android:id="@+id/action_addresses"
                     android:icon="@mipmap/ic_location_on_black_24dp"
                     android:title="@string/action_addresses" />
