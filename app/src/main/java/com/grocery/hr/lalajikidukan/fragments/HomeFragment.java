@@ -106,6 +106,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if(mUtils.isDeviceOnline(getContext())){
             ButterKnife.bind(this, view);
+            mcategoryslider.getProgressView().setVisibility(View.GONE);
             mToolbar=(Toolbar)getActivity().findViewById(R.id.homeToolbar);
             setUpToolbar();
             setUpViews();
@@ -297,6 +298,7 @@ public class HomeFragment extends Fragment {
                 mSliderAdapter.notifyDataSetChanged();
             } else {
                 try {
+                    mCardSlider.setAdapter(mSliderAdapter);
                     Snackbar.make(mRootWidget,
                             getString(R.string.cant_connect_to_server),
                             Snackbar.LENGTH_LONG)
@@ -305,6 +307,7 @@ public class HomeFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
+            mUtils.hideRefreshing(mCardSlider);
         }
     }
 
@@ -330,6 +333,7 @@ public class HomeFragment extends Fragment {
                 mcategoryslider.setAdapter(mCategoryAdapter);
                 mCategoryAdapter.notifyDataSetChanged();
             } else {
+                mcategoryslider.setAdapter(mCategoryAdapter);
                 try {
                     Snackbar.make(mRootWidget,
                             getString(R.string.cant_connect_to_server),
@@ -339,6 +343,7 @@ public class HomeFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
+            mUtils.hideRefreshing(mcategoryslider);
         }
     }
 

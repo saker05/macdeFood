@@ -290,17 +290,6 @@ public class CartFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
         }
 
-        @Override
-        public void onClick(View v) {
-           /* CartItem item = mAdapter.getCartItems().get(getAdapterPosition());
-            mActivity.getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.flContentMain, ProductDetailFragment.newInstance(
-                            item.toString()
-                    ), ProductDetailFragment.TAG)
-                    .addToBackStack(null)
-                    .commit();*/
-        }
 
        /* public AppCompatImageView getLogo() {
             return mLogo;

@@ -267,14 +267,10 @@ public class ProductFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-           /* CartItem item = mAdapter.getCartItems().get(getAdapterPosition());
-            mActivity.getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.flContentMain, ProductDetailFragment.newInstance(
-                            item.toString()
-                    ), ProductDetailFragment.TAG)
-                    .addToBackStack(null)
-                    .commit();*/
+            ProductModel product=productItems.get(getAdapterPosition());
+            mActivity.getSupportFragmentManager().beginTransaction().replace(
+                    R.id.flContentMain,ProductDescriptionFragment.newInstance(product)
+            ,ProductDescriptionFragment.TAG).addToBackStack(null).commit();
         }
 
        /* public AppCompatImageView getLogo() {
