@@ -328,6 +328,7 @@ public class ProductFragment extends Fragment {
                 mProductList.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
             } else {
+                mProductList.getProgressView().setVisibility(View.GONE);
                 try {
                     Snackbar.make(mRootWidget,
                             getString(R.string.cant_connect_to_server),
@@ -337,6 +338,7 @@ public class ProductFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
+            mUtils.hideRefreshing(mProductList);
         }
     }
 

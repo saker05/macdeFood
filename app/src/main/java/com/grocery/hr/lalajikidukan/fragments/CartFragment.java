@@ -384,6 +384,7 @@ public class CartFragment extends Fragment {
                 mCartList.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
             } else {
+                mCartList.getProgressView().setVisibility(View.GONE);
                 try {
                     Snackbar.make(mRootWidget,
                             getString(R.string.cant_connect_to_server),
@@ -393,6 +394,7 @@ public class CartFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
+            mUtils.hideRefreshing(mCartList);
         }
     }
 

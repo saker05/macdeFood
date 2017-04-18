@@ -1,48 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/clRootproduct"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clRootproduct"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_above="@+id/bottomBox"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:animateLayoutChanges="true"
+    android:fitsSystemWindows="true"
+    tools:context="com.grocery.hr.lalajikidukan.fragments.CartFragment">
+
+
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
-        android:fitsSystemWindows="true"
-        tools:context="com.grocery.hr.lalajikidukan.fragments.CartFragment"
-        android:layout_above="@+id/bottomBox"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-
-
-        <android.support.design.widget.AppBarLayout
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/productToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/productToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </android.support.design.widget.AppBarLayout>
 
-        </android.support.design.widget.AppBarLayout>
-
-        <com.malinskiy.superrecyclerview.SuperRecyclerView
-            android:id="@+id/rvproduct"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_empty="@layout/view_empty"
-            app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"
-            app:recyclerClipToPadding="false"
-            app:scrollbarStyle="insideInset" />
-
-
-    </android.support.design.widget.CoordinatorLayout>
+    <com.malinskiy.superrecyclerview.SuperRecyclerView
+        android:id="@+id/rvproduct"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_empty="@layout/view_empty"
+        app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"
+        app:recyclerClipToPadding="false"
+        app:scrollbarStyle="insideInset" />
+</android.support.design.widget.CoordinatorLayout>
 
 
 

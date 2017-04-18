@@ -54,6 +54,7 @@
         android:layout_below="@+id/appbar"
         android:layout_marginStart="8dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_empty="@layout/view_empty"
         app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"
         app:recyclerClipToPadding="false"
         app:scrollbarStyle="insideInset" />
@@ -66,6 +67,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_empty="@layout/view_empty"
         app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"
         app:recyclerClipToPadding="false"
         app:scrollbarStyle="insideInset" />

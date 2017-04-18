@@ -298,6 +298,7 @@ public class HomeFragment extends Fragment {
                 mSliderAdapter.notifyDataSetChanged();
             } else {
                 try {
+                    mCardSlider.getProgressView().setVisibility(View.GONE);
                     mCardSlider.setAdapter(mSliderAdapter);
                     Snackbar.make(mRootWidget,
                             getString(R.string.cant_connect_to_server),
@@ -333,7 +334,7 @@ public class HomeFragment extends Fragment {
                 mcategoryslider.setAdapter(mCategoryAdapter);
                 mCategoryAdapter.notifyDataSetChanged();
             } else {
-                mcategoryslider.setAdapter(mCategoryAdapter);
+                mcategoryslider.getProgressView().setVisibility(View.GONE);
                 try {
                     Snackbar.make(mRootWidget,
                             getString(R.string.cant_connect_to_server),
