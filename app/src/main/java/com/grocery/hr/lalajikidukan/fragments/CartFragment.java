@@ -311,6 +311,10 @@ public class CartFragment extends Fragment {
             return munits;
         }
 
+        @Override
+        public void onClick(View v) {
+
+        }
     }
 
 
