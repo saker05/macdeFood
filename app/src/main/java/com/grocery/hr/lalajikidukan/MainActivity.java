@@ -113,7 +113,9 @@ public class MainActivity extends AppCompatActivity {
                 setupLocation();
             }
         });
+        setUpNavView();
     }
+
 
     @Override
     public void onBackPressed() {
@@ -142,8 +144,23 @@ public class MainActivity extends AppCompatActivity {
 
     public void setUpNavView() {
         Menu menu = mNavigationView.getMenu();
-        menu.findItem(R.id.action_home)
-                .setTitle(AppSharedPreference.getString(this, AppConstants.User.MOBILE_NO, "9467021584"));
+        if (mUtils.isUserLoggedIn(getApplicationContext())) {
+            menu.findItem(R.id.action_home)
+                    .setTitle(AppSharedPreference.getString(this, AppConstants.User.MOBILE_NO));
+            menu.findItem(R.id.action_login).setVisible(false);
+            menu.findItem(R.id.action_logout).setVisible(true);
+            if (AppSharedPreference.getString(getApplicationContext(), AppConstants.User.TYPE) != null &&
+                    !AppSharedPreference.getString(getApplicationContext(), AppConstants.User.TYPE).equals(AppConstants.USER_TYPE.NORMAL)) {
+                menu.findItem(R.id.action_role).setTitle(AppSharedPreference.getString(getApplicationContext(), AppConstants.User.TYPE)).setVisible(true);
+            }
+        } else {
+            menu.findItem(R.id.action_home)
+                    .setTitle("");
+            menu.findItem(R.id.action_logout).setVisible(false);
+            menu.findItem(R.id.action_login).setVisible(true);
+            menu.findItem(R.id.action_role).setVisible(false);
+        }
+
 
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -151,6 +168,9 @@ public class MainActivity extends AppCompatActivity {
                 mDrawerLayout.closeDrawer(GravityCompat.START);
                 int drawerItemPosition = appPrefs.getActivityDrawerItemPosition();
                 switch (menuItem.getItemId()) {
+                    case R.id.action_login:
+                        loadLoginActivity();
+                        break;
                     case R.id.action_home:
                         if (drawerItemPosition != 0) {
                             loadFragment(0);
@@ -172,16 +192,23 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.action_share:
                         mUtils.shareApp(MainActivity.this);
-                        break;
+                        break; */
                     case R.id.action_logout:
                         logout();
-                        break;*/
+                        break;
                     default:
                         break;
                 }
                 return true;
             }
         });
+    }
+
+    public void logout() {
+        AppSharedPreference.remove(getApplicationContext(), AppConstants.User.MOBILE_NO);
+        AppSharedPreference.remove(getApplicationContext(), AppConstants.User.PASSWORD);
+        AppSharedPreference.remove(getApplicationContext(), AppConstants.User.TYPE);
+        setUpNavView();
     }
 
     public void loadFragment(int currentSelectedPosition) {
@@ -207,6 +234,11 @@ public class MainActivity extends AppCompatActivity {
                             CartFragment.TAG)
                     .commit();*/
         }
+    }
+
+    public void loadLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
     public void clearBackStack() {

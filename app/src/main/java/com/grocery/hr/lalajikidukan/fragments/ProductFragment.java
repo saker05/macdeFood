@@ -32,6 +32,8 @@ import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -322,7 +324,7 @@ public class ProductFragment extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             Log.e(TAG, "GetCategories::onGetExecte(): result is: " + result);
-            if ((result != null && result.trim().length() != 0)) {
+            if (result != null && result.trim().length() != 0) {
                 productItems = JsonParserUtils.productParser(result);
                 productService.syncProductCountWithCartCount(productItems);
                 mProductList.setAdapter(mAdapter);

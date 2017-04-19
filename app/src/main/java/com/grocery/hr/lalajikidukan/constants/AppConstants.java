@@ -9,6 +9,11 @@ public interface AppConstants {
     public interface User {
         public static final String MOBILE_NO = "mobileNO";
         public static final String PASSWORD = "password";
+        public static final String TYPE     ="type";
+    }
+
+    public interface USER_TYPE{
+        public static final String NORMAL="NORMAL";
     }
 
     public interface Notification {
@@ -33,6 +38,8 @@ public interface AppConstants {
         public static final String EDIT_ADDRESS = "/user/address";
         public static final String GET_ORDERS = "/order";
         public static final String GET_SUB_ORDERS="/order/?/suborder";
+        public static final String REGISTER_USER = "/user/registerme";
+        public static final String LOGIN_USER    = "/user/login";
     }
 
     public interface Cloudinary{

@@ -1,19 +1,30 @@
 package com.grocery.hr.lalajikidukan.utils;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.backend.LocationService;
@@ -153,10 +164,10 @@ public class Utils {
         builder.post(body);
         okhttp3.Request request = builder.build();
         okhttp3.Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) {
-            throw new IOException(response.message() + " " + response.toString());
+        if(response.isSuccessful() || (response.code()>=400 && response.code()<500)){
+            return response.body().string();
         }
-        return response.body().string();
+        throw new IOException(response.message() + " " + response.toString());
     }
 
 
@@ -172,10 +183,11 @@ public class Utils {
         builder.url(url);
         okhttp3.Request request = builder.build();
         okhttp3.Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) {
-            throw new IOException(response.message() + " " + response.toString());
+        if(response.isSuccessful() || (response.code()>=400 && response.code()<500)){
+            return response.body().string();
         }
-        return response.body().string();
+        throw new IOException(response.message() + " " + response.toString());
+
     }
 
     public Map<String,String> getUerPasswordMap(Context context){
@@ -220,5 +232,23 @@ public class Utils {
         return true;
     }
 
+    public void hideSoftKeyboard(Activity activity) {
+        View view = activity.getCurrentFocus();
+        InputMethodManager imm = (InputMethodManager) activity
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (view != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    public ProgressDialog getProgressDialog(Context context) {
+        ProgressDialog dialog;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            dialog = new ProgressDialog(context, R.style.AppDialogTheme);
+        } else {
+            dialog = new ProgressDialog(context);
+        }
+        return dialog;
+    }
 
 }
