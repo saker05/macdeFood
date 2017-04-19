@@ -23,4 +23,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppDialogTheme" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
 </resources>

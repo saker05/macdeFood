@@ -57,4 +57,17 @@
         </item>
     </group>
 
+    <group
+        android:id="@+id/action_group4"
+        android:checkableBehavior="none">
+        <item android:title="@string/user_role">
+            <menu>
+                <item
+                    android:id="@+id/action_role"
+                    android:icon="@mipmap/ic_person_black_24dp"
+                    android:title="@string/action_role" />
+            </menu>
+        </item>
+    </group>
+
 </menu>

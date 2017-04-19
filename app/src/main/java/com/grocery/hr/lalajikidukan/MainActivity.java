@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 setupLocation();
             }
         });
+        setUpNavView();
     }
 
 
@@ -143,12 +144,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void setUpNavView() {
         Menu menu = mNavigationView.getMenu();
-        if(mUtils.isUserLoggedIn(getApplicationContext())){
+        if (mUtils.isUserLoggedIn(getApplicationContext())) {
             menu.findItem(R.id.action_home)
                     .setTitle(AppSharedPreference.getString(this, AppConstants.User.MOBILE_NO));
             menu.findItem(R.id.action_login).setVisible(false);
-        }else{
+            menu.findItem(R.id.action_logout).setVisible(true);
+            if (AppSharedPreference.getString(getApplicationContext(), AppConstants.User.TYPE) != null &&
+                    !AppSharedPreference.getString(getApplicationContext(), AppConstants.User.TYPE).equals(AppConstants.USER_TYPE.NORMAL)) {
+                menu.findItem(R.id.action_role).setTitle(AppSharedPreference.getString(getApplicationContext(), AppConstants.User.TYPE)).setVisible(true);
+            }
+        } else {
+            menu.findItem(R.id.action_home)
+                    .setTitle("");
             menu.findItem(R.id.action_logout).setVisible(false);
+            menu.findItem(R.id.action_login).setVisible(true);
+            menu.findItem(R.id.action_role).setVisible(false);
         }
 
 
@@ -194,9 +204,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void logout(){
-        AppSharedPreference.remove(getApplicationContext(),AppConstants.User.MOBILE_NO);
-        AppSharedPreference.remove(getApplicationContext(),AppConstants.User.PASSWORD);
+    public void logout() {
+        AppSharedPreference.remove(getApplicationContext(), AppConstants.User.MOBILE_NO);
+        AppSharedPreference.remove(getApplicationContext(), AppConstants.User.PASSWORD);
+        AppSharedPreference.remove(getApplicationContext(), AppConstants.User.TYPE);
         setUpNavView();
     }
 
@@ -225,8 +236,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void loadLoginActivity(){
-        Intent intent=new Intent(this, LoginActivity.class);
+    public void loadLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
