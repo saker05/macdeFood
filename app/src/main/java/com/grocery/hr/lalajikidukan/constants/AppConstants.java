@@ -24,7 +24,7 @@ public interface AppConstants {
     }
 
     public interface Url {
-        public static final String BASE_URL = "http://192.168.1.8:8080/groceryApp";
+        public static final String BASE_URL = "http://192.168.1.5:8080/groceryApp";
         public static final String ANONYMOUS_TOKEN_PATH = "/fcmtoken/anonymous";
         public static final String TOKEN_PATH = "/fcmtoken";
         public static final String ADD_CART   = "/cart";
@@ -55,5 +55,9 @@ public interface AppConstants {
         public static final String AVAILABLE="AVAILAIBLE";
     }
 
+    public interface Address_Fragment{
+        public static final String CHECKOUT="checkoutAddresses";
+        public static final String MY_ADDRESSES="myAddresses";
+    }
 
 }

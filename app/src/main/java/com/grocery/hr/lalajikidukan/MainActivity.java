@@ -21,6 +21,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
+import com.grocery.hr.lalajikidukan.fragments.AddressFragment;
 import com.grocery.hr.lalajikidukan.fragments.CartFragment;
 import com.grocery.hr.lalajikidukan.fragments.HomeFragment;
 import com.grocery.hr.lalajikidukan.fragments.ProductFragment;
@@ -142,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
         loadFragment(appPrefs.getActivityDrawerItemPosition());
     }
 
+
     public void setUpNavView() {
         Menu menu = mNavigationView.getMenu();
         if (mUtils.isUserLoggedIn(getApplicationContext())) {
@@ -222,11 +224,11 @@ public class MainActivity extends AppCompatActivity {
                             HomeFragment.TAG)
                     .commit();
         } else if (currentSelectedPosition == 1) {
-           /* getSupportFragmentManager()
+            getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.flContentMain, AddressFragment.newInstance(),
+                    .replace(R.id.flContentMain, AddressFragment.newInstance(AppConstants.Address_Fragment.MY_ADDRESSES),
                             AddressFragment.TAG)
-                    .commit();*/
+                    .commit();
         } else if (currentSelectedPosition == 2) {
             /*getSupportFragmentManager()
                     .beginTransaction()

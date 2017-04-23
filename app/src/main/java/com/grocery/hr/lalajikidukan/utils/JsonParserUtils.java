@@ -131,12 +131,13 @@ public class JsonParserUtils {
             for (int i = 0; i < addresses.length(); i ++) {
                 AddressModel addressModel = new AddressModel();
                 JSONObject address = addresses.getJSONObject(i);
-                addressModel.setAddress(address.getString("address"));
-                addressModel.setCity(address.getString("city"));
                 addressModel.setId(address.getInt("id"));
                 addressModel.setName(address.getString("name"));
+                addressModel.setFlat(address.getString("flat"));
                 addressModel.setPincode(address.getInt("pincode"));
-                addressModel.setState(address.getString("state"));
+                addressModel.setLocality(address.getString("locality"));
+                addressModel.setLandmark(address.getString("landmark"));
+                addressModel.setAddressType(address.getString("addressType"));
                 addressModel.setUser(address.getString("user"));
                 addressModelList.add(addressModel);
             }

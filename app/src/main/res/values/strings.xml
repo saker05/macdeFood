@@ -13,6 +13,10 @@
     <string name="action_orders">My Orders</string>
     <string name="action_order_details">Order Details</string>
     <string name="action_cart">My Cart</string>
+    <string name="action_choose_address">Choose Address</string>
+    <string name="action_my_address">My Addresses</string>
+    <string name="action_edit_address">Edit Address</string>
+    <string name="action_add_address">Add Address</string>
     <string name="action_other">Others</string>
     <string name="action_help_support">Help &amp; Support</string>
     <string name="action_share">Share</string>

@@ -87,6 +87,9 @@ public class CartFragment extends Fragment {
     @BindView(R.id.shippingDetailLayout)
     LinearLayout shippingDetailLayout;
 
+    @BindView(R.id.linlaHeaderProgress)
+    LinearLayout spinner;
+
 
     public static CartFragment newInstance() {
         return new CartFragment();
@@ -147,7 +150,6 @@ public class CartFragment extends Fragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-//        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     public void setUpToolbar() {
@@ -182,7 +184,12 @@ public class CartFragment extends Fragment {
 
     @OnClick(R.id.checkoutButton)
     public void checkout(){
-
+        mActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.flContentMain, AddressFragment
+                                .newInstance(AppConstants.Address_Fragment.CHECKOUT),
+                        AddressFragment.TAG).addToBackStack(null)
+                .commit();
     }
 
     public void baseGetCart() {
@@ -398,6 +405,7 @@ public class CartFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
+            spinner.setVisibility(View.GONE);
             mUtils.hideRefreshing(mCartList);
         }
     }

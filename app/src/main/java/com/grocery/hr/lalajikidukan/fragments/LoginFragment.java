@@ -1,5 +1,6 @@
 package com.grocery.hr.lalajikidukan.fragments;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -247,6 +248,11 @@ public class LoginFragment extends Fragment implements TextWatcher {
                         AppSharedPreference.putString(getContext(), AppConstants.User.MOBILE_NO, mobileNo);
                         AppSharedPreference.putString(getContext(), AppConstants.User.PASSWORD, password);
                         AppSharedPreference.putString(getContext(),AppConstants.User.TYPE,jsonObj.getString("data"));
+                        if (loginActivity.getParent() == null) {
+                            loginActivity.setResult(Activity.RESULT_OK);
+                        } else {
+                            loginActivity.getParent().setResult(Activity.RESULT_OK);
+                        }
                         loginActivity.finish();
                     } else {
                         mUtils.showMessage(

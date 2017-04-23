@@ -170,6 +170,24 @@ public class Utils {
         throw new IOException(response.message() + " " + response.toString());
     }
 
+    public String putToServer(String url, Map<String, String> pairs, String data) throws Exception {
+        okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
+        okhttp3.Request.Builder builder = new okhttp3.Request.Builder().url(url);
+
+        if (pairs != null) {
+            String encoding = Base64.encodeToString((pairs.get("user") + ":" + pairs.get("passwd")).getBytes("UTF-8"), Base64.NO_WRAP);
+            builder.addHeader("Authorization", "Basic " + encoding);
+        }
+        RequestBody body = RequestBody.create(JSON, data);
+        builder.put(body);
+        okhttp3.Request request = builder.build();
+        okhttp3.Response response = client.newCall(request).execute();
+        if(response.isSuccessful() || (response.code()>=400 && response.code()<500)){
+            return response.body().string();
+        }
+        throw new IOException(response.message() + " " + response.toString());
+    }
+
 
     public  String getFromServer(String url, Map<String, String> pairs) throws Exception {
         okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();

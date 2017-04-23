@@ -9,18 +9,12 @@ public class AddressModel {
     String user;
     String name;
     int pincode;
-    String city;
-    String state;
-    String address;
+    String landmark;
+    String flat;
+    String locality;
+    String addressType;
     int id;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getUser() {
         return user;
@@ -46,34 +40,57 @@ public class AddressModel {
         this.pincode = pincode;
     }
 
-    public String getCity() {
-        return city;
+    public String getLandmark() {
+        return landmark;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setLandmark(String landmark) {
+        this.landmark = landmark;
     }
 
-    public String getState() {
-        return state;
+    public String getFlat() {
+        return flat;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setFlat(String flat) {
+        this.flat = flat;
     }
 
-    public String getAddress() {
-        return address;
+    public String getLocality() {
+        return locality;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setLocality(String locality) {
+        this.locality = locality;
+    }
+
+    public String getAddressType() {
+        return addressType;
+    }
+
+    public void setAddressType(String addressType) {
+        this.addressType = addressType;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
-        return "AddressModel [user=" + user + ", name=" + name + ", pincode=" + pincode + ", city=" + city
-                + ", state=" + state + ", address=" + address + ", id=" + id + "]";
+        return "AddressModel{" +
+                "user='" + user + '\'' +
+                ", name='" + name + '\'' +
+                ", pincode=" + pincode +
+                ", landmark='" + landmark + '\'' +
+                ", flat='" + flat + '\'' +
+                ", locality='" + locality + '\'' +
+                ", addressType='" + addressType + '\'' +
+                ", id=" + id +
+                '}';
     }
-
 }

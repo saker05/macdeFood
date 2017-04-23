@@ -1,5 +1,6 @@
 package com.grocery.hr.lalajikidukan;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = LoginActivity.class.getSimpleName();
     private static final int REQUEST_CODE = 1234;
+    private static final int RESULT_CODE = 5;
     private Handler mHandler;
 
 
@@ -37,6 +39,15 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (getParent() == null) {
+            setResult(Activity.RESULT_CANCELED);
+        } else {
+            getParent().setResult(Activity.RESULT_CANCELED);
+        }
+        finish();
+    }
 
     public void setUpView() {
         getSupportFragmentManager()
