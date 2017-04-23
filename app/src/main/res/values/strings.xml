@@ -7,7 +7,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_home">Home</string>
     <string name="action_information">My Information</string>
-    <string name ="user_role">My Role</string>
+    <string name="user_role">My Role</string>
     <string name="action_information_other">Others</string>
     <string name="action_addresses">My Addresses</string>
     <string name="action_orders">My Orders</string>

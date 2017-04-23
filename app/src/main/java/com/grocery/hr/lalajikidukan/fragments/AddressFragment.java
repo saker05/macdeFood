@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -75,6 +76,10 @@ public class AddressFragment extends Fragment {
     @BindView(R.id.linearlayout2)
     RelativeLayout mRootWidget;
 
+    @BindView(R.id.linlaHeaderProgress)
+    LinearLayout spinner;
+
+
     public AddressFragment(String type) {
         this.type = type;
     }
@@ -107,7 +112,7 @@ public class AddressFragment extends Fragment {
                              Bundle savedInstanceState) {
         if (!mUtils.isDeviceOnline(getContext())) {
             return inflater.inflate(R.layout.no_internet_connection, container, false);
-        }else {
+        } else {
             return inflater.inflate(R.layout.fragment_address, container, false);
         }
     }
@@ -117,12 +122,13 @@ public class AddressFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mActivity.hideCart();
 
-        if(!mUtils.isUserLoggedIn(getContext())){
+        if (!mUtils.isUserLoggedIn(getContext())) {
             loadLoginActivity();
         }
 
         if (mUtils.isDeviceOnline(getContext())) {
             ButterKnife.bind(this, view);
+            mAddressList.getProgressView().setVisibility(View.GONE);
             mToolbar = (Toolbar) getActivity().findViewById(R.id.addresstb);
             setUpToolbar();
             setUpViews();
@@ -168,10 +174,9 @@ public class AddressFragment extends Fragment {
     public void loadLoginActivity() {
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         if (mActivity.getParent() == null) {
-            startActivityForResult(intent,2);
-        }
-        else {
-            mActivity.getParent().startActivityForResult(intent,2);
+            startActivityForResult(intent, 2);
+        } else {
+            mActivity.getParent().startActivityForResult(intent, 2);
         }
 
     }
@@ -179,12 +184,12 @@ public class AddressFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==mActivity.RESULT_CANCELED && (AppConstants.Address_Fragment.MY_ADDRESSES).equals(type)){
+        if (resultCode == mActivity.RESULT_CANCELED && (AppConstants.Address_Fragment.MY_ADDRESSES).equals(type)) {
             mActivity.clearBackStack();
             mActivity.loadFragment(0);
-        }else if(resultCode==mActivity.RESULT_CANCELED && (AppConstants.Address_Fragment.CHECKOUT).equals(type)){
+        } else if (resultCode == mActivity.RESULT_CANCELED && (AppConstants.Address_Fragment.CHECKOUT).equals(type)) {
             mActivity.onBackPressed();
-        }else{
+        } else {
             baseGetAddresses();
         }
 
@@ -201,7 +206,7 @@ public class AddressFragment extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mAddressList.setLayoutManager(linearLayoutManager);
 
-        if(mUtils.isUserLoggedIn(getContext())){
+        if (mUtils.isUserLoggedIn(getContext())) {
             mAddressList.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
@@ -223,7 +228,7 @@ public class AddressFragment extends Fragment {
     }
 
     @OnClick(R.id.linear12)
-    public void addAddressOnClick(){
+    public void addAddressOnClick() {
         mActivity.getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.flContentMain, EditOrAddAddressFragment
@@ -245,11 +250,11 @@ public class AddressFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(AddressViewHolder holder, int position) {
-            AddressModel address=addresses.get(position);
+            AddressModel address = addresses.get(position);
             holder.getAddressType().setText(address.getAddressType());
             holder.getNameAddress().setText(address.getName());
             holder.getLandmarkAddress().setText(address.getLandmark());
-            holder.getFlatLocalityAddress().setText(address.getFlat()+","+address.getLocality()+" "+address.getPincode());
+            holder.getFlatLocalityAddress().setText(address.getFlat() + "," + address.getLocality() + " " + address.getPincode());
         }
 
         @Override
@@ -277,7 +282,6 @@ public class AddressFragment extends Fragment {
         TextView landmarkAddress;
 
 
-
         public AddressViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -288,14 +292,14 @@ public class AddressFragment extends Fragment {
         public void onIconClick() {
             View menuItemView = mActivity.findViewById(R.id.editoption);
             PopupMenu popup = new PopupMenu(getActivity(), menuItemView);
-            MenuInflater inflater=popup.getMenuInflater();
-            mActivity.getMenuInflater().inflate(R.menu.address_popmenu,popup.getMenu());
+            MenuInflater inflater = popup.getMenuInflater();
+            mActivity.getMenuInflater().inflate(R.menu.address_popmenu, popup.getMenu());
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.menu_edit:
-                            AddressModel addressModel=addresses.get(getAdapterPosition());
+                            AddressModel addressModel = addresses.get(getAdapterPosition());
                             mActivity.getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.flContentMain, EditOrAddAddressFragment
@@ -328,7 +332,6 @@ public class AddressFragment extends Fragment {
         }*/
 
 
-
         public TextView getAddressType() {
             return addressType;
         }
@@ -347,7 +350,7 @@ public class AddressFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            if(AppConstants.Address_Fragment.CHECKOUT.equals(type)){
+            if (AppConstants.Address_Fragment.CHECKOUT.equals(type)) {
 
             }
         }
@@ -386,6 +389,7 @@ public class AddressFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
+            spinner.setVisibility(View.GONE);
         }
     }
 

@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
@@ -67,6 +68,9 @@ public class ProductFragment extends Fragment {
     @BindView(R.id.rvproduct)
     SuperRecyclerView mProductList;
 
+    @BindView(R.id.linlaHeaderProgress)
+    LinearLayout spinner;
+
 
     public ProductFragment(int category) {
         this.category = category;
@@ -111,6 +115,7 @@ public class ProductFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (mUtils.isDeviceOnline(getContext())) {
             ButterKnife.bind(this, view);
+            mProductList.getProgressView().setVisibility(View.GONE);
             mToolbar = (Toolbar) getActivity().findViewById(R.id.productToolbar);
             setUpToolbar();
             setUpViews();
@@ -118,6 +123,7 @@ public class ProductFragment extends Fragment {
             mToolbar = (Toolbar) getActivity().findViewById(R.id.noInternetConnectionToolbar);
             setUpToolbar();
         }
+
     }
 
     @Override
@@ -340,7 +346,7 @@ public class ProductFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-            mUtils.hideRefreshing(mProductList);
+            spinner.setVisibility(View.GONE);
         }
     }
 

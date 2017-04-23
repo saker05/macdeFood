@@ -30,10 +30,10 @@
     </style>
 
     <style name="Spinner" parent="Theme.AppCompat.Light.Dialog">
-        <item name="android:popupBackground">#ffffff</item>
-        <item name="colorPrimary">#ffffff</item>
-        <item name="colorPrimaryDark">#ffffff</item>
-        <item name="colorAccent">#ffffff</item>
+        <item name="android:popupBackground">#ff00ff</item>
+        <item name="colorPrimary">#ff00ff</item>
+        <item name="colorPrimaryDark">#ff00ff</item>
+        <item name="colorAccent">#ff00ff</item>
     </style>
 
 </resources>

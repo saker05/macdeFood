@@ -132,6 +132,7 @@ public class CartFragment extends Fragment {
         mActivity.hideCart();
         if(mUtils.isDeviceOnline(getContext())){
             ButterKnife.bind(this, view);
+            mCartList.getProgressView().setVisibility(View.GONE);
             mToolbar=(Toolbar)getActivity().findViewById(R.id.cartToolbar);
             setUpToolbar();
             setUpViews();
@@ -406,7 +407,6 @@ public class CartFragment extends Fragment {
                 }
             }
             spinner.setVisibility(View.GONE);
-            mUtils.hideRefreshing(mCartList);
         }
     }
 
