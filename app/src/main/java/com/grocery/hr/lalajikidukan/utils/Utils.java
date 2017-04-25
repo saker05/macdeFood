@@ -164,7 +164,7 @@ public class Utils {
         builder.post(body);
         okhttp3.Request request = builder.build();
         okhttp3.Response response = client.newCall(request).execute();
-        if(response.isSuccessful() || (response.code()>=400 && response.code()<500)){
+        if (response.isSuccessful() || (response.code() >= 400 && response.code() < 500)) {
             return response.body().string();
         }
         throw new IOException(response.message() + " " + response.toString());
@@ -182,14 +182,14 @@ public class Utils {
         builder.put(body);
         okhttp3.Request request = builder.build();
         okhttp3.Response response = client.newCall(request).execute();
-        if(response.isSuccessful() || (response.code()>=400 && response.code()<500)){
+        if (response.isSuccessful() || (response.code() >= 400 && response.code() < 500)) {
             return response.body().string();
         }
         throw new IOException(response.message() + " " + response.toString());
     }
 
 
-    public  String getFromServer(String url, Map<String, String> pairs) throws Exception {
+    public String getFromServer(String url, Map<String, String> pairs) throws Exception {
         okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
         okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
 
@@ -201,28 +201,28 @@ public class Utils {
         builder.url(url);
         okhttp3.Request request = builder.build();
         okhttp3.Response response = client.newCall(request).execute();
-        if(response.isSuccessful() || (response.code()>=400 && response.code()<500)){
+        if (response.isSuccessful() || (response.code() >= 400 && response.code() < 500)) {
             return response.body().string();
         }
         throw new IOException(response.message() + " " + response.toString());
 
     }
 
-    public Map<String,String> getUerPasswordMap(Context context){
-        if(AppSharedPreference.getString(context, AppConstants.User.MOBILE_NO, "abc").equals("abc") ){ // no use name password store in shared preference
+    public Map<String, String> getUerPasswordMap(Context context) {
+        if (AppSharedPreference.getString(context, AppConstants.User.MOBILE_NO, "abc").equals("abc")) { // no use name password store in shared preference
             return null;
         }
         Map<String, String> pairs = new HashMap<>();
-        pairs.put("user",AppSharedPreference.getString(context,AppConstants.User.MOBILE_NO));
-        pairs.put("passwd",AppSharedPreference.getString(context,AppConstants.User.PASSWORD));
+        pairs.put("user", AppSharedPreference.getString(context, AppConstants.User.MOBILE_NO));
+        pairs.put("passwd", AppSharedPreference.getString(context, AppConstants.User.PASSWORD));
 
         return pairs;
     }
 
-    public static List<CartModel> convertCartDosTOCartModel(List<CartDO> cartDOs){
-        List<CartModel> cartModelList=new ArrayList<>();
-        for(CartDO cartDO:cartDOs){
-            CartModel cartModel=new CartModel();
+    public static List<CartModel> convertCartDosTOCartModel(List<CartDO> cartDOs) {
+        List<CartModel> cartModelList = new ArrayList<>();
+        for (CartDO cartDO : cartDOs) {
+            CartModel cartModel = new CartModel();
             cartModel.setUpc(cartDO.getUpc());
             cartModel.setNoOfUnits(cartDO.getNoOfUnits());
             cartModelList.add(cartModel);
@@ -243,8 +243,8 @@ public class Utils {
         }
     }
 
-    public boolean isUserLoggedIn(Context context){
-        if((AppSharedPreference.getString(context, AppConstants.User.MOBILE_NO, "abc")).equals("abc")){
+    public boolean isUserLoggedIn(Context context) {
+        if ((AppSharedPreference.getString(context, AppConstants.User.MOBILE_NO, "abc")).equals("abc")) {
             return false;
         }
         return true;

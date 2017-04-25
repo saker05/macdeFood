@@ -75,6 +75,7 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
     private boolean isPincodeOk=false;
     private boolean isLocalityOk=false;
     private boolean isFlatNoOk  = false;
+    private boolean isPhoneNoOk = false;
 
     @BindView(R.id.add_addresstb)
     Toolbar mToolbar;
@@ -93,6 +94,10 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
 
     @BindView(R.id.customer_landmark)
     EditText mLandmark;
+
+    @BindView(R.id.customer_phone_number)
+    EditText mPhoneNo;
+
 
     @BindView(R.id.radioGroup)
     RadioGroup mAddressType;
@@ -146,6 +151,7 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
         mPincode.addTextChangedListener(this);
         mLocality.addTextChangedListener(this);
         mFlatNo.addTextChangedListener(this);
+        mPhoneNo.addTextChangedListener(this);
     }
 
     @Override
@@ -175,6 +181,9 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
                 case R.id.customer_locality:
                     validateLocality(s);
                     break;
+                case R.id.customer_phone_number:
+                    validatePhoneNo(s);
+                    break;
             }
         }
     }
@@ -203,6 +212,13 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
         setBnUpdateAddress();
     }
 
+    public void validatePhoneNo(Editable s) {
+        isPhoneNoOk = s.length()==10;
+        setError(isPhoneNoOk, mPhoneNo, "Please, Enter Valid Phone no");
+        setBnUpdateAddress();
+    }
+
+
     public void setError(boolean isOK, final EditText editText, final String message) {
         if (!isOK) {
             editText.post(new Runnable() {
@@ -222,7 +238,7 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
     }
 
     public void setBnUpdateAddress() {
-        mUpdateButton.setEnabled((isFlatNoOk && isNameOk && isLocalityOk && isPincodeOk ));
+        mUpdateButton.setEnabled((isFlatNoOk && isNameOk && isLocalityOk && isPincodeOk && isPhoneNoOk ));
     }
 
 
@@ -253,6 +269,7 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
             mFlatNo.setText(address.getFlat());
             mLocality.setText(address.getLocality());
             mLandmark.setText(address.getLandmark());
+            mPhoneNo.setText(address.getPhoneNumber());
             if (address.getAddressType() == "Home") {
                 mAddressType.check(0);
             } else if (address.getAddressType() == "Work") {
@@ -265,6 +282,7 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
             isNameOk=true;
             isFlatNoOk=true;
             isPincodeOk=true;
+            isPhoneNoOk=true;
             setBnUpdateAddress();
         }else{
             mUpdateButton.setText("Add Address");
@@ -297,6 +315,7 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
         String locality;
         String landMark;
         String addressType;
+        String phoneNo;
 
 
         public DoUpdate() {
@@ -310,6 +329,7 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
             address.setFlat(mFlatNo.getText().toString());
             address.setLocality(locality = mLocality.getText().toString());
             address.setLandmark(mLandmark.getText().toString());
+            address.setPhoneNumber(mPhoneNo.getText().toString());
             address.setAddressType(((RadioButton) mActivity.findViewById(mAddressType.getCheckedRadioButtonId())).getText().toString());
             address.setUser(AppSharedPreference.getString(getContext(),AppConstants.User.MOBILE_NO));
         }

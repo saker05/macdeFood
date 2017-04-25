@@ -139,6 +139,7 @@ public class JsonParserUtils {
                 addressModel.setLandmark(address.getString("landmark"));
                 addressModel.setAddressType(address.getString("addressType"));
                 addressModel.setUser(address.getString("user"));
+                addressModel.setPhoneNumber(address.getString("phoneNumber"));
                 addressModelList.add(addressModel);
             }
             return addressModelList;

@@ -14,6 +14,7 @@ public class AddressModel {
     String locality;
     String addressType;
     int id;
+    String phoneNumber;
 
 
     public String getUser() {
@@ -39,6 +40,7 @@ public class AddressModel {
     public void setPincode(int pincode) {
         this.pincode = pincode;
     }
+
 
     public String getLandmark() {
         return landmark;
@@ -78,6 +80,14 @@ public class AddressModel {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     @Override
