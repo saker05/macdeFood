@@ -1,5 +1,7 @@
 package com.grocery.hr.lalajikidukan.constants;
 
+import java.security.PublicKey;
+
 /**
  * Created by vipul on 25/3/17.
  */
@@ -24,7 +26,7 @@ public interface AppConstants {
     }
 
     public interface Url {
-        public static final String BASE_URL = "http://192.168.1.7:8080/groceryApp";
+        public static final String BASE_URL = "http://192.168.1.12:8080/groceryApp";
         public static final String ANONYMOUS_TOKEN_PATH = "/fcmtoken/anonymous";
         public static final String TOKEN_PATH = "/fcmtoken";
         public static final String ADD_CART   = "/cart";
@@ -40,6 +42,7 @@ public interface AppConstants {
         public static final String GET_SUB_ORDERS="/order/?/suborder";
         public static final String REGISTER_USER = "/user/registerme";
         public static final String LOGIN_USER    = "/user/login";
+        public static final String GET_OPS_ORDER_DETAIL ="/order/ops?start=+&end=*&status=/";
     }
 
     public interface Cloudinary{

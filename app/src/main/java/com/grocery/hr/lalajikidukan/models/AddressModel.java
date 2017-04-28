@@ -10,11 +10,13 @@ public class AddressModel {
     String name;
     int pincode;
     String landmark;
+    String phoneNumber;
     String flat;
     String locality;
     String addressType;
     int id;
-    String phoneNumber;
+
+
 
 
     public String getUser() {

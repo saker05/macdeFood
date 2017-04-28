@@ -11,6 +11,7 @@ public class UserSubOrderModel {
     int noOfUnits;
     int unitAmount;
     Integer unitQuantityInGm;
+    String name;
 
     public String getUoc() {
         return uoc;
@@ -46,6 +47,14 @@ public class UserSubOrderModel {
 
     public Integer getUnitQuantityInGm() {
         return unitQuantityInGm;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setUnitQuantityInGm(Integer unitQuantityInGm) {

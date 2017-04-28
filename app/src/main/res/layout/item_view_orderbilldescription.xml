@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp">
+
+    <TextView
+        android:id="@+id/order_desc_product"
+        android:layout_width="200dp"
+        android:paddingLeft="15dp"
+
+        android:layout_height="wrap_content"
+        android:text="jalebi"/>
+
+    <TextView
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/food_quantity"
+        android:text = "21"
+        android:paddingLeft="15dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/order_desc_product" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/food_item"
+        android:textSize="10sp"
+        android:text = "Rs.20"
+        android:paddingLeft="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_toEndOf="@id/food_quantity"/>
+
+
+</RelativeLayout>
+

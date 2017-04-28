@@ -20,7 +20,7 @@ import java.util.List;
 
 public class CustomSwipeAdapter extends PagerAdapter
 {
-    private int [] image_resource ={R.drawable.corbeille_de_fruits_en_bois,R.drawable.discount15,R.drawable.offer15,R.drawable.pic3};
+    private int [] image_resource ={R.drawable.capture1,R.drawable.capture2,R.drawable.capture3,R.drawable.capture4};
     private Context ctx;
     private LayoutInflater layoutInflater;
     private List<ProductModel> highlightedProductItems;
@@ -30,8 +30,6 @@ public class CustomSwipeAdapter extends PagerAdapter
          this.ctx=ctx;
          this.highlightedProductItems=highlightedProductItems;
      }
-
-
 
     @Override
     public int getCount() {

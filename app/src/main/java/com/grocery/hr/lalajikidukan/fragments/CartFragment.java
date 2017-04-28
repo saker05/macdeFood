@@ -376,6 +376,7 @@ public class CartFragment extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
                 return null;
             } else {
                 try {

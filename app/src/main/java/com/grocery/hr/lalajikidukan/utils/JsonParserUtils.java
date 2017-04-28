@@ -3,6 +3,9 @@ package com.grocery.hr.lalajikidukan.utils;
 import com.grocery.hr.lalajikidukan.models.AddressModel;
 import com.grocery.hr.lalajikidukan.models.CartModel;
 import com.grocery.hr.lalajikidukan.models.CategoryModel;
+import com.grocery.hr.lalajikidukan.models.OpsOrderDetailModel;
+import com.grocery.hr.lalajikidukan.models.OpsOrderModel;
+import com.grocery.hr.lalajikidukan.models.OrderStatusEnum;
 import com.grocery.hr.lalajikidukan.models.ProductModel;
 import com.grocery.hr.lalajikidukan.models.ShippingModel;
 import com.grocery.hr.lalajikidukan.models.UserOrderModel;
@@ -23,7 +26,7 @@ import java.util.List;
 public class JsonParserUtils {
 
     public static List<CartModel> cartParser(String jsonString) {
-        if(jsonString==null || jsonString.isEmpty())
+        if (jsonString == null || jsonString.isEmpty())
             return null;
         try {
             List<CartModel> cartModelList = new ArrayList<CartModel>();
@@ -54,8 +57,8 @@ public class JsonParserUtils {
     }
 
     public static List<CategoryModel> categoryParser(String jsonString) {
-        if(jsonString==null || jsonString.isEmpty()){
-            return  null;
+        if (jsonString == null || jsonString.isEmpty()) {
+            return null;
         }
         try {
             List<CategoryModel> categoryModelList = new ArrayList<>();
@@ -79,13 +82,13 @@ public class JsonParserUtils {
 
 
     public static List<ProductModel> productParser(String jsonString) {
-        if(jsonString==null || jsonString.isEmpty()){
-            return  null;
+        if (jsonString == null || jsonString.isEmpty()) {
+            return null;
         }
         try {
             List<ProductModel> productModelList = new ArrayList<>();
             JSONArray productList = new JSONObject(jsonString).optJSONArray("data");
-            for (int i = 0; i < productList.length(); i ++) {
+            for (int i = 0; i < productList.length(); i++) {
                 ProductModel productModel = new ProductModel();
                 JSONObject product = productList.getJSONObject(i);
                 productModel.setImageUrl(product.getString("imageUrl"));
@@ -105,30 +108,30 @@ public class JsonParserUtils {
         return null;
     }
 
-    public static ShippingModel shippingParser(String jsonString){
-        if(jsonString==null || jsonString.isEmpty()){
-            return  null;
+    public static ShippingModel shippingParser(String jsonString) {
+        if (jsonString == null || jsonString.isEmpty()) {
+            return null;
         }
-        try{
-            JSONObject shippingDetail=new JSONObject(jsonString).optJSONObject("data");
-            ShippingModel shippingModel=new ShippingModel();
+        try {
+            JSONObject shippingDetail = new JSONObject(jsonString).optJSONObject("data");
+            ShippingModel shippingModel = new ShippingModel();
             shippingModel.setDeliveryCharge(shippingDetail.getInt("deliveryCharge"));
             shippingModel.setMinOrderForFreeDelivery(shippingDetail.getInt("minOrderForFreeDelivery"));
             return shippingModel;
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static List<AddressModel> addressParser(String jsonString){
-        if(jsonString==null || jsonString.isEmpty()){
-            return  null;
+    public static List<AddressModel> addressParser(String jsonString) {
+        if (jsonString == null || jsonString.isEmpty()) {
+            return null;
         }
-        try{
+        try {
             List<AddressModel> addressModelList = new ArrayList<>();
             JSONArray addresses = new JSONObject(jsonString).optJSONArray("data");
-            for (int i = 0; i < addresses.length(); i ++) {
+            for (int i = 0; i < addresses.length(); i++) {
                 AddressModel addressModel = new AddressModel();
                 JSONObject address = addresses.getJSONObject(i);
                 addressModel.setId(address.getInt("id"));
@@ -143,46 +146,46 @@ public class JsonParserUtils {
                 addressModelList.add(addressModel);
             }
             return addressModelList;
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static List<UserOrderModel> orderParser(String jsonString){
-        if(jsonString==null || jsonString.isEmpty()){
-            return  null;
+    public static List<UserOrderModel> orderParser(String jsonString) {
+        if (jsonString == null || jsonString.isEmpty()) {
+            return null;
         }
         try {
             List<UserOrderModel> orderModelList = new ArrayList<>();
             JSONArray orders = new JSONObject(jsonString).optJSONArray("data");
-            for (int i = 0; i < orders.length(); i ++) {
-                UserOrderModel orderModel=new UserOrderModel();
-                JSONObject order= orders.getJSONObject(i);
+            for (int i = 0; i < orders.length(); i++) {
+                UserOrderModel orderModel = new UserOrderModel();
+                JSONObject order = orders.getJSONObject(i);
                 orderModel.setUser(order.getString("user"));
                 orderModel.setOrderDate(order.getString("orderDate"));
                 orderModel.setOrderTotalAmount(order.getInt("orderTotalAmount"));
-                orderModel.setStatus(order.getString("status"));
+                orderModel.setStatus(OrderStatusEnum.getEnumFromString(order.getString("status")));
                 orderModel.setUoc(order.getString("uoc"));
                 orderModelList.add(orderModel);
             }
             return orderModelList;
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static List<UserSubOrderModel> subOrderParser(String jsonString){
-        if(jsonString==null || jsonString.isEmpty()){
-            return  null;
+    public static List<UserSubOrderModel> subOrderParser(String jsonString) {
+        if (jsonString == null || jsonString.isEmpty()) {
+            return null;
         }
         try {
             List<UserSubOrderModel> subOrderModelList = new ArrayList<>();
             JSONArray subOrders = new JSONObject(jsonString).optJSONArray("data");
-            for (int i = 0; i < subOrders.length(); i ++) {
-                UserSubOrderModel subOrderModel=new UserSubOrderModel();
-                JSONObject subOrder= subOrders.getJSONObject(i);
+            for (int i = 0; i < subOrders.length(); i++) {
+                UserSubOrderModel subOrderModel = new UserSubOrderModel();
+                JSONObject subOrder = subOrders.getJSONObject(i);
                 subOrderModel.setUoc(subOrder.getString("uoc"));
                 subOrderModel.setUpc(subOrder.getString("upc"));
                 subOrderModel.setNoOfUnits(subOrder.getInt("noOfUnits"));
@@ -191,10 +194,67 @@ public class JsonParserUtils {
                 subOrderModelList.add(subOrderModel);
             }
             return subOrderModelList;
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
     }
 
+
+    public static OpsOrderModel opsOrdeParser(String jsonString) {
+        if (jsonString == null || jsonString.isEmpty()) {
+            return null;
+        }
+        try {
+            List<OpsOrderDetailModel> opsOrderDetailModelList = new ArrayList<>();
+            JSONObject opsData = new JSONObject(jsonString).getJSONObject("data");
+            int count = opsData.getInt("totalOrderCount");
+            JSONArray opsOrderJsonArray = opsData.optJSONArray("opsOrderDetailModel");
+
+            for (int i = 0; i < opsOrderJsonArray.length(); i++)
+            {
+                JSONObject addressJsonObject = (JSONObject) opsOrderJsonArray.getJSONObject(i).get("userAddressDetailModel");
+                JSONObject orderJsonObject = (JSONObject) opsOrderJsonArray.getJSONObject(i).get("userOrderModel");
+
+                OpsOrderDetailModel opsOrderDetailModel = new OpsOrderDetailModel();
+                UserOrderModel userOrderModel = new UserOrderModel();
+                AddressModel addressModel = new AddressModel();
+
+                userOrderModel.setShippingCharge(orderJsonObject.getInt("shippingCharge"));
+                userOrderModel.setOrderDate(orderJsonObject.getString("orderDate"));
+                userOrderModel.setStatus(OrderStatusEnum.getEnumFromString(orderJsonObject.getString("status")));
+                userOrderModel.setUoc(orderJsonObject.getString("uoc"));
+                userOrderModel.setUser(orderJsonObject.getString("user"));
+                userOrderModel.setOrderTotalAmount(orderJsonObject.getInt("orderTotalAmount"));
+
+                addressModel.setAddressType(addressJsonObject.getString("addressType"));
+                addressModel.setFlat(addressJsonObject.getString("flat"));
+                addressModel.setName(addressJsonObject.getString("name"));
+                addressModel.setPhoneNumber(addressJsonObject.getString("phoneNumber"));
+                addressModel.setPincode(addressJsonObject.getInt("pincode"));
+                addressModel.setLandmark(addressJsonObject.getString("landmark"));
+                addressModel.setAddressType(addressJsonObject.getString("addressType"));
+
+                opsOrderDetailModel.setAddressModel(addressModel);
+                opsOrderDetailModel.setUserOrderModel(userOrderModel);
+
+                opsOrderDetailModelList.add(opsOrderDetailModel);
+
+            }
+
+            OpsOrderModel opsOrderModel = new OpsOrderModel();
+            opsOrderModel.setOpsOrderDetailModel(opsOrderDetailModelList);
+            opsOrderModel.setTotalOrderCount(count);
+
+            return opsOrderModel;
+
+        }
+
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+
+   }
 }

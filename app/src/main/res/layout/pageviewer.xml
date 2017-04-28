@@ -9,12 +9,12 @@
 <android.support.v4.view.ViewPager
     android:id="@+id/vpRootSlider1"
     android:layout_width="match_parent"
-    android:layout_height="192dp"
-    android:layout_marginBottom="16dp"
-    android:layout_marginTop="16dp"
+    android:layout_height="220dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginTop="8dp"
     app:cardElevation="2dp"
-    android:elevation="8dp"
-    app:cardCornerRadius="10dp"
+    android:elevation="2dp"
+    app:cardCornerRadius="5dp"
     app:cardBackgroundColor="#ffffff"
 
     android:layout_marginEnd="2.5dp"

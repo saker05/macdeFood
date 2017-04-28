@@ -11,16 +11,12 @@ public class UserOrderModel {
     String uoc;
     String user;
     String orderDate;
+    String updatedDate;
     int orderTotalAmount;
-    String status;
+    int shippingCharge;
+    OrderStatusEnum status;
 
-    public String getOrderDate() {
-        return orderDate;
-    }
 
-    public void setOrderDate(String orderDate) {
-        this.orderDate = orderDate;
-    }
 
     public String getUoc() {
         return uoc;
@@ -38,6 +34,21 @@ public class UserOrderModel {
         this.user = user;
     }
 
+    public String getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public String getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(String updatedDate) {
+        this.updatedDate = updatedDate;
+    }
 
     public int getOrderTotalAmount() {
         return orderTotalAmount;
@@ -47,23 +58,27 @@ public class UserOrderModel {
         this.orderTotalAmount = orderTotalAmount;
     }
 
-    public String getStatus() {
+    public OrderStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatusEnum status) {
         this.status = status;
     }
 
+    public int getShippingCharge() {
+        return shippingCharge;
+    }
+
+    public void setShippingCharge(int shippingCharge) {
+        this.shippingCharge = shippingCharge;
+    }
 
     @Override
     public String toString() {
-        return "UserOrderModel{" +
-                "uoc='" + uoc + '\'' +
-                ", user='" + user + '\'' +
-                ", orderDate='" + orderDate + '\'' +
-                ", orderTotalAmount=" + orderTotalAmount +
-                ", status='" + status + '\'' +
-                '}';
+        return "UserOrderModel [uoc=" + uoc + ", user=" + user + ", orderDate=" + orderDate + ", updatedDate="
+                + updatedDate + ", orderTotalAmount=" + orderTotalAmount + ", shippingCharge=" + shippingCharge
+                + ", status=" + status + "]";
     }
+
 }
