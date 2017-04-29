@@ -4,7 +4,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/sliderRootHome"
+    android:id="@+id/cl_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
@@ -27,7 +27,7 @@
                 android:theme="@style/AppTheme.AppBarOverlay">
 
                 <android.support.v7.widget.Toolbar
-                    android:id="@+id/homeToolbar"
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/colorPrimary"
@@ -38,8 +38,7 @@
 
 
             <android.support.v4.view.ViewPager
-
-                android:id="@+id/viewpagerhome"
+                android:id="@+id/viewpager_highlighters"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_below="@id/appbar"
@@ -47,10 +46,10 @@
 
 
             <LinearLayout
-                android:id="@+id/linlaHeaderProgress"
+                android:id="@+id/ll_spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_below="@id/viewpagerhome"
+                android:layout_below="@id/viewpager_highlighters"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -64,7 +63,7 @@
                 android:id="@+id/shopbycategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/viewpagerhome"
+                android:layout_below="@id/viewpager_highlighters"
                 android:layout_marginTop="2.5dp"
                 android:background="#eceff1"
                 android:gravity="center"
@@ -76,7 +75,7 @@
                 android:textStyle="bold" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/categoryslider"
+                android:id="@+id/recycler_category"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_below="@+id/shopbycategory"

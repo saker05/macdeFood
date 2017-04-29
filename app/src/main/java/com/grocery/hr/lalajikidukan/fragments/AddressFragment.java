@@ -1,6 +1,5 @@
 package com.grocery.hr.lalajikidukan.fragments;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -11,7 +10,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -23,23 +21,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.util.Util;
-import com.google.gson.Gson;
 import com.grocery.hr.lalajikidukan.LoginActivity;
 import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
-import com.grocery.hr.lalajikidukan.entity.CartDO;
-import com.grocery.hr.lalajikidukan.manager.CartManager;
 import com.grocery.hr.lalajikidukan.models.AddressModel;
-import com.grocery.hr.lalajikidukan.models.CartModel;
-import com.grocery.hr.lalajikidukan.models.ProductModel;
-import com.grocery.hr.lalajikidukan.service.CartService;
 import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
@@ -76,7 +66,7 @@ public class AddressFragment extends Fragment {
     @BindView(R.id.linearlayout2)
     RelativeLayout mRootWidget;
 
-    @BindView(R.id.linlaHeaderProgress)
+    @BindView(R.id.ll_spinner)
     LinearLayout spinner;
 
 
@@ -111,7 +101,7 @@ public class AddressFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (!mUtils.isDeviceOnline(getContext())) {
-            return inflater.inflate(R.layout.no_internet_connection, container, false);
+            return inflater.inflate(R.layout.fragment_no_internet_connection, container, false);
         } else {
             return inflater.inflate(R.layout.fragment_address, container, false);
         }
@@ -133,7 +123,7 @@ public class AddressFragment extends Fragment {
             setUpToolbar();
             setUpViews();
         } else {
-            mToolbar = (Toolbar) getActivity().findViewById(R.id.noInternetConnectionToolbar);
+            mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
             setUpToolbar();
         }
     }

@@ -10,7 +10,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,22 +26,16 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
-import com.grocery.hr.lalajikidukan.Test.CartTest;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
 import com.grocery.hr.lalajikidukan.entity.CartDO;
 import com.grocery.hr.lalajikidukan.manager.CartManager;
 import com.grocery.hr.lalajikidukan.models.CartModel;
 import com.grocery.hr.lalajikidukan.models.ShippingModel;
-import com.grocery.hr.lalajikidukan.preferences.AppSharedPreference;
 import com.grocery.hr.lalajikidukan.service.CartService;
 import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
-import com.squareup.picasso.Picasso;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -87,7 +79,7 @@ public class CartFragment extends Fragment {
     @BindView(R.id.shippingDetailLayout)
     LinearLayout shippingDetailLayout;
 
-    @BindView(R.id.linlaHeaderProgress)
+    @BindView(R.id.ll_spinner)
     LinearLayout spinner;
 
 
@@ -120,7 +112,7 @@ public class CartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (!mUtils.isDeviceOnline(getContext())) {
-            return inflater.inflate(R.layout.no_internet_connection, container, false);
+            return inflater.inflate(R.layout.fragment_no_internet_connection, container, false);
         } else {
             return inflater.inflate(R.layout.fragment_cart, container, false);
         }
@@ -137,7 +129,7 @@ public class CartFragment extends Fragment {
             setUpToolbar();
             setUpViews();
         }else{
-            mToolbar=(Toolbar)getActivity().findViewById(R.id.noInternetConnectionToolbar);
+            mToolbar=(Toolbar)getActivity().findViewById(R.id.toolbar);
             setUpToolbar();
         }
     }

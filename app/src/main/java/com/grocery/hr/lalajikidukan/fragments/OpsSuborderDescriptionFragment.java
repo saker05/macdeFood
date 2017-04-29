@@ -261,7 +261,7 @@ public class OpsSuborderDescriptionFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-            //spinner.setVisibility(View.GONE);
+            //mSpinner.setVisibility(View.GONE);
         }
     }
 

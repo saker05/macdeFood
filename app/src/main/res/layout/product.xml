@@ -29,7 +29,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
-        android:id="@+id/linlaHeaderProgress"
+        android:id="@+id/ll_spinner"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center"

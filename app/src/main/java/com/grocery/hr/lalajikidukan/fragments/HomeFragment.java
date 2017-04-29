@@ -1,6 +1,5 @@
 package com.grocery.hr.lalajikidukan.fragments;
 
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,8 +8,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,14 +23,12 @@ import android.widget.TextView;
 
 import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
-import com.grocery.hr.lalajikidukan.adapters.CustomSwipeAdapter;
+import com.grocery.hr.lalajikidukan.adapters.HighlighterAutoSwipeAdapter;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
 import com.grocery.hr.lalajikidukan.models.CategoryModel;
 import com.grocery.hr.lalajikidukan.models.ProductModel;
 import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
-import com.malinskiy.superrecyclerview.SuperRecyclerView;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.Timer;
@@ -41,8 +36,6 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.view.KeyCharacterMap.load;
 
 /**
  * Created by vipul on 13/4/17.
@@ -59,24 +52,24 @@ public class HomeFragment extends Fragment {
     private List<CategoryModel> categoryItems;
     private Handler mHandler;
     private Utils mUtils;
-    CustomSwipeAdapter mCustomPagerAdapter;
+    HighlighterAutoSwipeAdapter mCustomPagerAdapter;
     Timer timer;
 
 
     // Xml field
     Toolbar mToolbar;
 
-    @BindView(R.id.sliderRootHome)
+    @BindView(R.id.cl_root)
     CoordinatorLayout mRootWidget;
 
-    @BindView(R.id.categoryslider)
-    RecyclerView mcategoryslider;
+    @BindView(R.id.recycler_category)
+    RecyclerView mRecyclerCategory;
 
-    @BindView(R.id.viewpagerhome)
+    @BindView(R.id.viewpager_highlighters)
     ViewPager mViewPager;
 
-    @BindView(R.id.linlaHeaderProgress)
-    LinearLayout spinner;
+    @BindView(R.id.ll_spinner)
+    LinearLayout mSpinner;
 
 
     public static HomeFragment newInstance() {
@@ -98,7 +91,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (!mUtils.isDeviceOnline(getContext())) {
-            return inflater.inflate(R.layout.no_internet_connection, container, false);
+            return inflater.inflate(R.layout.fragment_no_internet_connection, container, false);
         } else {
             return inflater.inflate(R.layout.fragment_home, container, false);
         }
@@ -119,11 +112,11 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (mUtils.isDeviceOnline(getContext())) {
             ButterKnife.bind(this, view);
-            mToolbar = (Toolbar) getActivity().findViewById(R.id.homeToolbar);
+            mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
             setUpToolbar();
             setUpViews();
         } else {
-            mToolbar = (Toolbar) getActivity().findViewById(R.id.noInternetConnectionToolbar);
+            mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
             setUpToolbar();
         }
     }
@@ -147,7 +140,7 @@ public class HomeFragment extends Fragment {
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mcategoryslider.setLayoutManager(linearLayoutManager);
+        mRecyclerCategory.setLayoutManager(linearLayoutManager);
         baseGetCategoryAndHighlihtedProducts();
     }
 
@@ -171,7 +164,6 @@ public class HomeFragment extends Fragment {
                 public void run() {
                     int len, i;
                     len = mCustomPagerAdapter.getCount();
-
                     if (mViewPager.getCurrentItem() == (len - 1)) {
                         mViewPager.setCurrentItem(0);
                     }
@@ -189,7 +181,7 @@ public class HomeFragment extends Fragment {
         public CategorySliderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return new CategorySliderViewHolder(
                     LayoutInflater.from(parent.getContext())
-                            .inflate(R.layout.category, parent, false)
+                            .inflate(R.layout.item_view_category_home, parent, false)
             );
         }
 
@@ -217,13 +209,13 @@ public class HomeFragment extends Fragment {
             itemView.setOnClickListener(this);
         }
 
-        @BindView(R.id.categoryImage)
+        @BindView(R.id.image)
         ImageView mCategoryImage;
 
-        @BindView(R.id.categroyName)
+        @BindView(R.id.text_name)
         TextView mCategoryName;
 
-        @BindView(R.id.description)
+        @BindView(R.id.text_description)
         TextView mDescription;
 
         @Override
@@ -249,7 +241,6 @@ public class HomeFragment extends Fragment {
 
 
     class GetHighlightedProducts extends AsyncTask<Void, Void, String> {
-
         @Override
         protected String doInBackground(Void... params) {
             try {
@@ -266,7 +257,7 @@ public class HomeFragment extends Fragment {
             Log.e(TAG, "GetHighLightedProduct::onGetExecte(): result is: " + result);
             if ((result != null && result.trim().length() != 0)) {
                 highlightedProductItems = JsonParserUtils.productParser(result);
-                mCustomPagerAdapter = new CustomSwipeAdapter(getActivity(), highlightedProductItems);
+                mCustomPagerAdapter = new HighlighterAutoSwipeAdapter(getActivity(), highlightedProductItems);
                 timer.schedule(new MyTimerTask(), 2000, 4000);
                 mViewPager.setAdapter(mCustomPagerAdapter);
 
@@ -302,7 +293,7 @@ public class HomeFragment extends Fragment {
             Log.e(TAG, "GetCategories::onGetExecte(): result is: " + result);
             if ((result != null && result.trim().length() != 0)) {
                 categoryItems = JsonParserUtils.categoryParser(result);
-                mcategoryslider.setAdapter(mCategoryAdapter);
+                mRecyclerCategory.setAdapter(mCategoryAdapter);
                 mCategoryAdapter.notifyDataSetChanged();
             } else {
                 try {
@@ -314,10 +305,9 @@ public class HomeFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-            spinner.setVisibility(View.GONE);
+            mSpinner.setVisibility(View.GONE);
         }
     }
-
 
 }
 

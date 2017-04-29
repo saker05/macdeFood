@@ -248,7 +248,7 @@ public class Allorder_Admin_fragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-            // spinner.setVisibility(View.GONE);
+            // mSpinner.setVisibility(View.GONE);
         }
     }
 

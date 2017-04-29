@@ -26,14 +26,11 @@ import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
 import com.grocery.hr.lalajikidukan.manager.CartManager;
-import com.grocery.hr.lalajikidukan.models.CartModel;
 import com.grocery.hr.lalajikidukan.models.ProductModel;
 import com.grocery.hr.lalajikidukan.service.ProductService;
 import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
-
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -68,7 +65,7 @@ public class ProductFragment extends Fragment {
     @BindView(R.id.rvproduct)
     SuperRecyclerView mProductList;
 
-    @BindView(R.id.linlaHeaderProgress)
+    @BindView(R.id.ll_spinner)
     LinearLayout spinner;
 
 
@@ -104,7 +101,7 @@ public class ProductFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (!mUtils.isDeviceOnline(getContext())) {
-            return inflater.inflate(R.layout.no_internet_connection, container, false);
+            return inflater.inflate(R.layout.fragment_no_internet_connection, container, false);
         } else {
             return inflater.inflate(R.layout.product, container, false);
         }
@@ -120,7 +117,7 @@ public class ProductFragment extends Fragment {
             setUpToolbar();
             setUpViews();
         } else {
-            mToolbar = (Toolbar) getActivity().findViewById(R.id.noInternetConnectionToolbar);
+            mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
             setUpToolbar();
         }
 

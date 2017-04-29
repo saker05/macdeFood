@@ -34,9 +34,6 @@ import com.grocery.hr.lalajikidukan.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -130,7 +127,7 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (!mUtils.isDeviceOnline(getContext())) {
-            return inflater.inflate(R.layout.no_internet_connection, container, false);
+            return inflater.inflate(R.layout.fragment_no_internet_connection, container, false);
         } else {
             return inflater.inflate(R.layout.add_address, container, false);
         }
