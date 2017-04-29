@@ -3,7 +3,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/clRootproduct"
+    android:id="@+id/cl_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_above="@+id/bottomBox"
@@ -44,7 +44,7 @@
     </LinearLayout>
 
     <com.malinskiy.superrecyclerview.SuperRecyclerView
-        android:id="@+id/rvproduct"
+        android:id="@+id/rv_product"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="8dp"

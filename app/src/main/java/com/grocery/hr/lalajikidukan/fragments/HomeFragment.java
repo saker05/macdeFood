@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment {
     @BindView(R.id.cl_root)
     CoordinatorLayout mRootWidget;
 
-    @BindView(R.id.recycler_category)
+    @BindView(R.id.rv_category)
     RecyclerView mRecyclerCategory;
 
     @BindView(R.id.viewpager_highlighters)

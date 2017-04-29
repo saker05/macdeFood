@@ -59,14 +59,14 @@ public class ProductFragment extends Fragment {
 
     Toolbar mToolbar;
 
-    @BindView(R.id.clRootproduct)
+    @BindView(R.id.cl_root)
     CoordinatorLayout mRootWidget;
 
-    @BindView(R.id.rvproduct)
+    @BindView(R.id.rv_product)
     SuperRecyclerView mProductList;
 
     @BindView(R.id.ll_spinner)
-    LinearLayout spinner;
+    LinearLayout mSpinner;
 
 
     public ProductFragment(int category) {
@@ -103,7 +103,7 @@ public class ProductFragment extends Fragment {
         if (!mUtils.isDeviceOnline(getContext())) {
             return inflater.inflate(R.layout.fragment_no_internet_connection, container, false);
         } else {
-            return inflater.inflate(R.layout.product, container, false);
+            return inflater.inflate(R.layout.fragment_product, container, false);
         }
     }
 
@@ -179,7 +179,7 @@ public class ProductFragment extends Fragment {
         public ProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return new ProductViewHolder(
                     LayoutInflater.from(parent.getContext())
-                            .inflate(R.layout.product_item, parent, false)
+                            .inflate(R.layout.item_view_product, parent, false)
             );
         }
 
@@ -187,20 +187,20 @@ public class ProductFragment extends Fragment {
         public void onBindViewHolder(ProductViewHolder holder, int position) {
             ProductModel product = productItems.get(position);
 
-            holder.getMQtyRate().setText(String.valueOf(product.getUnitAmount()));
+            holder.getMunitPrice().setText(String.valueOf(product.getUnitAmount()));
             if (product.getUnitQuantityInGm() == 0) {
-                holder.getMQuantity().setText("1 unit");
+                holder.getMUnitQuantity().setText("1 unit");
             } else {
-                holder.getMQuantity().setText(String.valueOf(product.getUnitQuantityInGm()) + "gm");
+                holder.getMUnitQuantity().setText(String.valueOf(product.getUnitQuantityInGm()) + "gm");
             }
 
             if (product.getNoOfItemInCart() == 0) {
                 holder.getMMinus().setVisibility(View.GONE);
-                holder.getMunits().setVisibility(View.GONE);
+                holder.getMunitsInCart().setVisibility(View.GONE);
             } else {
                 holder.getMMinus().setVisibility(View.VISIBLE);
-                holder.getMunits().setVisibility(View.VISIBLE);
-                holder.getMunits().setText(String.valueOf(product.getNoOfItemInCart()));
+                holder.getMunitsInCart().setVisibility(View.VISIBLE);
+                holder.getMunitsInCart().setText(String.valueOf(product.getNoOfItemInCart()));
             }
 
             holder.getMContent().setText(product.getName());
@@ -222,22 +222,22 @@ public class ProductFragment extends Fragment {
         @BindView(R.id.imageView)
        AppCompatImageView mLogo;*/
 
-        @BindView(R.id.productContent)
+        @BindView(R.id.text_content)
         AppCompatTextView mContent;
 
-        @BindView(R.id.productQuantity)
-        AppCompatTextView mQuantity;
+        @BindView(R.id.text_quantity)
+        AppCompatTextView mUnitQuantity;
 
-        @BindView(R.id.productRupee)
-        AppCompatTextView mQtyRate;
+        @BindView(R.id.text_rupee)
+        AppCompatTextView mUnitPrice;
 
-        @BindView(R.id.productNoofunits)
-        AppCompatTextView mUnits;
+        @BindView(R.id.text_units_in_cart)
+        AppCompatTextView mUnitsInCart;
 
-        @BindView(R.id.productcart_plus)
+        @BindView(R.id.image_plus)
         ImageView mPlus;
 
-        @BindView(R.id.productcart_minus)
+        @BindView(R.id.image_minus)
         ImageView mMinus;
 
         //   @BindView(R.id.tvCartTotal)
@@ -250,7 +250,7 @@ public class ProductFragment extends Fragment {
             // itemView.setOnClickListener(this);
         }
 
-        @OnClick(R.id.productcart_plus)
+        @OnClick(R.id.image_plus)
         public void onPlusClick() {
             ProductModel product = productItems.get(getAdapterPosition());
             cartManager.insertByOne(product.getUpc());
@@ -259,7 +259,7 @@ public class ProductFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
         }
 
-        @OnClick(R.id.productcart_minus)
+        @OnClick(R.id.image_minus)
         public void onMinusClick() {
             ProductModel product = productItems.get(getAdapterPosition());
             cartManager.removeByOne(product.getUpc());
@@ -287,16 +287,16 @@ public class ProductFragment extends Fragment {
         }*/
 
 
-        public AppCompatTextView getMQtyRate() {
-            return mQtyRate;
+        public AppCompatTextView getMunitPrice() {
+            return mUnitPrice;
         }
 
-        public AppCompatTextView getMQuantity() {
-            return mQuantity;
+        public AppCompatTextView getMUnitQuantity() {
+            return mUnitQuantity;
         }
 
-        public AppCompatTextView getMunits() {
-            return mUnits;
+        public AppCompatTextView getMunitsInCart() {
+            return mUnitsInCart;
         }
 
         public AppCompatTextView getMContent() {
@@ -343,7 +343,7 @@ public class ProductFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-            spinner.setVisibility(View.GONE);
+            mSpinner.setVisibility(View.GONE);
         }
     }
 
