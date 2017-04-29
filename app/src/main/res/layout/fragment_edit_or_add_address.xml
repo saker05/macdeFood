@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/clRootAddressUpate">
+    android:id="@+id/cl_root">
 
 
     <android.support.v7.widget.Toolbar
@@ -16,7 +16,7 @@
 
 
     <RadioGroup
-        android:id="@+id/radioGroup"
+        android:id="@+id/radio_group"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/add_addresstb"
@@ -24,7 +24,7 @@
         android:padding="20dp">
 
         <RadioButton
-            android:id="@+id/radio0"
+            android:id="@+id/radio_0"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -35,7 +35,7 @@
             android:text="Home" />
 
         <RadioButton
-            android:id="@+id/radio1"
+            android:id="@+id/radio_1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -45,7 +45,7 @@
             android:text="Work" />
 
         <RadioButton
-            android:id="@+id/radio2"
+            android:id="@+id/radio_2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -59,7 +59,7 @@
         android:id="@+id/linear1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/radioGroup"
+        android:layout_below="@id/radio_group"
 
         android:orientation="vertical">
 
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/customer_name"
+                android:id="@+id/edit_text_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -90,7 +90,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/customer_pincode"
+                android:id="@+id/edit_text_pincode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -109,10 +109,10 @@
             android:id="@+id/username_text_input_layout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/radioGroup">
+            android:layout_below="@id/radio_group">
 
             <EditText
-                android:id="@+id/customer_flat_no"
+                android:id="@+id/edit_text_flat_no"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -129,10 +129,10 @@
             android:id="@+id/username_text_input_layout4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/radioGroup">
+            android:layout_below="@id/radio_group">
 
             <EditText
-                android:id="@+id/customer_locality"
+                android:id="@+id/edit_text_locality"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -149,10 +149,10 @@
             android:id="@+id/username_text_input_layout5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/radioGroup">
+            android:layout_below="@id/radio_group">
 
             <EditText
-                android:id="@+id/customer_phone_number"
+                android:id="@+id/edit_text_phone_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -171,10 +171,10 @@
         android:id="@+id/username_text_input_layout6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/radioGroup">
+        android:layout_below="@id/radio_group">
 
         <EditText
-            android:id="@+id/customer_landmark"
+            android:id="@+id/edit_text_landmark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"

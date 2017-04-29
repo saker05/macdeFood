@@ -77,32 +77,32 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
     @BindView(R.id.add_addresstb)
     Toolbar mToolbar;
 
-    @BindView(R.id.customer_name)
+    @BindView(R.id.edit_text_name)
     EditText mName;
 
-    @BindView(R.id.customer_pincode)
+    @BindView(R.id.edit_text_pincode)
     EditText mPincode;
 
-    @BindView(R.id.customer_flat_no)
+    @BindView(R.id.edit_text_flat_no)
     EditText mFlatNo;
 
-    @BindView(R.id.customer_locality)
+    @BindView(R.id.edit_text_locality)
     EditText mLocality;
 
-    @BindView(R.id.customer_landmark)
+    @BindView(R.id.edit_text_landmark)
     EditText mLandmark;
 
-    @BindView(R.id.customer_phone_number)
+    @BindView(R.id.edit_text_phone_number)
     EditText mPhoneNo;
 
 
-    @BindView(R.id.radioGroup)
+    @BindView(R.id.radio_group)
     RadioGroup mAddressType;
 
     @BindView(R.id.btn_update)
     AppCompatButton mUpdateButton;
 
-    @BindView(R.id.clRootAddressUpate)
+    @BindView(R.id.cl_root)
     RelativeLayout mRootWidget;
 
     @Override
@@ -129,7 +129,7 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
         if (!mUtils.isDeviceOnline(getContext())) {
             return inflater.inflate(R.layout.fragment_no_internet_connection, container, false);
         } else {
-            return inflater.inflate(R.layout.add_address, container, false);
+            return inflater.inflate(R.layout.fragment_edit_or_add_address, container, false);
         }
     }
 
@@ -166,19 +166,19 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
         View view = mActivity.getCurrentFocus();
         if (null != view) {
             switch (view.getId()) {
-                case R.id.customer_name:
+                case R.id.edit_text_name:
                     validateName(s);
                     break;
-                case R.id.customer_pincode:
+                case R.id.edit_text_pincode:
                     validatePincode(s);
                     break;
-                case R.id.customer_flat_no:
+                case R.id.edit_text_flat_no:
                     validateFlatNo(s);
                     break;
-                case R.id.customer_locality:
+                case R.id.edit_text_locality:
                     validateLocality(s);
                     break;
-                case R.id.customer_phone_number:
+                case R.id.edit_text_phone_number:
                     validatePhoneNo(s);
                     break;
             }
