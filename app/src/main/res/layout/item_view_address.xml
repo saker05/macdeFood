@@ -11,7 +11,7 @@
         tools:ignore="ExtraText">
 
         <TextView
-            android:id="@+id/type_addr"
+            android:id="@+id/text_address_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
@@ -26,10 +26,10 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/name_addr"
+            android:id="@+id/text_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/type_addr"
+            android:layout_below="@+id/text_address_type"
             android:ellipsize="end"
             android:maxLines="1"
             android:padding="5dp"
@@ -37,10 +37,10 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/flat_locality_addr"
+            android:id="@+id/text_flat_locality"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/name_addr"
+            android:layout_below="@+id/text_name"
             android:ellipsize="end"
             android:maxLines="1"
             android:padding="5dp"
@@ -51,14 +51,14 @@
             android:id="@+id/linear123"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/flat_locality_addr"
+            android:layout_below="@id/text_flat_locality"
             android:ellipsize="end"
             android:maxLines="1"
             android:orientation="horizontal">
 
 
             <TextView
-                android:id="@+id/landmark_addr"
+                android:id="@+id/text_landmark"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -74,7 +74,7 @@
 
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_toRightOf="@+id/landmark_addr"
+                android:layout_toRightOf="@+id/text_landmark"
                 android:src="@drawable/ic_menu_send" />
 
         </RelativeLayout>

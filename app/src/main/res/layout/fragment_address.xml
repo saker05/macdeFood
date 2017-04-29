@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearlayout2"
+    android:id="@+id/rl_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
@@ -75,13 +75,13 @@
         android:text="Addresses"
         android:layout_height="wrap_content"
         android:layout_below="@id/linear12"
-        android:id="@+id/address_label"/>
+        android:id="@+id/text_label"/>
 
     <com.malinskiy.superrecyclerview.SuperRecyclerView
-        android:id="@+id/rvaddress"
+        android:id="@+id/rv_address"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/address_label">
+        android:layout_below="@+id/text_label">
 
     </com.malinskiy.superrecyclerview.SuperRecyclerView>
 

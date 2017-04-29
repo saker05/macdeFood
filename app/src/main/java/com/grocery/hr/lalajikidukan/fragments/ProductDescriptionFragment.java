@@ -1,11 +1,8 @@
 package com.grocery.hr.lalajikidukan.fragments;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -13,12 +10,7 @@ import android.view.ViewGroup;
 
 import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
-import com.grocery.hr.lalajikidukan.manager.CartManager;
 import com.grocery.hr.lalajikidukan.models.ProductModel;
-import com.grocery.hr.lalajikidukan.service.ProductService;
-import com.grocery.hr.lalajikidukan.utils.Utils;
-
-import butterknife.ButterKnife;
 
 /**
  * Created by vipul on 18/4/17.
@@ -58,7 +50,7 @@ public class ProductDescriptionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.product_description, container, false);
+        return inflater.inflate(R.layout.fragment_product_description, container, false);
     }
 
     @Override

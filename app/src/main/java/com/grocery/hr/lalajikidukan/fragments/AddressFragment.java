@@ -57,13 +57,13 @@ public class AddressFragment extends Fragment {
 
     Toolbar mToolbar;
 
-    @BindView(R.id.address_label)
+    @BindView(R.id.text_label)
     TextView mLabel;
 
-    @BindView(R.id.rvaddress)
+    @BindView(R.id.rv_address)
     SuperRecyclerView mAddressList;
 
-    @BindView(R.id.linearlayout2)
+    @BindView(R.id.rl_root)
     RelativeLayout mRootWidget;
 
     @BindView(R.id.ll_spinner)
@@ -259,16 +259,16 @@ public class AddressFragment extends Fragment {
 
     class AddressViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.type_addr)
+        @BindView(R.id.text_address_type)
         TextView addressType;
 
-        @BindView(R.id.name_addr)
+        @BindView(R.id.text_name)
         TextView nameAddress;
 
-        @BindView(R.id.flat_locality_addr)
+        @BindView(R.id.text_flat_locality)
         TextView flatLocalityAddress;
 
-        @BindView(R.id.landmark_addr)
+        @BindView(R.id.text_landmark)
         TextView landmarkAddress;
 
 
