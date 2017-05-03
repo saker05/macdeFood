@@ -33,7 +33,7 @@
             android:paddingTop="2.5dp">
 
             <ImageView
-                android:id="@+id/productimage"
+                android:id="@+id/image_product"
                 android:layout_width="100dp"
                 android:layout_height="130dp"
                 android:src="@drawable/switchbook" />

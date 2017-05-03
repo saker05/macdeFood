@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Allorder_Admin_fragment extends Fragment {
+public class OpsOrderFragment extends Fragment {
 
     private OrderDetailAdapter madapter;
     private MainActivity mActivity;
@@ -42,7 +42,7 @@ public class Allorder_Admin_fragment extends Fragment {
     OpsOrderModel opsOrderModel;
     List<OpsOrderDetailModel> opsOrderDetailModelList;
 
-    public static final String TAG = Allorder_Admin_fragment.class.getSimpleName();
+    public static final String TAG = OpsOrderFragment.class.getSimpleName();
 
     @BindView(R.id.OrderAdminRv)
     RecyclerView mrecyclerView;
@@ -50,7 +50,7 @@ public class Allorder_Admin_fragment extends Fragment {
     @BindView(R.id.rvRootWidget)
     LinearLayout mRootWidget;
 
-    public Allorder_Admin_fragment() {
+    public OpsOrderFragment() {
         // Required empty public constructor
     }
 
@@ -97,12 +97,6 @@ public class Allorder_Admin_fragment extends Fragment {
         baseGetOpsOrder();
 
     }
-
-
-
-
-
-
 
 
     class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailViewHolderr> {

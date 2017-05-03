@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,8 +27,11 @@ import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
 import com.grocery.hr.lalajikidukan.manager.CartManager;
+import com.grocery.hr.lalajikidukan.manager.PicassoManager;
+import com.grocery.hr.lalajikidukan.models.BaseResponse;
 import com.grocery.hr.lalajikidukan.models.ProductModel;
 import com.grocery.hr.lalajikidukan.service.ProductService;
+import com.grocery.hr.lalajikidukan.utils.CloudinaryUtility;
 import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
@@ -54,6 +58,7 @@ public class ProductFragment extends Fragment {
     private Handler mHandler;
     private ProductService productService;
     private CartManager cartManager;
+    private PicassoManager picassoManager;
 
     //XML VIEW
 
@@ -86,6 +91,7 @@ public class ProductFragment extends Fragment {
         productService = ProductService.getInstance(getContext());
         mHandler = new Handler();
         cartManager = CartManager.getInstance(getContext());
+        picassoManager = PicassoManager.getInstance();
         setHasOptionsMenu(true);
     }
 
@@ -187,6 +193,9 @@ public class ProductFragment extends Fragment {
         public void onBindViewHolder(ProductViewHolder holder, int position) {
             ProductModel product = productItems.get(position);
 
+            String imageUrl = CloudinaryUtility.getResizeImageUrl(1000, 1000, product.getImageUrl());
+            picassoManager.downloadImage(getContext(), imageUrl, holder.getLogo());
+
             holder.getMunitPrice().setText(String.valueOf(product.getUnitAmount()));
             if (product.getUnitQuantityInGm() == 0) {
                 holder.getMUnitQuantity().setText("1 unit");
@@ -218,9 +227,9 @@ public class ProductFragment extends Fragment {
 
 
     class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-/*
-        @BindView(R.id.imageView)
-       AppCompatImageView mLogo;*/
+
+        @BindView(R.id.image_product)
+        AppCompatImageView mLogo;
 
         @BindView(R.id.text_content)
         AppCompatTextView mContent;
@@ -272,16 +281,15 @@ public class ProductFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            ProductModel product=productItems.get(getAdapterPosition());
+            ProductModel product = productItems.get(getAdapterPosition());
             mActivity.getSupportFragmentManager().beginTransaction().replace(
-                    R.id.flContentMain,ProductDescriptionFragment.newInstance(product)
-            ,ProductDescriptionFragment.TAG).addToBackStack(null).commit();
+                    R.id.flContentMain, ProductDescriptionFragment.newInstance(product)
+                    , ProductDescriptionFragment.TAG).addToBackStack(null).commit();
         }
 
-       /* public AppCompatImageView getLogo() {
+        public AppCompatImageView getLogo() {
             return mLogo;
-        }*/
-
+        }
        /* public AppCompatTextView getName() {
             return mcontent;
         }*/
@@ -328,22 +336,30 @@ public class ProductFragment extends Fragment {
             super.onPostExecute(result);
             Log.e(TAG, "GetCategories::onGetExecte(): result is: " + result);
             if (result != null && result.trim().length() != 0) {
-                productItems = JsonParserUtils.productParser(result);
-                productService.syncProductCountWithCartCount(productItems);
-                mProductList.setAdapter(mAdapter);
-                mAdapter.notifyDataSetChanged();
-            } else {
-                mProductList.getProgressView().setVisibility(View.GONE);
-                try {
-                    Snackbar.make(mRootWidget,
-                            getString(R.string.cant_connect_to_server),
-                            Snackbar.LENGTH_LONG)
-                            .show();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                BaseResponse baseResponse = JsonParserUtils.getBaseResponse(result);
+                if (baseResponse != null && baseResponse.getResponseCode() >= 400 &&
+                        baseResponse.getResponseCode() < 500) {
+                    showSnackbar(baseResponse.getResponseMessage() + " " + getString(R.string.complaint_to_admin));
+                } else {
+                    productItems = JsonParserUtils.productParser(result);
+                    productService.syncProductCountWithCartCount(productItems);
+                    mProductList.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
                 }
+            } else {
+                showSnackbar(getString(R.string.cant_connect_to_server));
             }
             mSpinner.setVisibility(View.GONE);
+        }
+    }
+
+    public void showSnackbar(String message) {
+        try {
+            Snackbar.make(mRootWidget, message,
+                    Snackbar.LENGTH_LONG)
+                    .show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

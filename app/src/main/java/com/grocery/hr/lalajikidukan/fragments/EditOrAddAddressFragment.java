@@ -68,10 +68,10 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
     private Handler mHandler;
     private Gson gson;
     private String addressJson;
-    private boolean isNameOk=false;
-    private boolean isPincodeOk=false;
-    private boolean isLocalityOk=false;
-    private boolean isFlatNoOk  = false;
+    private boolean isNameOk = false;
+    private boolean isPincodeOk = false;
+    private boolean isLocalityOk = false;
+    private boolean isFlatNoOk = false;
     private boolean isPhoneNoOk = false;
 
     @BindView(R.id.add_addresstb)
@@ -210,7 +210,7 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
     }
 
     public void validatePhoneNo(Editable s) {
-        isPhoneNoOk = s.length()==10;
+        isPhoneNoOk = s.length() == 10;
         setError(isPhoneNoOk, mPhoneNo, "Please, Enter Valid Phone no");
         setBnUpdateAddress();
     }
@@ -235,7 +235,7 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
     }
 
     public void setBnUpdateAddress() {
-        mUpdateButton.setEnabled((isFlatNoOk && isNameOk && isLocalityOk && isPincodeOk && isPhoneNoOk ));
+        mUpdateButton.setEnabled((isFlatNoOk && isNameOk && isLocalityOk && isPincodeOk && isPhoneNoOk));
     }
 
 
@@ -275,13 +275,13 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
                 mAddressType.check(0);
             }
             mUpdateButton.setText("Edit Address");
-            isLocalityOk=true;
-            isNameOk=true;
-            isFlatNoOk=true;
-            isPincodeOk=true;
-            isPhoneNoOk=true;
+            isLocalityOk = true;
+            isNameOk = true;
+            isFlatNoOk = true;
+            isPincodeOk = true;
+            isPhoneNoOk = true;
             setBnUpdateAddress();
-        }else{
+        } else {
             mUpdateButton.setText("Add Address");
             setBnUpdateAddress();
         }
@@ -294,7 +294,7 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
             @Override
             public void run() {
                 if (mUtils.isDeviceOnline(mActivity)) {
-                   new DoUpdate().execute();
+                    new DoUpdate().execute();
                 } else {
                     Snackbar.make(mRootWidget, getString(R.string.device_offline), Snackbar.LENGTH_LONG).show();
                 }
@@ -328,7 +328,7 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
             address.setLandmark(mLandmark.getText().toString());
             address.setPhoneNumber(mPhoneNo.getText().toString());
             address.setAddressType(((RadioButton) mActivity.findViewById(mAddressType.getCheckedRadioButtonId())).getText().toString());
-            address.setUser(AppSharedPreference.getString(getContext(),AppConstants.User.MOBILE_NO));
+            address.setUser(AppSharedPreference.getString(getContext(), AppConstants.User.MOBILE_NO));
         }
 
         @Override
@@ -344,9 +344,11 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
         protected String doInBackground(String... params) {
             try {
                 if (address.getId() != 0) {
-                    return mUtils.putToServer(AppConstants.Url.BASE_URL + AppConstants.Url.EDIT_ADDRESS, mUtils.getUerPasswordMap(getContext()), addressJson);
+                    return mUtils.putToServer(AppConstants.Url.BASE_URL +
+                            AppConstants.Url.EDIT_ADDRESS, mUtils.getUerPasswordMap(getContext()), addressJson);
                 } else {
-                    return mUtils.postToServer(AppConstants.Url.BASE_URL + AppConstants.Url.ADD_NEW_ADDRESS, mUtils.getUerPasswordMap(getContext()), addressJson);
+                    return mUtils.postToServer(AppConstants.Url.BASE_URL +
+                            AppConstants.Url.ADD_NEW_ADDRESS, mUtils.getUerPasswordMap(getContext()), addressJson);
                 }
             } catch (Exception e) {
                 Log.e(TAG, "DoUpdate::doInBackground(): " + e.getMessage());
@@ -361,10 +363,10 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
                 dialog.dismiss();
             }
             if (result != null && result.length() != 0) {
-                Log.e(TAG + " result", result);
                 try {
                     JSONObject jsonObj = new JSONObject(result);
-                    if (jsonObj != null && jsonObj.getInt("responseCode") == 200 && jsonObj.getString("data")!=null && jsonObj.getString("data").equals("SUCCESS")) {
+                    if (jsonObj != null && jsonObj.getInt("responseCode") == 200 &&
+                            jsonObj.getString("data") != null && jsonObj.getString("data").equals("SUCCESS")) {
                         getFragmentManager().popBackStackImmediate();
                     } else {
                         mUtils.showMessage(
@@ -378,7 +380,7 @@ public class EditOrAddAddressFragment extends Fragment implements TextWatcher {
                     e.printStackTrace();
                 }
 
-            }else {
+            } else {
                 Log.e(TAG, "DoLogin::onPostExecute(): unexpected server result");
                 try {
                     Snackbar.make(mRootWidget,

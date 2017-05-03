@@ -25,8 +25,11 @@ import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.adapters.HighlighterAutoSwipeAdapter;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
+import com.grocery.hr.lalajikidukan.manager.PicassoManager;
+import com.grocery.hr.lalajikidukan.models.BaseResponse;
 import com.grocery.hr.lalajikidukan.models.CategoryModel;
 import com.grocery.hr.lalajikidukan.models.ProductModel;
+import com.grocery.hr.lalajikidukan.utils.CloudinaryUtility;
 import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
 
@@ -53,6 +56,7 @@ public class HomeFragment extends Fragment {
     private Handler mHandler;
     private Utils mUtils;
     HighlighterAutoSwipeAdapter mCustomPagerAdapter;
+    private PicassoManager picassoManager;
     Timer timer;
 
 
@@ -84,6 +88,7 @@ public class HomeFragment extends Fragment {
         mUtils = Utils.getInstance();
         mHandler = new Handler();
         timer = new Timer();
+        picassoManager = PicassoManager.getInstance();
         setHasOptionsMenu(true);
     }
 
@@ -188,6 +193,8 @@ public class HomeFragment extends Fragment {
         @Override
         public void onBindViewHolder(CategorySliderViewHolder holder, int position) {
             CategoryModel categoryModel = categoryItems.get(position);
+            String imageUrl = CloudinaryUtility.getResizeImageUrl(100, 100, categoryModel.getImageUrl());
+            picassoManager.downloadImage(getContext(), imageUrl, holder.getmCategoryImage());
             holder.getMCategoryName().setText(categoryModel.getName());
             holder.getMDescription().setText(categoryModel.getDescription());
         }
@@ -237,6 +244,10 @@ public class HomeFragment extends Fragment {
             return mDescription;
         }
 
+        public ImageView getmCategoryImage() {
+            return mCategoryImage;
+        }
+
     }
 
 
@@ -244,7 +255,8 @@ public class HomeFragment extends Fragment {
         @Override
         protected String doInBackground(Void... params) {
             try {
-                return mUtils.getFromServer(AppConstants.Url.BASE_URL + AppConstants.Url.GET_HIGHLIGHTED_PRODUCT, null);
+                return mUtils.getFromServer(AppConstants.Url.BASE_URL +
+                        AppConstants.Url.GET_HIGHLIGHTED_PRODUCT, null);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -256,20 +268,18 @@ public class HomeFragment extends Fragment {
             super.onPostExecute(result);
             Log.e(TAG, "GetHighLightedProduct::onGetExecte(): result is: " + result);
             if ((result != null && result.trim().length() != 0)) {
-                highlightedProductItems = JsonParserUtils.productParser(result);
-                mCustomPagerAdapter = new HighlighterAutoSwipeAdapter(getActivity(), highlightedProductItems);
-                timer.schedule(new MyTimerTask(), 2000, 4000);
-                mViewPager.setAdapter(mCustomPagerAdapter);
-
-            } else {
-                try {
-                    Snackbar.make(mRootWidget,
-                            getString(R.string.cant_connect_to_server),
-                            Snackbar.LENGTH_LONG)
-                            .show();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                BaseResponse baseResponse = JsonParserUtils.getBaseResponse(result);
+                if (baseResponse != null && baseResponse.getResponseCode() >= 400 &&
+                        baseResponse.getResponseCode() < 500) {
+                    showSnackbar(baseResponse.getResponseMessage() + " " + getString(R.string.complaint_to_admin));
+                } else {
+                    highlightedProductItems = JsonParserUtils.productParser(result);
+                    mCustomPagerAdapter = new HighlighterAutoSwipeAdapter(getActivity(), highlightedProductItems);
+                    timer.schedule(new MyTimerTask(), 2000, 4000);
+                    mViewPager.setAdapter(mCustomPagerAdapter);
                 }
+            } else {
+                showSnackbar(getString(R.string.cant_connect_to_server));
             }
         }
     }
@@ -292,20 +302,29 @@ public class HomeFragment extends Fragment {
             super.onPostExecute(result);
             Log.e(TAG, "GetCategories::onGetExecte(): result is: " + result);
             if ((result != null && result.trim().length() != 0)) {
-                categoryItems = JsonParserUtils.categoryParser(result);
-                mRecyclerCategory.setAdapter(mCategoryAdapter);
-                mCategoryAdapter.notifyDataSetChanged();
-            } else {
-                try {
-                    Snackbar.make(mRootWidget,
-                            getString(R.string.cant_connect_to_server),
-                            Snackbar.LENGTH_LONG)
-                            .show();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                BaseResponse baseResponse = JsonParserUtils.getBaseResponse(result);
+                if (baseResponse != null && baseResponse.getResponseCode() >= 400 &&
+                        baseResponse.getResponseCode() < 500) {
+                    showSnackbar(baseResponse.getResponseMessage() + " " + getString(R.string.complaint_to_admin));
+                } else {
+                    categoryItems = JsonParserUtils.categoryParser(result);
+                    mRecyclerCategory.setAdapter(mCategoryAdapter);
+                    mCategoryAdapter.notifyDataSetChanged();
                 }
+            } else {
+                showSnackbar(getString(R.string.cant_connect_to_server));
             }
             mSpinner.setVisibility(View.GONE);
+        }
+    }
+
+    public void showSnackbar(String message) {
+        try {
+            Snackbar.make(mRootWidget, message,
+                    Snackbar.LENGTH_LONG)
+                    .show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

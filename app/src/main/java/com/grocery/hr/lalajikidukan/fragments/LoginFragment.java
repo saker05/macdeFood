@@ -244,10 +244,12 @@ public class LoginFragment extends Fragment implements TextWatcher {
                 Log.e(TAG + " result", result);
                 try {
                     JSONObject jsonObj = new JSONObject(result);
-                    if (jsonObj != null && jsonObj.getInt("responseCode") == 200 && jsonObj.getString("data")!=null) {
+                    if (jsonObj != null && jsonObj.getInt("responseCode") == 200 &&
+                            jsonObj.getString("data") != null) {
                         AppSharedPreference.putString(getContext(), AppConstants.User.MOBILE_NO, mobileNo);
                         AppSharedPreference.putString(getContext(), AppConstants.User.PASSWORD, password);
-                        AppSharedPreference.putString(getContext(),AppConstants.User.TYPE,jsonObj.getString("data"));
+                        AppSharedPreference.putString(getContext(), AppConstants.User.TYPE,
+                                jsonObj.getString("data"));
                         if (loginActivity.getParent() == null) {
                             loginActivity.setResult(Activity.RESULT_OK);
                         } else {

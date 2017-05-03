@@ -30,9 +30,12 @@ import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
 import com.grocery.hr.lalajikidukan.models.AddressModel;
+import com.grocery.hr.lalajikidukan.models.BaseResponse;
 import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -365,23 +368,36 @@ public class AddressFragment extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             Log.e(TAG, "GetAddress::onPostExecute(): result is: " + result);
+
             if ((result != null && result.trim().length() != 0)) {
-                addresses = JsonParserUtils.addressParser(result);
-                mAddressList.setAdapter(mAdapter);
-                mAdapter.notifyDataSetChanged();
-            } else {
-                try {
-                    Snackbar.make(mRootWidget,
-                            getString(R.string.cant_connect_to_server),
-                            Snackbar.LENGTH_LONG)
-                            .show();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                BaseResponse baseResponse = JsonParserUtils.getBaseResponse(result);
+                if (baseResponse!=null && baseResponse.getResponseCode() == 403) {
+                    showSnackbar(getString(R.string.forbidden));
+                } else if (baseResponse!=null && baseResponse.getResponseCode() >= 400 &&
+                        baseResponse.getResponseCode() < 500) {
+                    showSnackbar(baseResponse.getResponseMessage() + " " + getString(R.string.complaint_to_admin));
+                } else {
+                    addresses = JsonParserUtils.addressParser(result);
+                    mAddressList.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
                 }
+            } else {
+                showSnackbar(getString(R.string.cant_connect_to_server));
+
             }
             spinner.setVisibility(View.GONE);
         }
     }
 
+
+    public void showSnackbar(String message) {
+        try {
+            Snackbar.make(mRootWidget, message,
+                    Snackbar.LENGTH_LONG)
+                    .show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

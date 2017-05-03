@@ -29,6 +29,7 @@ import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
 import com.grocery.hr.lalajikidukan.entity.CartDO;
 import com.grocery.hr.lalajikidukan.manager.CartManager;
+import com.grocery.hr.lalajikidukan.models.BaseResponse;
 import com.grocery.hr.lalajikidukan.models.CartModel;
 import com.grocery.hr.lalajikidukan.models.ShippingModel;
 import com.grocery.hr.lalajikidukan.service.CartService;
@@ -122,14 +123,14 @@ public class CartFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mActivity.hideCart();
-        if(mUtils.isDeviceOnline(getContext())){
+        if (mUtils.isDeviceOnline(getContext())) {
             ButterKnife.bind(this, view);
             mCartList.getProgressView().setVisibility(View.GONE);
-            mToolbar=(Toolbar)getActivity().findViewById(R.id.cartToolbar);
+            mToolbar = (Toolbar) getActivity().findViewById(R.id.cartToolbar);
             setUpToolbar();
             setUpViews();
-        }else{
-            mToolbar=(Toolbar)getActivity().findViewById(R.id.toolbar);
+        } else {
+            mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
             setUpToolbar();
         }
     }
@@ -176,7 +177,7 @@ public class CartFragment extends Fragment {
     }
 
     @OnClick(R.id.checkoutButton)
-    public void checkout(){
+    public void checkout() {
         mActivity.getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.flContentMain, AddressFragment
@@ -364,7 +365,8 @@ public class CartFragment extends Fragment {
                 return null;
             } else if (!mUtils.isUserLoggedIn(getContext())) {
                 try {
-                    return mUtils.postToServer(AppConstants.Url.BASE_URL + AppConstants.Url.CART_PRODUCT_INFO, null, cartModelJson);
+                    return mUtils.postToServer(AppConstants.Url.BASE_URL +
+                            AppConstants.Url.CART_PRODUCT_INFO, null, cartModelJson);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -372,7 +374,8 @@ public class CartFragment extends Fragment {
                 return null;
             } else {
                 try {
-                    return mUtils.postToServer(AppConstants.Url.BASE_URL + AppConstants.Url.ADD_CART, mUtils.getUerPasswordMap(getContext()), cartModelJson);
+                    return mUtils.postToServer(AppConstants.Url.BASE_URL + AppConstants.Url.ADD_CART,
+                            mUtils.getUerPasswordMap(getContext()), cartModelJson);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -384,20 +387,21 @@ public class CartFragment extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             Log.e(TAG, "GetCart::onPostExecute(): result is: " + result);
-            if ((cartModelJson == null || cartModelJson.isEmpty()) || (result != null && result.trim().length() != 0)) {
-                cartItems = JsonParserUtils.cartParser(result);
-                mCartList.setAdapter(mAdapter);
-                mAdapter.notifyDataSetChanged();
-            } else {
-                mCartList.getProgressView().setVisibility(View.GONE);
-                try {
-                    Snackbar.make(mRootWidget,
-                            getString(R.string.cant_connect_to_server),
-                            Snackbar.LENGTH_LONG)
-                            .show();
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if ((cartModelJson == null || cartModelJson.isEmpty()) ||
+                    (result != null && result.trim().length() != 0)) {
+                BaseResponse baseResponse = JsonParserUtils.getBaseResponse(result);
+                if (baseResponse != null && baseResponse.getResponseCode() == 403) {
+                    showSnackbar(getString(R.string.forbidden));
+                } else if (baseResponse != null && baseResponse.getResponseCode() >= 400 &&
+                        baseResponse.getResponseCode() < 500) {
+                    showSnackbar(baseResponse.getResponseMessage() + " " + getString(R.string.complaint_to_admin));
+                } else {
+                    cartItems = JsonParserUtils.cartParser(result);
+                    mCartList.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
                 }
+            } else {
+                showSnackbar(getString(R.string.cant_connect_to_server));
             }
             spinner.setVisibility(View.GONE);
         }
@@ -417,6 +421,16 @@ public class CartFragment extends Fragment {
             } else {
                 mDeliveryCharge.setText("Free");
             }
+        }
+    }
+
+    public void showSnackbar(String message) {
+        try {
+            Snackbar.make(mRootWidget, message,
+                    Snackbar.LENGTH_LONG)
+                    .show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

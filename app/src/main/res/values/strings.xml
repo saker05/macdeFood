@@ -58,7 +58,7 @@
 
     <!-- Internet Connection related string BEGIN -->
     <string name="device_offline">Turn on Internet Connection</string>
-    <string name="cant_connect_to_server">Couldn\'t reach to server</string>
+
     <!-- Internet Connection related string END -->
 
     <!-- Dummy strings BEGIN -->
@@ -123,8 +123,10 @@
     </string>
 
 
+    <!-- Strings related to server response -->
 
-
-
+    <string name="forbidden">You are not logged in.</string>
+    <string name="cant_connect_to_server">Couldn\'t reach to server</string>
+    <string name="complaint_to_admin">Try to connect to admin.</string>
 
 </resources>

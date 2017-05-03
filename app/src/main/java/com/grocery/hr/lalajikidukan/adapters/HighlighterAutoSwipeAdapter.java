@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.grocery.hr.lalajikidukan.R;
+import com.grocery.hr.lalajikidukan.manager.PicassoManager;
 import com.grocery.hr.lalajikidukan.models.ProductModel;
+import com.grocery.hr.lalajikidukan.utils.CloudinaryUtility;
 
 import java.util.List;
 
@@ -23,11 +25,13 @@ public class HighlighterAutoSwipeAdapter extends PagerAdapter
     private Context ctx;
     private LayoutInflater layoutInflater;
     private List<ProductModel> highlightedProductItems;
+    private PicassoManager picassoManager;
 
      public HighlighterAutoSwipeAdapter(Context ctx, List<ProductModel> highlightedProductItems)
      {
          this.ctx=ctx;
          this.highlightedProductItems=highlightedProductItems;
+         picassoManager=PicassoManager.getInstance();
      }
 
     @Override
@@ -48,8 +52,10 @@ public class HighlighterAutoSwipeAdapter extends PagerAdapter
     public Object instantiateItem(ViewGroup container, int position) {
         layoutInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemview = layoutInflater.inflate(R.layout.item_view_highlighters,container,false);
+        String imageUrl= CloudinaryUtility.getResizeImageUrl(500,200,highlightedProductItems.get(position).getImageUrl());
         ImageView imageView=(ImageView)itemview.findViewById(R.id.image);
-        imageView.setImageResource(image_resource[position]);
+        picassoManager.downloadImage(ctx,imageUrl,imageView);
+     //   imageView.setImageResource(image_resource[position]);
         container.addView( itemview );
         return itemview;
     }

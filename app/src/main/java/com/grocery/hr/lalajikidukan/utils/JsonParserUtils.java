@@ -1,6 +1,7 @@
 package com.grocery.hr.lalajikidukan.utils;
 
 import com.grocery.hr.lalajikidukan.models.AddressModel;
+import com.grocery.hr.lalajikidukan.models.BaseResponse;
 import com.grocery.hr.lalajikidukan.models.CartModel;
 import com.grocery.hr.lalajikidukan.models.CategoryModel;
 import com.grocery.hr.lalajikidukan.models.OpsOrderDetailModel;
@@ -211,9 +212,9 @@ public class JsonParserUtils {
             int count = opsData.getInt("totalOrderCount");
             JSONArray opsOrderJsonArray = opsData.optJSONArray("opsOrderDetailModel");
 
-            for (int i = 0; i < opsOrderJsonArray.length(); i++)
-            {
-                JSONObject addressJsonObject = (JSONObject) opsOrderJsonArray.getJSONObject(i).get("userAddressDetailModel");
+            for (int i = 0; i < opsOrderJsonArray.length(); i++) {
+                JSONObject addressJsonObject = (JSONObject) opsOrderJsonArray.getJSONObject(i).
+                        get("userAddressDetailModel");
                 JSONObject orderJsonObject = (JSONObject) opsOrderJsonArray.getJSONObject(i).get("userOrderModel");
 
                 OpsOrderDetailModel opsOrderDetailModel = new OpsOrderDetailModel();
@@ -248,13 +249,29 @@ public class JsonParserUtils {
 
             return opsOrderModel;
 
-        }
-
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
 
 
-   }
+    }
+
+    public static BaseResponse getBaseResponse(String jsonString){
+        if (jsonString == null || jsonString.isEmpty()) {
+            return null;
+        }
+        BaseResponse baseResponse=new BaseResponse();
+        try {
+            JSONObject jsonObject=new JSONObject(jsonString);
+            String responseMessage=jsonObject.getString("responseMessage");
+            int responseCode=jsonObject.getInt("responseCode");
+            baseResponse.setResponseCode(responseCode);
+            baseResponse.setResponseMessage(responseMessage);
+            return baseResponse;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

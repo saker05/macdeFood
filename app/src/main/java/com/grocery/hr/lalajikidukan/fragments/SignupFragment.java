@@ -237,7 +237,8 @@ public class SignupFragment extends Fragment implements TextWatcher {
                 Log.e(TAG, "DoRegister::onPostExecute(): result is: " + result);
                 try {
                     JSONObject jsonObj = new JSONObject(result);
-                    if (jsonObj != null && jsonObj.getInt("responseCode") == 200 && jsonObj.getString("data") != null && jsonObj.getString("data").equals("SUCCESS")) {
+                    if (jsonObj != null && jsonObj.getInt("responseCode") == 200 &&
+                            jsonObj.getString("data") != null && jsonObj.getString("data").equals("SUCCESS")) {
                         mUtils.showMessage(
                                 loginActivity,
                                 "Success",

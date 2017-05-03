@@ -1,40 +1,26 @@
 package com.grocery.hr.lalajikidukan.fragments;
 
 
-import android.app.Activity;
-import android.nfc.Tag;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
-import com.grocery.hr.lalajikidukan.constants.AppConstants;
-import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,8 +29,8 @@ import butterknife.ButterKnife;
  * A simple {@link Fragment} subclass.
  */
 public class AdminHomeFragment extends Fragment {
-Handler mHandler;
-   MainActivity mActivity;
+    Handler mHandler;
+    MainActivity mActivity;
     Toolbar mToolbar;
     ActionBarDrawerToggle mDrawerToggle;
     Utils mUtils;
@@ -55,9 +41,8 @@ Handler mHandler;
     RecyclerView mrecyclerView;*/
 
 
-
-  @BindView(R.id.mRootWidget)
-  CoordinatorLayout mRootWidget;
+    @BindView(R.id.mRootWidget)
+    CoordinatorLayout mRootWidget;
 
     @BindView(R.id.admin_viewpager)
     ViewPager mviewpager;
@@ -86,7 +71,6 @@ Handler mHandler;
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -98,9 +82,9 @@ Handler mHandler;
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        super.onViewCreated(view,savedInstanceState);
+        super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        mToolbar=(Toolbar)getActivity().findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         setUpToolbar();
         setupViews();
     }
@@ -118,19 +102,16 @@ Handler mHandler;
     }
 
 
-
-    public void setupViews()
-    {
+    public void setupViews() {
         mviewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
-        mviewPagerAdapter.addFragment(new Allorder_Admin_fragment(),"Placed");
-       mviewPagerAdapter.addFragment(new Allorder_Admin_fragment(),"Preparing");
-        mviewPagerAdapter.addFragment(new Allorder_Admin_fragment(),"Dispatched");
-        mviewPagerAdapter.addFragment(new Allorder_Admin_fragment(),"Delivered");
+        mviewPagerAdapter.addFragment(new OpsOrderFragment(), "Placed");
+        mviewPagerAdapter.addFragment(new OpsOrderFragment(), "Preparing");
+        mviewPagerAdapter.addFragment(new OpsOrderFragment(), "Dispatched");
+        mviewPagerAdapter.addFragment(new OpsOrderFragment(), "Delivered");
 
         mviewpager.setAdapter(mviewPagerAdapter);
         mtablayout.setupWithViewPager(mviewpager);
     }
-
 
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -162,12 +143,5 @@ Handler mHandler;
             return mFragmentTitleList.get(position);
         }
     }
-
-
-
-
-
-
-
 
 }

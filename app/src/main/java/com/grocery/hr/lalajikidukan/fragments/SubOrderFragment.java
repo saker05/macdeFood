@@ -22,7 +22,7 @@ public class SubOrderFragment extends Fragment {
     private List<UserSubOrderModel> subOrders;
     public static final String TAG = SubOrderFragment.class.getSimpleName();
 
-    String  uoc;
+    String uoc;
 
     class GetSubOrders extends AsyncTask<Void, Void, String>
 
@@ -30,26 +30,27 @@ public class SubOrderFragment extends Fragment {
 
         @Override
         protected String doInBackground(Void... params) {
-        try {
-            String subOrderUrl=AppConstants.Url.GET_SUB_ORDERS;
-            String replacedSubOrderUrl=subOrderUrl.replace("?",uoc);
-            return mUtils.getFromServer(AppConstants.Url.BASE_URL + subOrderUrl, mUtils.getUerPasswordMap(getContext()));
-        } catch (Exception e) {
-            e.printStackTrace();
+            try {
+                String subOrderUrl = AppConstants.Url.GET_SUB_ORDERS;
+                String replacedSubOrderUrl = subOrderUrl.replace("?", uoc);
+                return mUtils.getFromServer(AppConstants.Url.BASE_URL + subOrderUrl,
+                        mUtils.getUerPasswordMap(getContext()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
         }
-        return null;
-    }
 
 
         @Override
         protected void onPostExecute(String result) {
-        super.onPostExecute(result);
-        Log.e(TAG, "GetCart::onPostExecute(): result is: " + result);
-        if ((result != null && result.trim().length() != 0)) {
-            subOrders= JsonParserUtils.subOrderParser(result);
+            super.onPostExecute(result);
+            Log.e(TAG, "GetCart::onPostExecute(): result is: " + result);
+            if ((result != null && result.trim().length() != 0)) {
+                subOrders = JsonParserUtils.subOrderParser(result);
                 /*mCartList.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();*/
-        } else {
+            } else {
               /*  try {
                     Snackbar.make(mRootWidget,
                             getString(R.string.cant_connect_to_server),
@@ -58,8 +59,8 @@ public class SubOrderFragment extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }*/
+            }
         }
-    }
     }
 
 }

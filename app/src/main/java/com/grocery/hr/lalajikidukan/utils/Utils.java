@@ -13,6 +13,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.util.Pair;
@@ -158,7 +159,8 @@ public class Utils {
         okhttp3.Request.Builder builder = new okhttp3.Request.Builder().url(url);
 
         if (pairs != null) {
-            String encoding = Base64.encodeToString((pairs.get("user") + ":" + pairs.get("passwd")).getBytes("UTF-8"), Base64.NO_WRAP);
+            String encoding = Base64.encodeToString((pairs.get("user") + ":" +
+                    pairs.get("passwd")).getBytes("UTF-8"), Base64.NO_WRAP);
             builder.addHeader("Authorization", "Basic " + encoding);
         }
         RequestBody body = RequestBody.create(JSON, data);
@@ -176,7 +178,8 @@ public class Utils {
         okhttp3.Request.Builder builder = new okhttp3.Request.Builder().url(url);
 
         if (pairs != null) {
-            String encoding = Base64.encodeToString((pairs.get("user") + ":" + pairs.get("passwd")).getBytes("UTF-8"), Base64.NO_WRAP);
+            String encoding = Base64.encodeToString((pairs.get("user") + ":" +
+                    pairs.get("passwd")).getBytes("UTF-8"), Base64.NO_WRAP);
             builder.addHeader("Authorization", "Basic " + encoding);
         }
         RequestBody body = RequestBody.create(JSON, data);
@@ -195,7 +198,8 @@ public class Utils {
         okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
 
         if (pairs != null) {
-            String encoding = Base64.encodeToString((pairs.get("user") + ":" + pairs.get("passwd")).getBytes("UTF-8"), Base64.NO_WRAP);
+            String encoding = Base64.encodeToString((pairs.get("user") + ":" +
+                    pairs.get("passwd")).getBytes("UTF-8"), Base64.NO_WRAP);
             builder.addHeader("Authorization", "Basic " + encoding);
         }
         // Log.i(TAG, "getToServer: url is: " + url);
@@ -269,7 +273,6 @@ public class Utils {
         }
         return dialog;
     }
-
 
 
 }
