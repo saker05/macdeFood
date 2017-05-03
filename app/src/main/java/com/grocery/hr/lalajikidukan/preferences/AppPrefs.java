@@ -11,6 +11,7 @@ public class AppPrefs {
     private  String LastLocation = null;
     private  Boolean running = false;
     private  int  activityDrawerItemPosition=0;
+    private  boolean isHighligherAutoSwiperThreadIsRunning=false;
 
     private static AppPrefs instance;
 
@@ -41,6 +42,13 @@ public class AppPrefs {
         return running;
     }
 
+    public boolean isHighligherAutoSwiperThreadIsRunning() {
+        return isHighligherAutoSwiperThreadIsRunning;
+    }
+
+    public void setHighligherAutoSwiperThreadIsRunning(boolean highligherAutoSwiperThreadIsRunning) {
+        isHighligherAutoSwiperThreadIsRunning = highligherAutoSwiperThreadIsRunning;
+    }
 
     public void setLastLocation(String lastLocation) {
         LastLocation = lastLocation;

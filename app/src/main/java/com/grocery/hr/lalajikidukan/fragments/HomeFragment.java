@@ -29,6 +29,7 @@ import com.grocery.hr.lalajikidukan.manager.PicassoManager;
 import com.grocery.hr.lalajikidukan.models.BaseResponse;
 import com.grocery.hr.lalajikidukan.models.CategoryModel;
 import com.grocery.hr.lalajikidukan.models.ProductModel;
+import com.grocery.hr.lalajikidukan.preferences.AppPrefs;
 import com.grocery.hr.lalajikidukan.utils.CloudinaryUtility;
 import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
@@ -57,6 +58,7 @@ public class HomeFragment extends Fragment {
     private Utils mUtils;
     HighlighterAutoSwipeAdapter mCustomPagerAdapter;
     private PicassoManager picassoManager;
+    AppPrefs appPrefs;
     Timer timer;
 
 
@@ -89,6 +91,7 @@ public class HomeFragment extends Fragment {
         mHandler = new Handler();
         timer = new Timer();
         picassoManager = PicassoManager.getInstance();
+        appPrefs=AppPrefs.getInstance();
         setHasOptionsMenu(true);
     }
 
@@ -275,7 +278,10 @@ public class HomeFragment extends Fragment {
                 } else {
                     highlightedProductItems = JsonParserUtils.productParser(result);
                     mCustomPagerAdapter = new HighlighterAutoSwipeAdapter(getActivity(), highlightedProductItems);
-                    timer.schedule(new MyTimerTask(), 2000, 4000);
+                    if(!appPrefs.isHighligherAutoSwiperThreadIsRunning()){
+                        timer.schedule(new MyTimerTask(), 2000, 4000);
+                        appPrefs.setHighligherAutoSwiperThreadIsRunning(true);
+                    }
                     mViewPager.setAdapter(mCustomPagerAdapter);
                 }
             } else {

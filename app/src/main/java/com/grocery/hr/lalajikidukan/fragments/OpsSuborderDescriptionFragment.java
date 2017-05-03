@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.grocery.hr.lalajikidukan.MainActivity;
@@ -64,10 +63,10 @@ public class OpsSuborderDescriptionFragment extends Fragment {
 
 
 
-    @BindView(R.id.order_bill_list)
+    @BindView(R.id.rv_suborder_list)
     RecyclerView mRecyclerView;
 
-    @BindView(R.id.main_content)
+    @BindView(R.id.cl_root)
     CoordinatorLayout mRootWidget;
 
     public OpsSuborderDescriptionFragment() {
@@ -87,7 +86,7 @@ public class OpsSuborderDescriptionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ops_order_description, container, false);
+        return inflater.inflate(R.layout.fragment_ops_suporder_description, container, false);
     }
 
 
@@ -139,7 +138,7 @@ public class OpsSuborderDescriptionFragment extends Fragment {
         public OrderBillDescritionViewHolderr onCreateViewHolder(ViewGroup parent, int viewType) {
             return new OrderBillDescritionViewHolderr(
                     LayoutInflater.from(parent.getContext())
-                            .inflate(R.layout.item_view_orderbilldescription, parent, false)
+                            .inflate(R.layout.item_view_ops_suborder_description, parent, false)
             );
         }
 
@@ -171,7 +170,7 @@ public class OpsSuborderDescriptionFragment extends Fragment {
     {
 
 
-        @BindView(R.id.order_desc_product)
+        @BindView(R.id.text_description)
         TextView mOrderDescription;
 
         @BindView(R.id.food_item)

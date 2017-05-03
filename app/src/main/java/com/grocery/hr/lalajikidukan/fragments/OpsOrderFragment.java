@@ -44,15 +44,11 @@ public class OpsOrderFragment extends Fragment {
 
     public static final String TAG = OpsOrderFragment.class.getSimpleName();
 
-    @BindView(R.id.OrderAdminRv)
+    @BindView(R.id.rv_ops_order)
     RecyclerView mrecyclerView;
 
-    @BindView(R.id.rvRootWidget)
+    @BindView(R.id.ll_root)
     LinearLayout mRootWidget;
-
-    public OpsOrderFragment() {
-        // Required empty public constructor
-    }
 
 
     @Override
@@ -65,11 +61,10 @@ public class OpsOrderFragment extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_order_alldetail, container, false);
+        return inflater.inflate(R.layout.fragment_ops_order, container, false);
 
     }
 
@@ -83,7 +78,6 @@ public class OpsOrderFragment extends Fragment {
 
 
     }
-
 
 
     public void setUp() {
@@ -104,26 +98,25 @@ public class OpsOrderFragment extends Fragment {
         public OrderDetailViewHolderr onCreateViewHolder(ViewGroup parent, int viewType) {
             return new OrderDetailViewHolderr(
                     LayoutInflater.from(parent.getContext())
-                            .inflate(R.layout.item_view_admin, parent, false)
+                            .inflate(R.layout.item_view_ops_order, parent, false)
             );
         }
 
 
         @Override
-        public void onBindViewHolder(OrderDetailViewHolderr holder, int position)
-        {
-            UserOrderModel userOrderModel=opsOrderDetailModelList.get(position).getUserOrderModel();
-            AddressModel   addressModel= opsOrderDetailModelList.get(position).getAddressModel();
-            holder.getmLocalInfo().setText(addressModel.getLocality()+" " +addressModel.getPhoneNumber());
-            holder.getmTime().setText(userOrderModel.getOrderDate());
-            holder.getmOrderId().setText(userOrderModel.getUoc());
-            holder.getmOrderStatus().setText(userOrderModel.getStatus().toString());
+        public void onBindViewHolder(OrderDetailViewHolderr holder, int position) {
+            UserOrderModel userOrderModel = opsOrderDetailModelList.get(position).getUserOrderModel();
+            AddressModel addressModel = opsOrderDetailModelList.get(position).getAddressModel();
+            holder.getMAddress().setText(addressModel.getLocality() + " " + addressModel.getPhoneNumber());
+            holder.getMTime().setText(userOrderModel.getOrderDate());
+            holder.getMOrderId().setText(userOrderModel.getUoc());
+            holder.getMOrderStatus().setText(userOrderModel.getStatus().toString());
         }
 
 
         @Override
         public int getItemCount() {
-            if(opsOrderDetailModelList!=null){
+            if (opsOrderDetailModelList != null) {
                 return opsOrderDetailModelList.size();
             }
             return 0;
@@ -134,19 +127,19 @@ public class OpsOrderFragment extends Fragment {
     class OrderDetailViewHolderr extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 
-        @BindView(R.id.timed)
+        @BindView(R.id.text_time)
         TextView mTime;
 
-        @BindView(R.id.order_date1)
+        @BindView(R.id.text_date)
         TextView mOrdeDate;
 
-        @BindView(R.id.order_id1)
+        @BindView(R.id.text_id)
         TextView mOrderId;
 
-        @BindView(R.id.local_info1)
-        TextView mLocalInfo;
+        @BindView(R.id.text_address)
+        TextView mAddress;
 
-        @BindView(R.id.order_status1)
+        @BindView(R.id.text_status)
         TextView mOrderStatus;
 
 
@@ -156,23 +149,23 @@ public class OpsOrderFragment extends Fragment {
             itemView.setOnClickListener(this);
         }
 
-        public TextView getmTime() {
+        public TextView getMTime() {
             return mTime;
         }
 
-        public TextView getmOrdeDate() {
+        public TextView getMOrdeDate() {
             return mOrdeDate;
         }
 
-        public TextView getmOrderId() {
+        public TextView getMOrderId() {
             return mOrderId;
         }
 
-        public TextView getmLocalInfo() {
-            return mLocalInfo;
+        public TextView getMAddress() {
+            return mAddress;
         }
 
-        public TextView getmOrderStatus() {
+        public TextView getMOrderStatus() {
             return mOrderStatus;
         }
 
@@ -180,18 +173,18 @@ public class OpsOrderFragment extends Fragment {
         @Override
         public void onClick(View v) {
             AddressModel addressModel = opsOrderDetailModelList.get(getAdapterPosition()).getAddressModel();
-            UserOrderModel userOrderModel=opsOrderDetailModelList.get(getAdapterPosition()).getUserOrderModel();
+            UserOrderModel userOrderModel = opsOrderDetailModelList.get(getAdapterPosition()).
+                    getUserOrderModel();
             mActivity.getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.flContentMain, OpsSuborderDescriptionFragment.getInstance(addressModel,userOrderModel), OpsSuborderDescriptionFragment.TAG).addToBackStack(null)
+                    .replace(R.id.flContentMain, OpsSuborderDescriptionFragment.getInstance(
+                            addressModel, userOrderModel), OpsSuborderDescriptionFragment.TAG).
+                    addToBackStack(null)
                     .commit();
 
         }
 
-        }
-
-
-
+    }
 
 
     public void baseGetOpsOrder() {
@@ -205,9 +198,6 @@ public class OpsOrderFragment extends Fragment {
             }
         });
     }
-
-
-
 
 
     class GetCategories extends AsyncTask<Void, Void, String> {
@@ -228,8 +218,8 @@ public class OpsOrderFragment extends Fragment {
             super.onPostExecute(result);
             Log.e(TAG, "GetCategories::onGetExecte(): result is: " + result);
             if ((result != null && result.trim().length() != 0)) {
-             opsOrderModel= JsonParserUtils.opsOrdeParser(result);
-                opsOrderDetailModelList=opsOrderModel.getOpsOrderDetailModel();
+                opsOrderModel = JsonParserUtils.opsOrdeParser(result);
+                opsOrderDetailModelList = opsOrderModel.getOpsOrderDetailModel();
                 mrecyclerView.setAdapter(madapter);
                 madapter.notifyDataSetChanged();
             } else {

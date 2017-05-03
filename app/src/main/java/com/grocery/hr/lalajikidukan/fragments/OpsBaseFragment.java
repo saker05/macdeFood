@@ -28,14 +28,14 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AdminHomeFragment extends Fragment {
+public class OpsBaseFragment extends Fragment {
     Handler mHandler;
     MainActivity mActivity;
     Toolbar mToolbar;
     ActionBarDrawerToggle mDrawerToggle;
     Utils mUtils;
 
-    public static final String TAG = AdminHomeFragment.class.getSimpleName();
+    public static final String TAG = OpsBaseFragment.class.getSimpleName();
 
   /*  @BindView(R.id.OrderAdminRv)
     RecyclerView mrecyclerView;*/
@@ -52,12 +52,8 @@ public class AdminHomeFragment extends Fragment {
 
     ViewPagerAdapter mviewPagerAdapter;
 
-    public AdminHomeFragment() {
-        // Required empty public constructor
-    }
-
-    public static AdminHomeFragment newInstance() {
-        return new AdminHomeFragment();
+    public static OpsBaseFragment newInstance() {
+        return new OpsBaseFragment();
     }
 
 
@@ -74,9 +70,7 @@ public class AdminHomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_admin_home, container, false);
-
-
+        return inflater.inflate(R.layout.fragment_ops_base, container, false);
     }
 
     @Override
@@ -91,8 +85,6 @@ public class AdminHomeFragment extends Fragment {
 
 
     public void setUpToolbar() {
-
-
         mActivity.setSupportActionBar(mToolbar);
         mActivity.setTitle("Operation");
         mDrawerToggle = new ActionBarDrawerToggle(mActivity, mActivity.getDrawerLayout(), mToolbar,
@@ -108,7 +100,6 @@ public class AdminHomeFragment extends Fragment {
         mviewPagerAdapter.addFragment(new OpsOrderFragment(), "Preparing");
         mviewPagerAdapter.addFragment(new OpsOrderFragment(), "Dispatched");
         mviewPagerAdapter.addFragment(new OpsOrderFragment(), "Delivered");
-
         mviewpager.setAdapter(mviewPagerAdapter);
         mtablayout.setupWithViewPager(mviewpager);
     }
