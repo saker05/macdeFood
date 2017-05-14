@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/root_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/linear1"
+        android:layout_below="@id/toolbar"
+        android:layout_alignParentStart="true" >
+
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:id="@+id/payable_amount"
+        android:text="Payable amount_label"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingStart="10dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(Inc of all taxes)"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id= "@id/payable_amount"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#E91E63"
+            android:text="Rs.434"
+            android:paddingLeft="30dp"/>
+
+
+    </LinearLayout>
+
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:id="@+id/linear2"
+    android:background="#5C6BC0"
+
+    android:layout_below="@id/linear1">
+
+
+
+
+
+    <android.support.design.widget.TabLayout
+
+        android:id="@+id/payment_options_slidingTabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabTextColor="#FFFFFF"
+        app:tabMode="fixed" />
+
+
+</LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:id="@+id/linear3"
+        android:layout_below="@id/linear2">
+
+        <android.support.v4.view.ViewPager
+
+            android:id="@+id/payment_options_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linear3"
+        android:background="#8BC34A">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="PLACE ORDER"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#000000" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
+
