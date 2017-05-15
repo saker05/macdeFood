@@ -129,4 +129,11 @@
     <string name="cant_connect_to_server">Couldn\'t reach to server</string>
     <string name="complaint_to_admin">Try to connect to admin.</string>
 
+    <!--strings for UI of Ops base screen to show orders-->
+    <string name="Order_date">  Date</string>
+    <string name="Order_id">Order ID</string>
+    <string name="Order_status">Status</string>
+    <string name="Order_info_and_phone_no">Locality/PhoneNo.</string>
+
+
 </resources>
