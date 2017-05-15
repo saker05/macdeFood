@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
+import com.grocery.hr.lalajikidukan.constants.AppConstants;
 import com.grocery.hr.lalajikidukan.models.OpsOrderDetailModel;
 import com.grocery.hr.lalajikidukan.models.*;
 import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
@@ -205,8 +206,12 @@ public class OpsOrderFragment extends Fragment {
         @Override
         protected String doInBackground(Void... params) {
             try {
+                String opsOrderUrl= AppConstants.Url.GET_OPS_ORDER_DETAIL;
+                opsOrderUrl = opsOrderUrl.replace("+","1");
+                opsOrderUrl = opsOrderUrl.replace("%","3");
+                opsOrderUrl = opsOrderUrl.replace("#","PLACED");
+                return mUtils.getFromServer(AppConstants.Url.BASE_URL + opsOrderUrl,mUtils.getUerPasswordMap(getContext()));
 
-                return mUtils.getFromServer("http://192.168.1.5:5000/message", null);
             } catch (Exception e) {
                 e.printStackTrace();
             }

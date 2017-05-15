@@ -4,15 +4,7 @@
     xmlns:include="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="2.5dp"
-    android:layout_marginEnd="2.5dp"
-    android:layout_marginLeft="2.5dp"
-    android:layout_marginRight="2.5dp"
-    android:layout_marginStart="2.5dp"
-    android:layout_marginTop="2.5dp"
-    app:cardBackgroundColor="#ffffff"
-    app:cardElevation="5dp">
+    android:layout_height="wrap_content">
 
 
     <LinearLayout
@@ -28,47 +20,31 @@
 
             <TextView
                 android:id="@+id/text_time"
-                android:layout_width="180dp"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="2.5dp"
-                android:layout_marginRight="2.5dp"
-                android:layout_marginTop="2.5dp"
-                android:background="@drawable/textview_round_design"
-                android:fontFamily="sans-serif"
-                android:gravity="center"
-                android:padding="2.5dp"
                 android:text="12:12:12 AM"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                include:ignore="HardcodedText"
+                android:gravity="center"
+                style="@style/TextView_Ops_Order_Formatting" />
 
         </RelativeLayout>
 
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/order_date"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:padding="2.5dp"
-                android:text="Date :"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+               style="@style/TextView_Ops_Order_Formatting1"
+                android:text="@string/order_date"
+                />
 
             <TextView
                 android:id="@+id/text_date"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/TextView_Ops_Order_Formatting1"
                 android:layout_alignParentEnd="true"
                 android:layout_toRightOf="@id/order_date"
-                android:padding="2.5dp"
                 android:text="fill the time here"
-                android:textSize="12sp"
                 android:textStyle="normal" />
 
         </RelativeLayout>
@@ -80,24 +56,18 @@
 
             <TextView
                 android:id="@+id/order_id"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:padding="2.5dp"
-                android:text="Order id here"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                style="@style/TextView_Ops_Order_Formatting1"
+                android:text="@string/order_id" />
 
             <TextView
                 android:id="@+id/text_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                style="@style/TextView_Ops_Order_Formatting1"
                 android:layout_toRightOf="@id/order_id"
-                android:padding="2.5dp"
+                android:textStyle="normal"
                 android:text="fill the orderid here"
-                android:textSize="12sp"
-                android:textStyle="normal" />
+               />
 
 
         </RelativeLayout>
@@ -109,13 +79,9 @@
 
             <TextView
                 android:id="@+id/order_status"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:padding="2.5dp"
-                android:text="status :"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                style="@style/TextView_Ops_Order_Formatting1"
+                android:text="@string/order_status"
+                 />
 
             <TextView
                 android:id="@+id/text_status"
@@ -126,7 +92,8 @@
                 android:padding="2.5dp"
                 android:text="fill the status here"
                 android:textSize="12sp"
-                android:textStyle="normal" />
+                android:textStyle="normal"
+                include:ignore="HardcodedText" />
 
 
         </RelativeLayout>
@@ -138,13 +105,8 @@
 
             <TextView
                 android:id="@+id/local_info"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:padding="2.5dp"
-                android:text="local Info :"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                style="@style/TextView_Ops_Order_Formatting1"
+                android:text="@string/Order_info_and_phone_no" />
 
             <TextView
                 android:id="@+id/text_address"
@@ -173,7 +135,8 @@
                 <RadioButton
                     android:layout_width="100dp"
                     android:layout_height="20dp"
-                    android:text="check" />
+                    android:text="check"
+                    include:ignore="HardcodedText" />
 
                 <RadioButton
                     android:layout_width="100dp"
@@ -186,10 +149,10 @@
                 android:id="@+id/checkout_from_placedstate"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:padding="3dp"
                 android:background="#8bc34a"
                 android:gravity="center"
-                android:text="Checkout" />
+                android:text="Checkout"
+                include:ignore="HardcodedText" />
 
 
         </LinearLayout>
