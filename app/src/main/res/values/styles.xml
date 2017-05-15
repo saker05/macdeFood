@@ -28,8 +28,6 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-    
-    
 
 
     <style name="Spinner" parent="Theme.AppCompat.Light.Dialog">
@@ -39,14 +37,44 @@
         <item name="colorAccent">#ff00ff</item>
     </style>
 
-<!--...Card foramtting......-->
+    <!--...Card foramtting......-->
     <style name="Widget.CardContent" parent="android:Widget">
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:paddingTop">24dp</item>
         <item name="android:paddingBottom">24dp</item>
         <item name="android:orientation">vertical</item>
+
+        <!--card formatting for various screen in app-->
+
     </style>
 
+
+    <!-- textview formatting for ops view -->
+
+
+    <style name="TextView_Ops_Order_Formatting">
+        <item name="android:layout_width">180dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginBottom">2.5dp</item>
+        <item name="android:layout_marginRight">2.5dp</item>
+        <item name="android:layout_marginTop">2.5dp</item>
+        <item name="android:background">@drawable/textview_round_design</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:gravity">left</item>
+        <item name="android:padding">2.5dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+<style name="TextView_Ops_Order_Formatting1">
+
+  <item name="android:layout_width">150dp</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:fontFamily">sans-serif</item>
+    <item name="android:padding">2.5dp</item>
+    <item name="android:textSize">14sp</item>
+    <item name="android:textStyle">bold</item>
+</style>
 
 </resources>
