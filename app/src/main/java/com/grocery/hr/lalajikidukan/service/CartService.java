@@ -1,12 +1,21 @@
 package com.grocery.hr.lalajikidukan.service;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
 
+import com.google.gson.Gson;
+import com.grocery.hr.lalajikidukan.MainActivity;
+import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
 import com.grocery.hr.lalajikidukan.entity.CartDO;
+import com.grocery.hr.lalajikidukan.fragments.LoginFragment;
 import com.grocery.hr.lalajikidukan.manager.CartManager;
+import com.grocery.hr.lalajikidukan.models.BaseResponse;
 import com.grocery.hr.lalajikidukan.models.CartModel;
 import com.grocery.hr.lalajikidukan.models.ShippingModel;
+import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
+import com.grocery.hr.lalajikidukan.utils.Utils;
 
 import java.util.List;
 
@@ -18,9 +27,13 @@ public class CartService {
 
     private static CartService instance = null;
     private static CartManager cartManager;
+    private Utils mUtils;
+    private Gson gson;
+    private String cartModelJson;
 
     private CartService() {
-
+        mUtils=Utils.getInstance();
+        gson = new Gson();
     }
 
     public static CartService getInstance(Context context) {
@@ -45,27 +58,29 @@ public class CartService {
 
     public void syncCartModelAndCartDo(List<CartModel> cartModels) {
         List<CartDO> cartDOs = cartManager.getCartItems();
-          for(int i = cartModels.size() - 1; i>=0; i--){
-              CartModel cartModel=cartModels.get(i);
-              Boolean isInCartDo=false;
-              for(CartDO cartDO:cartDOs){
-                  if(cartDO.getUpc().equals(cartModel.getUpc())){
-                      cartModel.setNoOfUnits(cartDO.getNoOfUnits());
-                      isInCartDo=true;
-                      break;
-                  }
-              }
-              if(!isInCartDo){
-                  cartModels.remove(cartModel);
-              }
-          }
+        for (int i = cartModels.size() - 1; i >= 0; i--) {
+            CartModel cartModel = cartModels.get(i);
+            Boolean isInCartDo = false;
+            for (CartDO cartDO : cartDOs) {
+                if (cartDO.getUpc().equals(cartModel.getUpc())) {
+                    cartModel.setNoOfUnits(cartDO.getNoOfUnits());
+                    isInCartDo = true;
+                    break;
+                }
+            }
+            if (!isInCartDo) {
+                cartModels.remove(cartModel);
+            }
+        }
     }
 
-    public int getShippingCharge(ShippingModel deliveryChargeModel, int cartTotalPrice){
-        if(deliveryChargeModel==null) return 0;
-        return (cartTotalPrice<deliveryChargeModel.getMinOrderForFreeDelivery())
+    public int getShippingCharge(ShippingModel deliveryChargeModel, int cartTotalPrice) {
+        if (deliveryChargeModel == null) return 0;
+        return (cartTotalPrice < deliveryChargeModel.getMinOrderForFreeDelivery())
                 ?
-                Math.min(deliveryChargeModel.getMinOrderForFreeDelivery(),(deliveryChargeModel.getDeliveryCharge()+cartTotalPrice))-cartTotalPrice
-                :0;
+                Math.min(deliveryChargeModel.getMinOrderForFreeDelivery(),
+                        (deliveryChargeModel.getDeliveryCharge() + cartTotalPrice)) - cartTotalPrice
+                : 0;
     }
+
 }

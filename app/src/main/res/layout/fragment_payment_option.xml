@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root_layout"
+    android:id="@+id/rl_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,6 +15,21 @@
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     <LinearLayout
+        android:id="@+id/ll_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/pbHeaderProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/Spinner"/>
+    </LinearLayout>
+
+
+    <LinearLayout
         android:id="@+id/linear1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,10 +37,8 @@
         android:layout_below="@id/toolbar"
         android:orientation="horizontal">
 
-
         <TextView
-
-            android:id="@+id/payable_amount"
+            android:id="@+id/text_price_label"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:gravity="center"
@@ -33,26 +46,24 @@
             android:paddingLeft="10dp"
             android:paddingStart="10dp"
             android:paddingTop="10dp"
-            android:text="Payable amount_label"
+            android:text="Payable amount"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="(Inc of all taxes)" />
+            android:text=" (Inc of all taxes)" />
 
         <TextView
-            android:id="@id/payable_amount"
+            android:id="@+id/text_total_price_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="30dp"
-            android:text="Rs.434"
+            android:text="Rs.-"
             android:textColor="#E91E63"
             android:textSize="18sp"
             android:textStyle="bold" />
-
-
     </LinearLayout>
 
 
@@ -60,27 +71,24 @@
         android:id="@+id/linear2"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:orientation="vertical"
-        android:layout_below="@id/linear1">
+        android:layout_below="@id/linear1"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:text="Select cod before placing the order."
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
-<CheckBox
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/cod_checkbox"
-    android:text="Csh on Delivery"
-    android:textStyle="bold"
-    android:textSize="20sp"/>
-
-
+        <CheckBox
+            android:id="@+id/checkbox_cod"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cash on Delivery"
+            android:textSize="20sp"
+            android:textStyle="bold" />
     </LinearLayout>
-
 
     <android.support.v7.widget.CardView
         android:id="@+id/linear3"
@@ -97,33 +105,33 @@
 
 
             <TextView
+                android:id="@+id/summary_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/summary_label"
-                android:text="  Summary "
-                android:textColor=""
+                android:gravity="center"
                 android:padding="10dp"
-                android:textStyle="bold"
-                android:gravity="center"/>
+                android:text="  Summary "
+                android:textColor="#E91E63"
+                android:textStyle="bold" />
 
             <TextView
 
                 android:id="@+id/payorder_amount"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:text="Total Purchase Amount"
                 android:layout_below="@id/summary_label"
+                android:text="Total Purchase Amount"
                 android:textSize="16sp" />
 
 
             <TextView
-                android:id="@id/payable_amount"
+                android:id="@+id/text_order_price"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@id/payorder_amount"
                 android:layout_alignRight="@id/payorder_amount"
                 android:layout_below="@id/summary_label"
-                android:text="Rs.434"
+                android:text="Rs.-"
                 android:textSize="16sp" />
 
 
@@ -138,13 +146,13 @@
 
 
             <TextView
-                android:id="@+id/pay_delivery_charges"
+                android:id="@+id/text_delivery_price"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@id/delivery_charges"
                 android:layout_alignRight="@id/delivery_charges"
-                android:layout_below="@id/payable_amount"
-                android:text="Rs.40"
+                android:layout_below="@id/payorder_amount"
+                android:text="Rs.-"
                 android:textSize="16sp" />
 
 
@@ -162,60 +170,59 @@
                 android:id="@+id/pay_taxes"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pay_delivery_charges"
-                android:layout_alignRight="@id/taxes"
                 android:layout_alignEnd="@id/taxes"
-                android:text="Rs. o"
+                android:layout_alignRight="@id/taxes"
+                android:layout_below="@id/text_delivery_price"
+                android:text="Rs.0"
                 android:textSize="16sp" />
-
-
 
 
             <TextView
 
-                android:id="@+id/order_amountt"
+                android:id="@+id/order_amount"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/taxes"
                 android:layout_marginTop="10dp"
-                android:textStyle="bold"
                 android:text="Total Amount Payable"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
 
             <TextView
-                android:id="@+id/total_payable_amount"
+                android:id="@+id/text_total_price"
                 android:layout_width="100dp"
-                android:layout_marginTop="10dp"
                 android:layout_height="wrap_content"
-                android:layout_alignRight="@id/order_amountt"
-                android:layout_alignEnd="@id/order_amountt"
+                android:layout_alignEnd="@id/order_amount"
+                android:layout_alignRight="@id/order_amount"
                 android:layout_below="@id/pay_taxes"
-                android:text="Rs.434"
-                android:textStyle="bold"
-                android:textSize="18sp" />
+                android:layout_marginTop="10dp"
+                android:text="Rs.-"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
 
-
-</RelativeLayout>
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
-<LinearLayout
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:layout_below="@+id/linear3"
-android:background="#8BC34A">
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:text="PLACE ORDER"
-    android:gravity="center"
-    android:textStyle="bold"
-    android:textColor="#000000" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linear3"
+        android:background="#8BC34A"
+        android:id="@+id/ll_place_order">
 
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="PLACE ORDER"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
 
-    </RelativeLayout>
+</RelativeLayout>
 

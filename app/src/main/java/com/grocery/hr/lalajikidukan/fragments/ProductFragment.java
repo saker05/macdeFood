@@ -256,7 +256,7 @@ public class ProductFragment extends Fragment {
             super(itemView);
             ButterKnife.bind(this, itemView);
             //   mHeader.setVisibility(View.GONE);
-            // itemView.setOnClickListener(this);
+             itemView.setOnClickListener(this);
         }
 
         @OnClick(R.id.image_plus)

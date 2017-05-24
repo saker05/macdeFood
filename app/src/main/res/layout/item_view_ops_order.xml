@@ -24,7 +24,6 @@
                 include:ignore="HardcodedText"
                 android:gravity="center"
                 style="@style/TextView_Ops_Order_Formatting" />
-
         </RelativeLayout>
 
 
@@ -94,8 +93,6 @@
                 android:textSize="12sp"
                 android:textStyle="normal"
                 include:ignore="HardcodedText" />
-
-
         </RelativeLayout>
 
         <RelativeLayout
@@ -118,8 +115,6 @@
                 android:text="fill the time here"
                 android:textSize="12sp"
                 android:textStyle="normal" />
-
-
         </RelativeLayout>
 
         <LinearLayout
@@ -130,31 +125,31 @@
             <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:id="@+id/radio_group">
 
                 <RadioButton
                     android:layout_width="100dp"
                     android:layout_height="20dp"
+                    android:id="@+id/radio_0"
                     android:text="check"
                     include:ignore="HardcodedText" />
 
                 <RadioButton
                     android:layout_width="100dp"
                     android:layout_height="20dp"
-                    android:text="remove" />
-
+                    android:id="@+id/radio_1"
+                    android:text="Reject" />
             </RadioGroup>
 
             <Button
-                android:id="@+id/checkout_from_placedstate"
+                android:id="@+id/button_move"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:background="#8bc34a"
                 android:gravity="center"
-                android:text="Checkout"
+                android:text="Move"
                 include:ignore="HardcodedText" />
-
-
         </LinearLayout>
 
     </LinearLayout>

@@ -32,6 +32,7 @@ import com.grocery.hr.lalajikidukan.manager.CartManager;
 import com.grocery.hr.lalajikidukan.models.BaseResponse;
 import com.grocery.hr.lalajikidukan.models.CartModel;
 import com.grocery.hr.lalajikidukan.models.ShippingModel;
+import com.grocery.hr.lalajikidukan.preferences.AppSharedPreference;
 import com.grocery.hr.lalajikidukan.service.CartService;
 import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
@@ -57,12 +58,14 @@ public class CartFragment extends Fragment {
     private CartManager cartManager;
     private String cartModelJson;
     private CartService cartService;
+    private boolean isCartLoaded = false;
+    private boolean isShippingDetailLoaded = false;
 
     //XML View
 
     Toolbar mToolbar;
 
-    @BindView(R.id.clRootCart)
+    @BindView(R.id.cl_root)
     CoordinatorLayout mRootWidget;
 
     @BindView(R.id.rvCart)
@@ -340,9 +343,22 @@ public class CartFragment extends Fragment {
             super.onPostExecute(result);
             Log.e(TAG, "GetShippingDetail::onPostExecute(): result is: " + result);
             if (result != null && result.trim().length() != 0) {
-                shippingDetail = JsonParserUtils.shippingParser(result);
-                refreshBottomDetail();
+                BaseResponse baseResponse = JsonParserUtils.getBaseResponse(result);
+                if (baseResponse != null && baseResponse.getResponseCode() == 403) {
+                    showSnackbar(getString(R.string.forbidden));
+                } else if (baseResponse != null && baseResponse.getResponseCode() >= 400 &&
+                        baseResponse.getResponseCode() < 500) {
+                    showSnackbar(baseResponse.getResponseMessage() + " " + getString(R.string.complaint_to_admin));
+                } else {
+                    shippingDetail = JsonParserUtils.shippingParser(result);
+                    AppSharedPreference.putString(getContext(), AppConstants.User.SHIPPING_DETAIL, result);
+                    refreshBottomDetail();
+                }
+            } else {
+                showSnackbar(getString(R.string.cant_connect_to_server));
             }
+            isShippingDetailLoaded = true;
+            hideSpinner();
         }
     }
 
@@ -403,7 +419,8 @@ public class CartFragment extends Fragment {
             } else {
                 showSnackbar(getString(R.string.cant_connect_to_server));
             }
-            spinner.setVisibility(View.GONE);
+            isCartLoaded = true;
+            hideSpinner();
         }
     }
 
@@ -424,7 +441,13 @@ public class CartFragment extends Fragment {
         }
     }
 
-    public void showSnackbar(String message) {
+    private void hideSpinner() {
+        if (isCartLoaded && isShippingDetailLoaded) {
+            spinner.setVisibility(View.GONE);
+        }
+    }
+
+    private void showSnackbar(String message) {
         try {
             Snackbar.make(mRootWidget, message,
                     Snackbar.LENGTH_LONG)

@@ -1,6 +1,7 @@
 package com.grocery.hr.lalajikidukan.fragments;
 
 
+import android.graphics.Path;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 
 import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
+import com.grocery.hr.lalajikidukan.constants.AppConstants;
 import com.grocery.hr.lalajikidukan.utils.Utils;
 
 import java.util.ArrayList;
@@ -66,7 +68,6 @@ public class OpsBaseFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -83,7 +84,6 @@ public class OpsBaseFragment extends Fragment {
         setupViews();
     }
 
-
     public void setUpToolbar() {
         mActivity.setSupportActionBar(mToolbar);
         mActivity.setTitle("Operation");
@@ -93,17 +93,16 @@ public class OpsBaseFragment extends Fragment {
         mDrawerToggle.syncState();
     }
 
-
     public void setupViews() {
         mviewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
-        mviewPagerAdapter.addFragment(new OpsOrderFragment(), "Placed");
-        mviewPagerAdapter.addFragment(new OpsOrderFragment(), "Preparing");
-        mviewPagerAdapter.addFragment(new OpsOrderFragment(), "Dispatched");
-        mviewPagerAdapter.addFragment(new OpsOrderFragment(), "Delivered");
+        mviewPagerAdapter.addFragment(OpsOrderFragment.newInstance(AppConstants.OrderStatus.PLACED),AppConstants.OrderStatus.PLACED);
+        mviewPagerAdapter.addFragment(OpsOrderFragment.newInstance(AppConstants.OrderStatus.PREPARING),AppConstants.OrderStatus.PREPARING);
+        mviewPagerAdapter.addFragment(OpsOrderFragment.newInstance(AppConstants.OrderStatus.DISPATCHED),AppConstants.OrderStatus.DISPATCHED);
+        mviewPagerAdapter.addFragment(OpsOrderFragment.newInstance(AppConstants.OrderStatus.DELIVERED),AppConstants.OrderStatus.DELIVERED);
+        mviewPagerAdapter.addFragment(OpsOrderFragment.newInstance(AppConstants.OrderStatus.REJECTED),AppConstants.OrderStatus.REJECTED);
         mviewpager.setAdapter(mviewPagerAdapter);
         mtablayout.setupWithViewPager(mviewpager);
     }
-
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
