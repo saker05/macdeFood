@@ -25,6 +25,7 @@ import com.grocery.hr.lalajikidukan.constants.AppConstants;
 import com.grocery.hr.lalajikidukan.fragments.AddressFragment;
 import com.grocery.hr.lalajikidukan.fragments.CartFragment;
 import com.grocery.hr.lalajikidukan.fragments.HomeFragment;
+import com.grocery.hr.lalajikidukan.fragments.OpsBaseFragment;
 import com.grocery.hr.lalajikidukan.fragments.ProductFragment;
 import com.grocery.hr.lalajikidukan.manager.CartManager;
 import com.grocery.hr.lalajikidukan.models.BaseResponse;
@@ -201,6 +202,8 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_logout:
                         logout();
                         break;
+                    case R.id.action_role:
+                        loadFragment(3);
                     default:
                         break;
                 }
@@ -235,6 +238,12 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.flContentMain, CartFragment.newInstance(),
                             CartFragment.TAG)
                     .commit();*/
+        }else if(currentSelectedPosition == 3){
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.flContentMain, OpsBaseFragment.newInstance(),
+                            OpsBaseFragment.TAG)
+                    .commit();
         }
     }
 

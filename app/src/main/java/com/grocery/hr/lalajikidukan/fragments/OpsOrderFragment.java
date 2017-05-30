@@ -48,7 +48,7 @@ public class OpsOrderFragment extends Fragment {
 
     public static final String TAG = OpsOrderFragment.class.getSimpleName();
 
-    private OpsOrderFragment(String orderStatus) {
+    public OpsOrderFragment(String orderStatus) {
         this.orderStatus = orderStatus;
     }
 
@@ -61,11 +61,12 @@ public class OpsOrderFragment extends Fragment {
     private String orderStatus;
     private int offset;
     private int size;
+    private boolean onViewCreated=false;
 
     private Toolbar mToolbar;
 
     @BindView(R.id.rv_ops_order)
-    SuperRecyclerView mSRecyclerView;
+    RecyclerView mRecyclerView;
 
     @BindView(R.id.ll_root)
     LinearLayout mRootWidget;
@@ -86,12 +87,10 @@ public class OpsOrderFragment extends Fragment {
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        if (menu != null) {
-            menu.clear();
-        }
+    public void onResume() {
+        super.onResume();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,27 +105,37 @@ public class OpsOrderFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mActivity.showCart();
     }
 
-    @Override
+    /*@Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-    }
+    }*/
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mActivity.hideCart();
+
         if (mUtils.isDeviceOnline(getContext())) {
             ButterKnife.bind(this, view);
             //mToolbar = (Toolbar) getActivity().findViewById(R.id.cartToolbar);
             setUpToolbar();
-            setUpViews();
+            if(!onViewCreated || orderStatus.equals(AppConstants.OrderStatus.DELIVERED) ||
+                    orderStatus.equals(AppConstants.OrderStatus.REJECTED)){
+                setUpViews();
+            }else{
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.refresh();
+                    }
+                });
+            }
         } else {
             mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
             setUpToolbar();
         }
+        onViewCreated=true;
     }
 
 
@@ -137,13 +146,14 @@ public class OpsOrderFragment extends Fragment {
     public void setUpViews() {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mSRecyclerView.setLayoutManager(linearLayoutManager);
-        mSRecyclerView.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+       /* mRecyclerView.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 baseGetOpsOrder();
             }
-        });
+        });*/
+       baseGetOpsOrder();
     }
 
 
@@ -154,6 +164,10 @@ public class OpsOrderFragment extends Fragment {
                     LayoutInflater.from(parent.getContext())
                             .inflate(R.layout.item_view_ops_order, parent, false)
             );
+        }
+
+        public void refresh() {
+            notifyDataSetChanged();
         }
 
         @Override
@@ -297,7 +311,7 @@ public class OpsOrderFragment extends Fragment {
             try {
                 String opsOrderUrl = AppConstants.Url.GET_OPS_ORDER_DETAIL;
                 opsOrderUrl = opsOrderUrl.replace("+", String.valueOf(offset));
-                opsOrderUrl = opsOrderUrl.replace("%", String.valueOf(offset + size));
+                opsOrderUrl = opsOrderUrl.replace("*", String.valueOf(7));
                 opsOrderUrl = opsOrderUrl.replace("#", orderStatus);
                 return mUtils.getFromServer(AppConstants.Url.BASE_URL + opsOrderUrl, mUtils.getUerPasswordMap(getContext()));
             } catch (Exception e) {
@@ -320,7 +334,7 @@ public class OpsOrderFragment extends Fragment {
                 } else {
                     opsOrderModel = JsonParserUtils.opsOrdeParser(result);
                     opsOrderDetailModelList = opsOrderModel.getOpsOrderDetailModel();
-                    mSRecyclerView.setAdapter(mAdapter);
+                    mRecyclerView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 }
             } else {

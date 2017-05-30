@@ -69,6 +69,12 @@ public class OpsBaseFragment extends Fragment {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mActivity.showCart();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_ops_base, container, false);
@@ -79,6 +85,7 @@ public class OpsBaseFragment extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+        mActivity.hideCart();
         mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         setUpToolbar();
         setupViews();
@@ -95,19 +102,30 @@ public class OpsBaseFragment extends Fragment {
 
     public void setupViews() {
         mviewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
-        mviewPagerAdapter.addFragment(OpsOrderFragment.newInstance(AppConstants.OrderStatus.PLACED),AppConstants.OrderStatus.PLACED);
-        mviewPagerAdapter.addFragment(OpsOrderFragment.newInstance(AppConstants.OrderStatus.PREPARING),AppConstants.OrderStatus.PREPARING);
-        mviewPagerAdapter.addFragment(OpsOrderFragment.newInstance(AppConstants.OrderStatus.DISPATCHED),AppConstants.OrderStatus.DISPATCHED);
-        mviewPagerAdapter.addFragment(OpsOrderFragment.newInstance(AppConstants.OrderStatus.DELIVERED),AppConstants.OrderStatus.DELIVERED);
-        mviewPagerAdapter.addFragment(OpsOrderFragment.newInstance(AppConstants.OrderStatus.REJECTED),AppConstants.OrderStatus.REJECTED);
         mviewpager.setAdapter(mviewPagerAdapter);
         mtablayout.setupWithViewPager(mviewpager);
+
+        mviewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                // Code goes here
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
 
+        private  int NUM_ITEMS = 5;
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
@@ -115,22 +133,34 @@ public class OpsBaseFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            return mFragmentList.get(position);
+            switch (position) {
+                case 0: return OpsOrderFragment.newInstance(AppConstants.OrderStatus.PLACED);
+                case 1: return OpsOrderFragment.newInstance(AppConstants.OrderStatus.PREPARING);
+                case 2: return OpsOrderFragment.newInstance(AppConstants.OrderStatus.DISPATCHED);
+                case 3: return OpsOrderFragment.newInstance(AppConstants.OrderStatus.DELIVERED);
+                case 4: return OpsOrderFragment.newInstance(AppConstants.OrderStatus.REJECTED);
+                default: return null;
+            }
+
         }
 
         @Override
         public int getCount() {
-            return mFragmentList.size();
+            return NUM_ITEMS;
         }
 
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
+
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+            switch (position) {
+                case 0: return AppConstants.OrderStatus.PLACED;
+                case 1: return AppConstants.OrderStatus.PREPARING;
+                case 2: return AppConstants.OrderStatus.DISPATCHED;
+                case 3: return AppConstants.OrderStatus.DELIVERED;
+                case 4: return AppConstants.OrderStatus.REJECTED;
+                default: return null;
+            }
         }
     }
 

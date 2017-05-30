@@ -16,11 +16,11 @@ public interface AppConstants {
     }
 
     public interface OrderStatus {
-        public static final String PLACED = "Placed";
-        public static final String PREPARING = "Preparing";
-        public static final String DISPATCHED = "Dispatched";
-        public static final String DELIVERED = "Delivered";
-        public static final String REJECTED = "Rejected";
+        public static final String PLACED = "PLACED";
+        public static final String PREPARING = "PREPARING";
+        public static final String DISPATCHED = "DISPATCHED";
+        public static final String DELIVERED = "DELIVERED";
+        public static final String REJECTED = "REJECTED";
 
     }
 
@@ -36,7 +36,7 @@ public interface AppConstants {
     }
 
     public interface Url {
-        public static final String BASE_URL = "http://35.167.220.58:8080/groceryApp";
+        public static final String BASE_URL = "http://192.168.1.5:8080/groceryApp";
         public static final String ANONYMOUS_TOKEN_PATH = "/fcmtoken/anonymous";
         public static final String TOKEN_PATH = "/fcmtoken";
         public static final String ADD_CART = "/cart";
