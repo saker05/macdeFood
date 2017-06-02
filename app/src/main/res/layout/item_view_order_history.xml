@@ -1,0 +1,106 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+
+
+    <android.support.v7.widget.CardView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:elevation="10dp"
+        android:layout_margin="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/order_history_name"
+                    android:text="khana khajana"
+                    android:padding="10dp"
+                    android:textStyle="bold"
+
+                    android:textSize="18sp"
+                    android:layout_width="280dp"
+                    android:layout_height="40dp" />
+
+                <TextView
+                    android:id="@+id/order_history_amount"
+                    android:padding="10dp"
+                    android:text="Rs.150"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/order_history_details"
+                    android:text="Onion Parantha(2),Aloo Parantha(2),fried Rice, Salad, papad,dessert"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:singleLine="true"
+                    android:textSize="16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/order_history_date_time"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="Nov, 12 ,2016, 10:30 PM"
+                    android:textSize="16sp"
+                    android:textColor="#bdbdbd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+                <Button
+                    android:id="@+id/order_history_detailsbtn"
+                    android:text="DETAILS"
+                    android:padding="10dp"
+
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp" />
+
+                <Button
+                    android:id="@+id/order_history_reorder"
+                    android:padding="10dp"
+                    android:text="REORDER"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp" />
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>
