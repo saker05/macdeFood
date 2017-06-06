@@ -1,4 +1,4 @@
-package com.grocery.hr.lalajikidukan.models;
+package com.grocery.hr.lalajikidukan.enums;
 
 /**
  * Created by Rohit on 25-04-2017.

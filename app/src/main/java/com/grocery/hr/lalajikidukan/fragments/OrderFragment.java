@@ -1,130 +1,109 @@
+/*
 package com.grocery.hr.lalajikidukan.fragments;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
+import com.grocery.hr.lalajikidukan.manager.CartManager;
+import com.grocery.hr.lalajikidukan.models.BaseResponse;
+import com.grocery.hr.lalajikidukan.models.CartModel;
+import com.grocery.hr.lalajikidukan.models.ShippingModel;
 import com.grocery.hr.lalajikidukan.models.UserOrderModel;
+import com.grocery.hr.lalajikidukan.service.CartService;
 import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
 
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OrderFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link OrderFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import butterknife.ButterKnife;
+
+
 public class OrderFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private Utils mUtils;
-    private List<UserOrderModel> orders;
 
     public static final String TAG = OrderFragment.class.getSimpleName();
 
-    private OnFragmentInteractionListener mListener;
+    private MainActivity mActivity;
+    private Handler mHandler;
+    private Utils mUtils;
+    private List<UserOrderModel> orders;
 
-    public OrderFragment() {
-        // Required empty public constructor
+
+    //XML View
+
+    Toolbar mToolbar;
+
+    private OrderFragment() {
     }
+
 
     public static OrderFragment newInstance() {
         return new OrderFragment();
-
-    }
-
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment OrderFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static OrderFragment newInstance(String param1, String param2) {
-        OrderFragment fragment = new OrderFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        mActivity = (MainActivity) getActivity();
+        mHandler = new Handler();
+        mUtils = Utils.getInstance();
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (menu != null) {
+            menu.clear();
         }
     }
 
-   /* @Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_order2, container, false);
-    }*/
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (!mUtils.isDeviceOnline(getContext())) {
+            return inflater.inflate(R.layout.fragment_no_internet_connection, container, false);
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+
         }
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mActivity.hideCart();
+        if (mUtils.isDeviceOnline(getContext())) {
+            ButterKnife.bind(this, view);
+           */
+/* mCartList.getProgressView().setVisibility(View.GONE);
+            mToolbar = (Toolbar) getActivity().findViewById(R.id.cartToolbar);
+            setUpToolbar();
+            setUpViews();*//*
+
+        } else {
+            mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+            setUpToolbar();
+        }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+
+
 
     class GetOrder extends AsyncTask<Void, Void, String> {
 
@@ -144,22 +123,38 @@ public class OrderFragment extends Fragment {
             super.onPostExecute(result);
             Log.e(TAG, "GetOrder::onPostExecute(): result is: " + result);
             if ((result != null && result.trim().length() != 0)) {
-                orders=JsonParserUtils.orderParser(result);
-                /*mCartList.setAdapter(mAdapter);
-                mAdapter.notifyDataSetChanged();*/
+                BaseResponse baseResponse = JsonParserUtils.getBaseResponse(result);
+                if (baseResponse != null && baseResponse.getResponseCode() == 403) {
+                    showSnackbar(getString(R.string.forbidden));
+                } else if (baseResponse != null && baseResponse.getResponseCode() >= 400 &&
+                        baseResponse.getResponseCode() < 500) {
+                    showSnackbar(baseResponse.getResponseMessage() + " " + getString(R.string.complaint_to_admin));
+                } else {
+                    orders = JsonParserUtils.orderParser(result);
+                    */
+/*cartItems = JsonParserUtils.cartParser(result);
+                    mCartList.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();*//*
+
+                }
             } else {
-              /*  try {
-                    Snackbar.make(mRootWidget,
-                            getString(R.string.cant_connect_to_server),
-                            Snackbar.LENGTH_LONG)
-                            .show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }*/
+                showSnackbar(getString(R.string.cant_connect_to_server));
             }
         }
     }
 
+    private void showSnackbar(String message) {
+      */
+/*  try {
+            Snackbar.make(mRootWidget, message,
+                    Snackbar.LENGTH_LONG)
+                    .show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }*//*
+
 
 
 }
+*/

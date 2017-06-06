@@ -121,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
         setUpNavView();
     }
 
-
     @Override
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -193,12 +192,12 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_cart:
                         onCart();
                         break;
-                    /*case R.id.action_rate:
+                    case R.id.action_rate:
                         mUtils.rateApp(MainActivity.this);
                         break;
                     case R.id.action_share:
                         mUtils.shareApp(MainActivity.this);
-                        break; */
+                        break;
                     case R.id.action_logout:
                         logout();
                         break;
