@@ -155,8 +155,10 @@ public class MainActivity extends AppCompatActivity {
             menu.findItem(R.id.action_login).setVisible(false);
             menu.findItem(R.id.action_logout).setVisible(true);
             if (AppSharedPreference.getString(getApplicationContext(), AppConstants.User.TYPE) != null &&
-                    !AppSharedPreference.getString(getApplicationContext(), AppConstants.User.TYPE).equals(AppConstants.USER_TYPE.NORMAL)) {
-                menu.findItem(R.id.action_role).setTitle(AppSharedPreference.getString(getApplicationContext(), AppConstants.User.TYPE)).setVisible(true);
+                    !AppSharedPreference.getString(getApplicationContext(), AppConstants.User.TYPE).equals
+                            (AppConstants.USER_TYPE.NORMAL)) {
+                menu.findItem(R.id.action_role).setTitle(AppSharedPreference.getString
+                        (getApplicationContext(), AppConstants.User.TYPE)).setVisible(true);
             }
         } else {
             menu.findItem(R.id.action_home)
@@ -237,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.flContentMain, CartFragment.newInstance(),
                             CartFragment.TAG)
                     .commit();*/
-        }else if(currentSelectedPosition == 3){
+        } else if (currentSelectedPosition == 3) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.flContentMain, OpsBaseFragment.newInstance(),
@@ -359,7 +361,7 @@ public class MainActivity extends AppCompatActivity {
                 if (baseResponse != null && baseResponse.getResponseCode() >= 400 &&
                         baseResponse.getResponseCode() < 500) {
                     mUtils.showMessage(
-                            MainActivity.this,getString(R.string.complaint_to_admin),
+                            MainActivity.this, getString(R.string.complaint_to_admin),
                             "Try again later.\nTry Again",
                             "OK", null
                     );

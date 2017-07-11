@@ -310,8 +310,8 @@ public class OpsOrderFragment extends Fragment {
         protected String doInBackground(Void... params) {
             try {
                 String opsOrderUrl = AppConstants.Url.GET_OPS_ORDER_DETAIL;
-                opsOrderUrl = opsOrderUrl.replace("+", String.valueOf(offset));
-                opsOrderUrl = opsOrderUrl.replace("*", String.valueOf(7));
+                opsOrderUrl = opsOrderUrl.replace("+", String.valueOf(0));
+                opsOrderUrl = opsOrderUrl.replace("*", String.valueOf(50));
                 opsOrderUrl = opsOrderUrl.replace("#", orderStatus);
                 return mUtils.getFromServer(AppConstants.Url.BASE_URL + opsOrderUrl, mUtils.getUerPasswordMap(getContext()));
             } catch (Exception e) {
