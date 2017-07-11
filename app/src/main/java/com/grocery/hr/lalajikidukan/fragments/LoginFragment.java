@@ -30,9 +30,13 @@ import com.grocery.hr.lalajikidukan.LoginActivity;
 import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
+import com.grocery.hr.lalajikidukan.entity.CartDO;
 import com.grocery.hr.lalajikidukan.manager.CartManager;
+import com.grocery.hr.lalajikidukan.models.BaseResponse;
+import com.grocery.hr.lalajikidukan.models.CartModel;
 import com.grocery.hr.lalajikidukan.preferences.AppSharedPreference;
 import com.grocery.hr.lalajikidukan.service.CartService;
+import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
 //fadsf
 import org.json.JSONException;
@@ -62,6 +66,9 @@ public class LoginFragment extends Fragment implements TextWatcher {
     }
 
     LoginActivity loginActivity;
+    private CartManager cartManager;
+    private String cartModelJson;
+    private Gson gson;
     Utils mUtils;
     boolean isMobileNoOK = false;
     boolean isPassOK = false;
@@ -79,12 +86,16 @@ public class LoginFragment extends Fragment implements TextWatcher {
     @BindView(R.id.bnLogin)
     AppCompatButton mLogin;
 
+    ProgressDialog dialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loginActivity = (LoginActivity) getActivity();
         mUtils = Utils.getInstance();
         mHandler = new Handler();
+        gson = new Gson();
+        cartManager = CartManager.getInstance(getContext());
         setHasOptionsMenu(true);
     }
 
@@ -201,7 +212,6 @@ public class LoginFragment extends Fragment implements TextWatcher {
 
     class DoLogin extends AsyncTask<String, Void, String> {
 
-        ProgressDialog dialog;
         String mobileNo;
         String password;
 
@@ -243,45 +253,139 @@ public class LoginFragment extends Fragment implements TextWatcher {
             if (result != null && result.length() != 0) {
                 Log.e(TAG + " result", result);
                 try {
+                    BaseResponse baseResponse = JsonParserUtils.getBaseResponse(result);
                     JSONObject jsonObj = new JSONObject(result);
-                    if (jsonObj != null && jsonObj.getInt("responseCode") == 200 &&
-                            jsonObj.getString("data") != null) {
+                    if (baseResponse != null && baseResponse.getResponseCode() == 403) {
+                        mUtils.showMessage(
+                                loginActivity,
+                                "Error",
+                                "Wrong combination of user name and password.\nTry Again",
+                                "OK", null
+                        );
+                    } else if (baseResponse != null && baseResponse.getResponseCode() >= 400 &&
+                            baseResponse.getResponseCode() < 500) {
+                        showSnackbar(baseResponse.getResponseMessage() + " " + getString(R.string.complaint_to_admin));
+                    } else {
                         AppSharedPreference.putString(getContext(), AppConstants.User.MOBILE_NO, mobileNo);
                         AppSharedPreference.putString(getContext(), AppConstants.User.PASSWORD, password);
                         AppSharedPreference.putString(getContext(), AppConstants.User.TYPE,
                                 jsonObj.getString("data"));
-                        if (loginActivity.getParent() == null) {
-                            loginActivity.setResult(Activity.RESULT_OK);
-                        } else {
-                            loginActivity.getParent().setResult(Activity.RESULT_OK);
-                        }
-                        loginActivity.finish();
-                    } else {
-                        mUtils.showMessage(
-                                loginActivity,
-                                "Error",
-                                "Login Fail.\nTry Again",
-                                "OK", null
-                        );
+                        new PostCart().execute();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+                }catch (Exception e){}
             } else {
-                Log.e(TAG, "DoLogin::onPostExecute(): unexpected server result");
+                showSnackbar(getString(R.string.cant_connect_to_server));
+            }
+        }
+    }
+
+
+    class PostCart extends AsyncTask<Void, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            List<CartDO> cartDOs = cartManager.getCartItems();
+            List<CartModel> cartModelList = mUtils.convertCartDosTOCartModel(cartDOs);
+            if (cartModelList != null && !cartModelList.isEmpty()) {
+                cartModelJson = gson.toJson(cartModelList);
+            }
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            if (cartModelJson == null || cartModelJson.isEmpty()) {
+                return null;
+            }else {
                 try {
-                    Snackbar.make(mRootWidget,
-                            getString(R.string.cant_connect_to_server),
-                            Snackbar.LENGTH_LONG)
-                            .show();
+                    return mUtils.postToServer(AppConstants.Url.BASE_URL + AppConstants.Url.ADD_CART,
+                            mUtils.getUerPasswordMap(getContext()), cartModelJson);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.e(TAG, "GetCart::onPostExecute(): result is: " + result);
+            if ((cartModelJson == null || cartModelJson.isEmpty()) ||
+                    (result != null && result.trim().length() != 0)) {
+                BaseResponse baseResponse = JsonParserUtils.getBaseResponse(result);
+                 if (baseResponse != null && baseResponse.getResponseCode() >= 400 &&
+                        baseResponse.getResponseCode() < 500) {
+                    showSnackbar(baseResponse.getResponseMessage() + " " + getString(R.string.complaint_to_admin));
+                    removeLoginCredential();
+                } else {
+                   new PostTokenToServer().execute();
+                }
+            } else {
+                showSnackbar(getString(R.string.cant_connect_to_server));
+                removeLoginCredential();
+            }
+        }
+    }
+
+    class PostTokenToServer extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... params) {
+            String url = AppConstants.Url.BASE_URL + AppConstants.Url.TOKEN_PATH;
+                try {
+                    return mUtils.putToServer(url,mUtils.getUerPasswordMap(getContext()),
+                            AppSharedPreference.getString(getContext(),
+                            AppConstants.Notification.KEY_ACCESS_TOKEN));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.e(TAG, "GetCart::onPostExecute(): result is: " + result);
+            if ((result != null && result.trim().length() != 0)) {
+                BaseResponse baseResponse = JsonParserUtils.getBaseResponse(result);
+                if (baseResponse != null && baseResponse.getResponseCode() >= 400 &&
+                        baseResponse.getResponseCode() < 500) {
+                    showSnackbar(baseResponse.getResponseMessage() + " " + getString(R.string.complaint_to_admin));
+                    removeLoginCredential();
+                } else {
+                   setLoginActivityReturn();
+                }
+            } else {
+                showSnackbar(getString(R.string.cant_connect_to_server));
+                removeLoginCredential();
             }
         }
 
 
+    }
+
+    public void showSnackbar(String message) {
+        try {
+            Snackbar.make(mRootWidget, message,
+                    Snackbar.LENGTH_LONG)
+                    .show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setLoginActivityReturn(){
+        if (loginActivity.getParent() == null) {
+            loginActivity.setResult(Activity.RESULT_OK);
+        } else {
+            loginActivity.getParent().setResult(Activity.RESULT_OK);
+        }
+        loginActivity.finish();
+    }
+
+    public void removeLoginCredential(){
+        AppSharedPreference.remove(getContext(),AppConstants.User.MOBILE_NO);
+        AppSharedPreference.remove(getContext(),AppConstants.User.PASSWORD);
+        AppSharedPreference.remove(getContext(),AppConstants.User.TYPE);
     }
 
 

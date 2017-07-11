@@ -1,3 +1,4 @@
+/*
 package com.grocery.hr.lalajikidukan.fragments;
 
 import android.content.res.Configuration;
@@ -21,19 +22,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
-import com.grocery.hr.lalajikidukan.entity.CartDO;
-import com.grocery.hr.lalajikidukan.manager.CartManager;
 import com.grocery.hr.lalajikidukan.models.BaseResponse;
 import com.grocery.hr.lalajikidukan.models.CartModel;
-import com.grocery.hr.lalajikidukan.models.ShippingModel;
-import com.grocery.hr.lalajikidukan.preferences.AppSharedPreference;
-import com.grocery.hr.lalajikidukan.service.CartService;
+import com.grocery.hr.lalajikidukan.models.UserOrderModel;
 import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
@@ -44,51 +39,36 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CartFragment extends Fragment {
 
-    public static final String TAG = CartFragment.class.getSimpleName();
+public class OrderHistoryFragment extends Fragment {
 
-    private CartAdapter mAdapter;
+    public static final String TAG = OrderHistoryFragment.class.getSimpleName();
+
     private MainActivity mActivity;
     private Handler mHandler;
-    private Gson gson;
     private Utils mUtils;
-    private List<CartModel> cartItems;
-    private ShippingModel shippingDetail;
-    private CartManager cartManager;
-    private String cartModelJson;
-    private CartService cartService;
-    private boolean isCartLoaded = false;
-    private boolean isShippingDetailLoaded = false;
+    private List<UserOrderModel> orders;
+
 
     //XML View
 
     Toolbar mToolbar;
 
-    @BindView(R.id.cl_root)
-    CoordinatorLayout mRootWidget;
-
-    @BindView(R.id.rvCart)
-    SuperRecyclerView mCartList;
-
-    @BindView(R.id.price)
-    TextView mCartTotal;
-
-    @BindView(R.id.dcfree)
-    TextView mDeliveryCharge;
-
-    @BindView(R.id.checkoutButtonLayout)
-    LinearLayout checkoutButtonLayout;
-
-    @BindView(R.id.shippingDetailLayout)
-    LinearLayout shippingDetailLayout;
-
     @BindView(R.id.ll_spinner)
     LinearLayout spinner;
 
+    @BindView(R.id.cl_root)
+    CoordinatorLayout mRootWidget;
 
-    public static CartFragment newInstance() {
-        return new CartFragment();
+    @BindView(R.id.srv_order_history)
+    SuperRecyclerView recyclerView;
+
+    private OrderHistoryFragment() {
+    }
+
+
+    public static OrderHistoryFragment newInstance() {
+        return new OrderHistoryFragment();
     }
 
     @Override
@@ -97,10 +77,6 @@ public class CartFragment extends Fragment {
         mActivity = (MainActivity) getActivity();
         mHandler = new Handler();
         mUtils = Utils.getInstance();
-        gson = new Gson();
-        cartManager = CartManager.getInstance(getContext());
-        mAdapter = new CartAdapter();
-        cartService = CartService.getInstance(getContext());
         setHasOptionsMenu(true);
     }
 
@@ -113,12 +89,23 @@ public class CartFragment extends Fragment {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mActivity.showCart();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (!mUtils.isDeviceOnline(getContext())) {
             return inflater.inflate(R.layout.fragment_no_internet_connection, container, false);
         } else {
-            return inflater.inflate(R.layout.fragment_cart, container, false);
+            return inflater.inflate(R.layout.fragment_order_history, container, false);
         }
     }
 
@@ -128,25 +115,15 @@ public class CartFragment extends Fragment {
         mActivity.hideCart();
         if (mUtils.isDeviceOnline(getContext())) {
             ButterKnife.bind(this, view);
-            mCartList.getProgressView().setVisibility(View.GONE);
+            recyclerView.getProgressView().setVisibility(View.GONE);
             mToolbar = (Toolbar) getActivity().findViewById(R.id.cartToolbar);
             setUpToolbar();
             setUpViews();
+
         } else {
             mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
             setUpToolbar();
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mActivity.showCart();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
     }
 
     public void setUpToolbar() {
@@ -162,58 +139,42 @@ public class CartFragment extends Fragment {
                 mActivity.onBackPressed();
             }
         });
-        mActivity.setTitle(getString(R.string.action_cart));
+        mActivity.setTitle(getString(R.string.action_order_history));
     }
-
 
     public void setUpViews() {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mCartList.setLayoutManager(linearLayoutManager);
-        mCartList.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                baseGetCart();
+                baseGetOrders();
             }
         });
-        baseGetCart();
+        baseGetOrders();
     }
 
-    @OnClick(R.id.checkoutButton)
-    public void checkout() {
-        mActivity.getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.flContentMain, AddressFragment
-                                .newInstance(AppConstants.Address_Fragment.CHECKOUT),
-                        AddressFragment.TAG).addToBackStack(null)
-                .commit();
-    }
 
-    public void baseGetCart() {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                new GetCart().execute();
-                new GetShippingDetail().execute();
-            }
-        });
-    }
 
-    class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
+
+    class OrderAdapter extends RecyclerView.Adapter<CartFragment.CartViewHolder> {
         @Override
-        public CartViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new CartViewHolder(
+        public CartFragment.CartViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new CartFragment.CartViewHolder(
                     LayoutInflater.from(parent.getContext())
                             .inflate(R.layout.item_view_cart, parent, false)
             );
         }
 
         @Override
-        public void onBindViewHolder(CartViewHolder holder, int position) {
+        public void onBindViewHolder(CartFragment.CartViewHolder holder, int position) {
             CartModel item = cartItems.get(position);
-           /* Picasso.with(mActivity)
+           */
+/* Picasso.with(mActivity)
                     .load(R.drawable.placeholder)
-                    .into(holder.getLogo());*/
+                    .into(holder.getLogo());*//*
+
             holder.getName().setText(item.getName());
             // holder.getDeliveryTime().setText(item.getDeliveryTime());
             holder.getQtyRate().setText(String.valueOf(
@@ -241,10 +202,12 @@ public class CartFragment extends Fragment {
     }
 
 
-    class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+*/
 /*
         @BindView(R.id.imageView)
-       AppCompatImageView mLogo;*/
+       AppCompatImageView mLogo;*//*
+
 
         @BindView(R.id.content)
         AppCompatTextView mcontent;
@@ -267,11 +230,9 @@ public class CartFragment extends Fragment {
         //   @BindView(R.id.tvCartTotal)
         // AppCompatTextView mTotal;
 
-        public CartViewHolder(View itemView) {
+        public OrderViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            //   mHeader.setVisibility(View.GONE);
-            // itemView.setOnClickListener(this);
         }
 
         @OnClick(R.id.cart_plus)
@@ -299,9 +260,11 @@ public class CartFragment extends Fragment {
         }
 
 
-       /* public AppCompatImageView getLogo() {
+       */
+/* public AppCompatImageView getLogo() {
             return mLogo;
-        }*/
+        }*//*
+
 
         public AppCompatTextView getName() {
             return mcontent;
@@ -326,23 +289,34 @@ public class CartFragment extends Fragment {
     }
 
 
-    class GetShippingDetail extends AsyncTask<Void, Void, String> {
+    public void baseGetOrders() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                new GetOrder().execute();
+            }
+        });
+    }
+
+
+    class GetOrder extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... params) {
             try {
-                return mUtils.getFromServer(AppConstants.Url.BASE_URL + AppConstants.Url.GET_SHIPPING_DETAIL, null);
+                return mUtils.getFromServer(AppConstants.Url.BASE_URL + AppConstants.Url.GET_ORDERS, mUtils.getUerPasswordMap(getContext()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
         }
 
+
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Log.e(TAG, "GetShippingDetail::onPostExecute(): result is: " + result);
-            if (result != null && result.trim().length() != 0) {
+            Log.e(TAG, "GetOrder::onPostExecute(): result is: " + result);
+            if ((result != null && result.trim().length() != 0)) {
                 BaseResponse baseResponse = JsonParserUtils.getBaseResponse(result);
                 if (baseResponse != null && baseResponse.getResponseCode() == 403) {
                     showSnackbar(getString(R.string.forbidden));
@@ -350,100 +324,15 @@ public class CartFragment extends Fragment {
                         baseResponse.getResponseCode() < 500) {
                     showSnackbar(baseResponse.getResponseMessage() + " " + getString(R.string.complaint_to_admin));
                 } else {
-                    shippingDetail = JsonParserUtils.shippingParser(result);
-                    AppSharedPreference.putString(getContext(), AppConstants.User.SHIPPING_DETAIL, result);
-                    refreshBottomDetail();
-                }
-            } else {
-                showSnackbar(getString(R.string.cant_connect_to_server));
-            }
-            isShippingDetailLoaded = true;
-            hideSpinner();
-        }
-    }
-
-
-    class GetCart extends AsyncTask<Void, Void, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            List<CartDO> cartDOs = cartManager.getCartItems();
-            List<CartModel> cartModelList = mUtils.convertCartDosTOCartModel(cartDOs);
-            if (cartModelList != null && !cartModelList.isEmpty()) {
-                cartModelJson = gson.toJson(cartModelList);
-            }
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            if (cartModelJson == null || cartModelJson.isEmpty()) {
-                return null;
-            } else if (!mUtils.isUserLoggedIn(getContext())) {
-                try {
-                    return mUtils.postToServer(AppConstants.Url.BASE_URL +
-                            AppConstants.Url.CART_PRODUCT_INFO, null, cartModelJson);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                return null;
-            } else {
-                try {
-                    return mUtils.postToServer(AppConstants.Url.BASE_URL + AppConstants.Url.ADD_CART,
-                            mUtils.getUerPasswordMap(getContext()), cartModelJson);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            Log.e(TAG, "GetCart::onPostExecute(): result is: " + result);
-            if ((cartModelJson == null || cartModelJson.isEmpty()) ||
-                    (result != null && result.trim().length() != 0)) {
-                BaseResponse baseResponse = JsonParserUtils.getBaseResponse(result);
-                if (baseResponse != null && baseResponse.getResponseCode() == 403) {
-                    showSnackbar(getString(R.string.forbidden));
-                } else if (baseResponse != null && baseResponse.getResponseCode() >= 400 &&
-                        baseResponse.getResponseCode() < 500) {
-                    showSnackbar(baseResponse.getResponseMessage() + " " + getString(R.string.complaint_to_admin));
-                } else {
+                    orders = JsonParserUtils.orderParser(result);
                     cartItems = JsonParserUtils.cartParser(result);
                     mCartList.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
+
                 }
             } else {
                 showSnackbar(getString(R.string.cant_connect_to_server));
             }
-            isCartLoaded = true;
-            hideSpinner();
-        }
-    }
-
-    public void refreshBottomDetail() {
-        if (cartItems == null || cartItems.size() == 0) {
-            shippingDetailLayout.setVisibility(View.GONE);
-            checkoutButtonLayout.setVisibility(View.GONE);
-        } else {
-            int cartToalPrice = cartService.getCartTotalPrice(cartItems);
-            mCartTotal.setText(String.valueOf(cartToalPrice));
-
-            int deliveryCharge = cartService.getShippingCharge(shippingDetail, cartToalPrice);
-            if (deliveryCharge != 0) {
-                mDeliveryCharge.setText(String.valueOf(deliveryCharge));
-            } else {
-                mDeliveryCharge.setText("Free");
-            }
-        }
-    }
-
-    private void hideSpinner() {
-        if (isCartLoaded && isShippingDetailLoaded) {
-            spinner.setVisibility(View.GONE);
         }
     }
 
@@ -457,6 +346,6 @@ public class CartFragment extends Fragment {
         }
     }
 
+
 }
-
-
+*/

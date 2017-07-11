@@ -38,7 +38,7 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
     }
 
     private void sendTokenToServer(String token){
-        if(AppSharedPreference.getString(this, AppConstants.User.MOBILE_NO, "abc").equals("abc")){
+        if(!mUtils.isUserLoggedIn(getApplicationContext())){
             String url=AppConstants.Url.BASE_URL+AppConstants.Url.ANONYMOUS_TOKEN_PATH;
             try {
                 mUtils.postToServer(url,null,token);
@@ -55,4 +55,6 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
 
         }
     }
+
+
 }

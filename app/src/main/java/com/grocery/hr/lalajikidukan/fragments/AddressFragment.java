@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringDef;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -25,17 +26,19 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.grocery.hr.lalajikidukan.LoginActivity;
 import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
+import com.grocery.hr.lalajikidukan.entity.CartDO;
+import com.grocery.hr.lalajikidukan.manager.CartManager;
 import com.grocery.hr.lalajikidukan.models.AddressModel;
 import com.grocery.hr.lalajikidukan.models.BaseResponse;
+import com.grocery.hr.lalajikidukan.models.CartModel;
 import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
-
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -57,6 +60,9 @@ public class AddressFragment extends Fragment {
     private Handler mHandler;
     private String type;
     private AddressAdapter mAdapter;
+    private CartManager cartManager;
+    private String cartModelJson;
+    private Gson gson;
 
     Toolbar mToolbar;
 
@@ -89,6 +95,8 @@ public class AddressFragment extends Fragment {
         mHandler = new Handler();
         mUtils = Utils.getInstance();
         mAdapter = new AddressAdapter();
+        cartManager = CartManager.getInstance(getContext());
+        gson = new Gson();
         setHasOptionsMenu(true);
     }
 
@@ -206,9 +214,8 @@ public class AddressFragment extends Fragment {
                     baseGetAddresses();
                 }
             });
-            baseGetAddresses();
+           baseGetAddresses();
         }
-
     }
 
     public void baseGetAddresses() {
@@ -281,9 +288,9 @@ public class AddressFragment extends Fragment {
             itemView.setOnClickListener(this);
         }
 
-        @OnClick(R.id.editoption)
+        @OnClick(R.id.image_edit)
         public void onIconClick() {
-            View menuItemView = mActivity.findViewById(R.id.editoption);
+            View menuItemView = mActivity.findViewById(R.id.image_edit);
             PopupMenu popup = new PopupMenu(getActivity(), menuItemView);
             MenuInflater inflater = popup.getMenuInflater();
             mActivity.getMenuInflater().inflate(R.menu.address_popmenu, popup.getMenu());
@@ -311,20 +318,6 @@ public class AddressFragment extends Fragment {
             popup.show();
         }
 
-
-
-       /* @OnClick(R.id.menu_edit)
-        public void onEditClick(){
-            AddressModel addressModel=addresses.get(getAdapterPosition());
-            mActivity.getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.flContentMain, EditOrAddAddressFragment
-                                    .newInstance(addressModel),
-                            EditOrAddAddressFragment.TAG).addToBackStack(null)
-                    .commit();
-        }*/
-
-
         public TextView getAddressType() {
             return addressType;
         }
@@ -343,12 +336,17 @@ public class AddressFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            if (AppConstants.Address_Fragment.CHECKOUT.equals(type)) {
-
+            if (type.equals(AppConstants.Address_Fragment.CHECKOUT)) {
+                AddressModel addressModel = addresses.get(getAdapterPosition());
+                mActivity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.flContentMain, PaymentOptionFragment
+                                        .newInstance(addressModel.getId()),
+                                PaymentOptionFragment.TAG).addToBackStack(null)
+                        .commit();
             }
         }
     }
-
 
     class GetAddress extends AsyncTask<Void, Void, String> {
 
@@ -371,9 +369,9 @@ public class AddressFragment extends Fragment {
 
             if ((result != null && result.trim().length() != 0)) {
                 BaseResponse baseResponse = JsonParserUtils.getBaseResponse(result);
-                if (baseResponse!=null && baseResponse.getResponseCode() == 403) {
+                if (baseResponse != null && baseResponse.getResponseCode() == 403) {
                     showSnackbar(getString(R.string.forbidden));
-                } else if (baseResponse!=null && baseResponse.getResponseCode() >= 400 &&
+                } else if (baseResponse != null && baseResponse.getResponseCode() >= 400 &&
                         baseResponse.getResponseCode() < 500) {
                     showSnackbar(baseResponse.getResponseMessage() + " " + getString(R.string.complaint_to_admin));
                 } else {
@@ -388,7 +386,6 @@ public class AddressFragment extends Fragment {
             spinner.setVisibility(View.GONE);
         }
     }
-
 
     public void showSnackbar(String message) {
         try {

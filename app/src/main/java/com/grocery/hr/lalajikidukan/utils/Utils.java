@@ -2,44 +2,34 @@ package com.grocery.hr.lalajikidukan.utils;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 
 import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.backend.LocationService;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
 import com.grocery.hr.lalajikidukan.entity.CartDO;
 import com.grocery.hr.lalajikidukan.models.CartModel;
-import com.grocery.hr.lalajikidukan.models.OrderStatusEnum;
 import com.grocery.hr.lalajikidukan.preferences.AppSharedPreference;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 
-import org.json.JSONArray;
-
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -109,7 +99,6 @@ public class Utils {
                 .setCancelable(false)
                 .show();
     }
-
 
     public AlertDialog checkLocationSettings(final Context context) {
         if (isGPSLocationEnabled(context)) {
@@ -192,7 +181,6 @@ public class Utils {
         throw new IOException(response.message() + " " + response.toString());
     }
 
-
     public String getFromServer(String url, Map<String, String> pairs) throws Exception {
         okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
         okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
@@ -224,6 +212,7 @@ public class Utils {
         return pairs;
     }
 
+
     public static List<CartModel> convertCartDosTOCartModel(List<CartDO> cartDOs) {
         List<CartModel> cartModelList = new ArrayList<>();
         for (CartDO cartDO : cartDOs) {
@@ -234,6 +223,7 @@ public class Utils {
         }
         return cartModelList;
     }
+
 
     public void hideRefreshing(final SuperRecyclerView recyclerView) {
         if (recyclerView.getSwipeToRefresh().isRefreshing()) {
@@ -274,5 +264,38 @@ public class Utils {
         return dialog;
     }
 
+    public void rateApp(Activity activity) {
+        try {
+            activity.startActivity(
+                    new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + activity.getPackageName())));
+        } catch (ActivityNotFoundException e) {
+            try {
+                activity.startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=" + activity.getPackageName())));
+            } catch (ActivityNotFoundException e2) {
+                e.printStackTrace();
+                Log.e(TAG, "rateApp(): " + e.getMessage());
+            }
+        }
+    }
+
+    public void moveToPlayStore(Activity activity) {
+        try {
+            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + activity.getPackageName())));
+        } catch (android.content.ActivityNotFoundException anfe) {
+            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + activity.getPackageName())));
+        }
+    }
+
+    public void shareApp(Activity activity) {
+        Intent share_que = new Intent(Intent.ACTION_SEND);
+        share_que.setType("text/plain");
+        share_que.putExtra(Intent.EXTRA_TEXT,
+                "Hey friends,\nI just discovered an amazing app called "
+                        + activity.getResources().getString(R.string.app_name)
+                        + ". Get it from https://play.google.com/store/apps/details?id=" + activity.getPackageName());
+        activity.startActivityForResult(Intent.createChooser(share_que,
+                "Share " + activity.getResources().getString(R.string.app_name) + " Using"), 123);
+    }
 
 }

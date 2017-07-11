@@ -1,6 +1,6 @@
 package com.grocery.hr.lalajikidukan.models;
 
-import java.sql.Timestamp;
+import com.grocery.hr.lalajikidukan.enums.OrderStatusEnum;
 
 /**
  * Created by vipul on 19/3/17.

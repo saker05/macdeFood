@@ -1,5 +1,6 @@
 package com.grocery.hr.lalajikidukan.fragments;
 
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -167,6 +168,9 @@ public class HomeFragment extends Fragment {
 
         @Override
         public void run() {
+            if(getActivity()==null){
+                return;
+            }
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -289,7 +293,6 @@ public class HomeFragment extends Fragment {
             }
         }
     }
-
 
     class GetCategories extends AsyncTask<Void, Void, String> {
 

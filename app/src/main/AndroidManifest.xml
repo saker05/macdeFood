@@ -22,9 +22,11 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".NotificationHandlerActivity">
             <intent-filter>
                 <action android:name=".NotificationHandlerActivity" />
@@ -32,7 +34,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".LoginActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -51,5 +52,11 @@
         </service>
 
     </application>
+
+    defaultConfig {
+    versionCode 1
+    versionName "1.0"
+    }
+
 
 </manifest>

@@ -118,7 +118,7 @@ public class OpsSuborderDescriptionFragment extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mAdapter=new OrderBillDeescriptionAdapter();
-       mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
         baseGetOpsOrder();
 
         //baseGetOpsOrder();
@@ -145,11 +145,11 @@ public class OpsSuborderDescriptionFragment extends Fragment {
         @Override
         public void onBindViewHolder(OrderBillDescritionViewHolderr holder, int position)
         {
-                   UserSubOrderModel userSubOrderModel = userSubOrderModelItems.get(position);
+            UserSubOrderModel userSubOrderModel = userSubOrderModelItems.get(position);
 
-                       holder.getmFoodItem().setText(userSubOrderModel.getUnitAmount()+"*"+userSubOrderModel.getNoOfUnits());
-                       holder.getmFoodQuantity().setText(userSubOrderModel.getNoOfUnits()+"*"+userSubOrderModel.getUnitQuantityInGm());
-                       holder.getmOrderDescription().setText(userSubOrderModel.getName());
+            holder.getmFoodItem().setText(userSubOrderModel.getUnitAmount()+"*"+userSubOrderModel.getNoOfUnits());
+            holder.getmFoodQuantity().setText(userSubOrderModel.getNoOfUnits()+"*"+userSubOrderModel.getUnitQuantityInGm());
+            holder.getmOrderDescription().setText(userSubOrderModel.getName());
         }
 
 
@@ -158,10 +158,10 @@ public class OpsSuborderDescriptionFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-          if(userSubOrderModelItems!=null)
-              return userSubOrderModelItems.size();
+            if(userSubOrderModelItems!=null)
+                return userSubOrderModelItems.size();
             else
-            return 0;
+                return 0;
         }
     }
 
@@ -187,20 +187,20 @@ public class OpsSuborderDescriptionFragment extends Fragment {
             ButterKnife.bind(this, itemView);
         }
 
-       public TextView getmOrderDescription()
-       {
-           return mOrderDescription;
-       }
+        public TextView getmOrderDescription()
+        {
+            return mOrderDescription;
+        }
 
-       public TextView getmFoodItem()
-       {
-           return mFoodItem;
-       }
+        public TextView getmFoodItem()
+        {
+            return mFoodItem;
+        }
 
-       public TextView getmFoodQuantity()
-       {
-           return mFoodQuantity;
-       }
+        public TextView getmFoodQuantity()
+        {
+            return mFoodQuantity;
+        }
 
 
 
