@@ -108,6 +108,7 @@ public class JsonParserUtils {
                     ProductVariantsModel productVariantsModel=new ProductVariantsModel();
                     productVariantsModel.setPrice(productVariants.getInt("price"));
                     productVariantsModel.setSizeType(productVariants.getString("sizeType"));
+                    productVariantsModel.setDiscountPercent(productVariants.getInt("discountPercent"));
                     productVariantsModelList.add(productVariantsModel);
                 }
                 Collections.sort(productVariantsModelList);
