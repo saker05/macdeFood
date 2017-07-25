@@ -8,6 +8,7 @@ import com.grocery.hr.lalajikidukan.models.OpsOrderDetailModel;
 import com.grocery.hr.lalajikidukan.models.OpsOrderModel;
 import com.grocery.hr.lalajikidukan.enums.OrderStatusEnum;
 import com.grocery.hr.lalajikidukan.models.ProductModel;
+import com.grocery.hr.lalajikidukan.models.ProductVariantsModel;
 import com.grocery.hr.lalajikidukan.models.ShippingModel;
 import com.grocery.hr.lalajikidukan.models.UserOrderModel;
 import com.grocery.hr.lalajikidukan.models.UserSubOrderModel;
@@ -17,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -90,15 +92,25 @@ public class JsonParserUtils {
             JSONArray productList = new JSONObject(jsonString).optJSONArray("data");
             for (int i = 0; i < productList.length(); i++) {
                 ProductModel productModel = new ProductModel();
+                List<ProductVariantsModel> productVariantsModelList=new ArrayList<>();
                 JSONObject product = productList.getJSONObject(i);
                 productModel.setImageUrl(product.getString("imageUrl"));
                 productModel.setUpc(product.getString("upc"));
                 productModel.setStatus(product.getString("status"));
-                productModel.setUnitAmount(product.getInt("unitAmount"));
                 productModel.setName(product.getString("name"));
                 productModel.setCategoryId(product.getInt("categoryId"));
                 productModel.setDescription(product.getString("description"));
-                productModel.setUnitQuantityInGm(product.getInt("unitQuantityInGm"));
+                productModel.setProductVariants(productVariantsModelList);
+
+                JSONArray productVariantsList = product.getJSONArray("productVariants");
+                for (int j = 0; j < productVariantsList.length(); j++) {
+                    JSONObject productVariants=productVariantsList.getJSONObject(j);
+                    ProductVariantsModel productVariantsModel=new ProductVariantsModel();
+                    productVariantsModel.setPrice(productVariants.getInt("price"));
+                    productVariantsModel.setSizeType(productVariants.getString("sizeType"));
+                    productVariantsModelList.add(productVariantsModel);
+                }
+                Collections.sort(productVariantsModelList);
                 productModelList.add(productModel);
             }
             return productModelList;

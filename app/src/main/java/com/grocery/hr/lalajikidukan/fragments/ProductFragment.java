@@ -196,12 +196,7 @@ public class ProductFragment extends Fragment {
             String imageUrl = CloudinaryUtility.getResizeImageUrl(1000, 1000, product.getImageUrl());
             picassoManager.downloadImage(getContext(), imageUrl, holder.getLogo());
 
-            holder.getMunitPrice().setText(String.valueOf(product.getUnitAmount()));
-            if (product.getUnitQuantityInGm() == 0) {
-                holder.getMUnitQuantity().setText("1 unit");
-            } else {
-                holder.getMUnitQuantity().setText(String.valueOf(product.getUnitQuantityInGm()) + "gm");
-            }
+            holder.getMunitPrice().setText(String.valueOf(product.getProductVariants().get(0).getPrice()));
 
             if (product.getNoOfItemInCart() == 0) {
                 holder.getMMinus().setVisibility(View.GONE);

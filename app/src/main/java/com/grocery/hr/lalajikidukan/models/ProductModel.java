@@ -3,20 +3,16 @@ package com.grocery.hr.lalajikidukan.models;
 /**
  * Created by vipul on 19/3/17.
  */
+import java.util.List;
 
 public class ProductModel {
-
     private String upc;
     private String name;
     private String description;
     private Integer categoryId;
     private String status;
-    private Integer unitQuantityInGm; // if it is null mean product will be sold
-    // per
-    // piece
-    private int unitAmount;
-    private String addedBy;
     private String imageUrl;
+    private List<ProductVariantsModel> productVariants;
     private int noOfItemInCart; // this is using in android app
 
     public String getUpc() {
@@ -59,36 +55,20 @@ public class ProductModel {
         this.status = status;
     }
 
-    public Integer getUnitQuantityInGm() {
-        return unitQuantityInGm;
-    }
-
-    public void setUnitQuantityInGm(Integer unitQuantityInGm) {
-        this.unitQuantityInGm = unitQuantityInGm;
-    }
-
-    public int getUnitAmount() {
-        return unitAmount;
-    }
-
-    public void setUnitAmount(int unitAmount) {
-        this.unitAmount = unitAmount;
-    }
-
-    public String getAddedBy() {
-        return addedBy;
-    }
-
-    public void setAddedBy(String addedBy) {
-        this.addedBy = addedBy;
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public List<ProductVariantsModel> getProductVariants() {
+        return productVariants;
+    }
+
+    public void setProductVariants(List<ProductVariantsModel> productVariants) {
+        this.productVariants = productVariants;
     }
 
     public int getNoOfItemInCart() {
@@ -99,12 +79,12 @@ public class ProductModel {
         this.noOfItemInCart = noOfItemInCart;
     }
 
+
     @Override
     public String toString() {
         return "ProductModel [upc=" + upc + ", name=" + name + ", description=" + description + ", categoryId="
-                + categoryId + ", status=" + status + ", unitQuantityInGm=" + unitQuantityInGm + ", unitAmount="
-                + unitAmount + ", addedBy=" + addedBy + ", imageUrl=" + imageUrl + "]";
+                + categoryId + ", status=" + status
+                + ", imageUrl=" + imageUrl + ", productVariants=" + productVariants + "]";
     }
-
 
 }

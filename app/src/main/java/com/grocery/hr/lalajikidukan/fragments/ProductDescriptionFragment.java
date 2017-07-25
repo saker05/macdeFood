@@ -117,14 +117,8 @@ public class ProductDescriptionFragment extends Fragment {
     }
 
     public void setUpView(){
-        if (productItem.getUnitQuantityInGm() == 0) {
-            mUnit.setText("1 unit");
-        } else {
-            mUnit.setText(String.valueOf(productItem.getUnitQuantityInGm()) + "gm");
-        }
-
         mDescritpion.setText(productItem.getDescription());
-        mPrice.setText(String.valueOf(productItem.getUnitAmount()));
+        mPrice.setText(String.valueOf(productItem.getProductVariants().get(0).getPrice()));
         mName.setText(productItem.getName());
         String imageUrl = CloudinaryUtility.getResizeImageUrl(600, 600, productItem.getImageUrl());
         picassoManager.downloadImage(getContext(), imageUrl,image);

@@ -294,6 +294,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
+
     class GetCategories extends AsyncTask<Void, Void, String> {
 
         @Override
