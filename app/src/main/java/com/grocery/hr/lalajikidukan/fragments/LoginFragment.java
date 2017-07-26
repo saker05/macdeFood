@@ -270,7 +270,7 @@ public class LoginFragment extends Fragment implements TextWatcher {
                         AppSharedPreference.putString(getContext(), AppConstants.User.PASSWORD, password);
                         AppSharedPreference.putString(getContext(), AppConstants.User.TYPE,
                                 jsonObj.getString("data"));
-                        new PostCart().execute();
+                        //new PostCart().execute();
                     }
                 }catch (Exception e){}
             } else {
@@ -280,7 +280,7 @@ public class LoginFragment extends Fragment implements TextWatcher {
     }
 
 
-    class PostCart extends AsyncTask<Void, Void, String> {
+   /* class PostCart extends AsyncTask<Void, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -325,7 +325,7 @@ public class LoginFragment extends Fragment implements TextWatcher {
                 removeLoginCredential();
             }
         }
-    }
+    }*/
 
     class PostTokenToServer extends AsyncTask<Void, Void, String> {
         @Override
