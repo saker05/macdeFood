@@ -4,6 +4,7 @@ import com.grocery.hr.lalajikidukan.enums.OrderStatusEnum;
 import com.grocery.hr.lalajikidukan.models.AddressModel;
 import com.grocery.hr.lalajikidukan.models.BaseResponse;
 import com.grocery.hr.lalajikidukan.models.CartModel;
+import com.grocery.hr.lalajikidukan.models.CartPageModel;
 import com.grocery.hr.lalajikidukan.models.CategoryModel;
 import com.grocery.hr.lalajikidukan.models.HomePageModel;
 import com.grocery.hr.lalajikidukan.models.OpsOrderDetailModel;
@@ -215,9 +216,9 @@ public class JsonParserUtils {
             return null;
         }
         try {
-            JSONObject opsData = new JSONObject(jsonString).getJSONObject("data");
-            JSONArray categoryJsonArray = opsData.optJSONArray("categoryModelList");
-            JSONArray productJsonArray = opsData.optJSONArray("productModelList");
+            JSONObject homePageData = new JSONObject(jsonString).getJSONObject("data");
+            JSONArray categoryJsonArray = homePageData.optJSONArray("categoryModelList");
+            JSONArray productJsonArray = homePageData.optJSONArray("productModelList");
 
             List<CategoryModel> categoryModelList = categoryJsonArrayParser(categoryJsonArray);
             List<ProductModel> productModelList = productJsonArrayParser(productJsonArray);
@@ -228,6 +229,29 @@ public class JsonParserUtils {
 
             return homePageModel;
 
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static CartPageModel cartPageParser(String jsonString){
+        if (jsonString == null || jsonString.isEmpty()) {
+            return null;
+        }
+        try {
+            JSONObject cartPageData = new JSONObject(jsonString).getJSONObject("data");
+            JSONArray cartJsonArray = cartPageData.optJSONArray("cartModelList");
+            JSONObject shippingJsonObject = cartPageData.optJSONObject("shippingModel");
+
+            List<CartModel> cartModelList=cartJsonArrayParser(cartJsonArray);
+            ShippingModel shippingModel=shippingJsonObjectParser(shippingJsonObject);
+
+            CartPageModel cartPageModel=new CartPageModel();
+            cartPageModel.setCartModelList(cartModelList);
+            cartPageModel.setShippingModel(shippingModel);
+
+            return cartPageModel;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -303,7 +327,8 @@ public class JsonParserUtils {
                     JSONObject productVariants = productVariantsList.getJSONObject(j);
                     ProductVariantsModel productVariantsModel = new ProductVariantsModel();
                     productVariantsModel.setPrice(productVariants.getInt("price"));
-                    productVariantsModel.setSizeType(productVariants.getString("sizeType"));
+                    productVariantsModel.setType(productVariants.getString("type"));
+                    productVariantsModel.setSku(productVariants.getString("sku"));
                     productVariantsModel.setDiscountPercent(productVariants.getInt("discountPercent"));
                     productVariantsModelList.add(productVariantsModel);
                 }
