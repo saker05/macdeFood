@@ -217,17 +217,17 @@ public class CartFragment extends Fragment {
             holder.getName().setText(item.getName());
             // holder.getDeliveryTime().setText(item.getDeliveryTime());
             holder.getQtyRate().setText(String.valueOf(
-                    item.getUnitAmount()
+                    item.getUnitPrice()
             ));
             holder.getMunits().setText(String.valueOf(
                     item.getNoOfUnits()
             ));
 
-            if (item.getUnitQuantityInGm() == 0) {
+           /* if (item.getUnitQuantityInGm() == 0) {
                 holder.getQuantity().setText("1 unit");
             } else {
                 holder.getQuantity().setText(String.valueOf(item.getUnitQuantityInGm()) + "gm");
-            }
+            }*/
         }
 
         @Override

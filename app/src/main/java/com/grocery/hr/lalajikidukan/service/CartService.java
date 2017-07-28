@@ -49,7 +49,7 @@ public class CartService {
         int totalPrice = 0;
         for (CartModel cartModel : cartModels) {
             if (cartModel.getStatus().equals(AppConstants.ProductStatusEnum.AVAILABLE)) {
-                totalPrice += (cartModel.getUnitAmount() * cartModel.getNoOfUnits());
+                totalPrice += (cartModel.getUnitPrice() * cartModel.getNoOfUnits());
             }
 
         }
@@ -62,7 +62,7 @@ public class CartService {
             CartModel cartModel = cartModels.get(i);
             Boolean isInCartDo = false;
             for (CartDO cartDO : cartDOs) {
-                if (cartDO.getUpc().equals(cartModel.getUpc())) {
+                if (cartDO.getSku().equals(cartModel.getSku())) {
                     cartModel.setNoOfUnits(cartDO.getNoOfUnits());
                     isInCartDo = true;
                     break;

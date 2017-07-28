@@ -16,7 +16,7 @@ public class CartDAO {
 
     public static final String TAG = "CartDAO";
 
-    public static final String UPC = "upc";
+    public static final String SKU = "sku";
     public static final String NO_OF_UNIT = "no_of_unit";
     public static final String KEY_ID = "id";
 
@@ -27,7 +27,7 @@ public class CartDAO {
             + "("
             + KEY_ID
             + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + UPC
+            + SKU
             + " TEXT,"
             + NO_OF_UNIT
             + " INTEGER DEFAULT 1"
@@ -61,7 +61,7 @@ public class CartDAO {
 
     public void insertCartItem(CartDO cartDO) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(UPC, cartDO.getUpc());
+        contentValues.put(SKU, cartDO.getSku());
         contentValues.put(NO_OF_UNIT, cartDO.getNoOfUnits());
 
         baseDBHelper.insert(contentValues, TABLE_USER_CART);
@@ -72,25 +72,25 @@ public class CartDAO {
     }
 
     public void deleteCartItem(CartDO cartDO) {
-        baseDBHelper.delete(TABLE_USER_CART, UPC + "=?",
-                new String[]{cartDO.getUpc()});
+        baseDBHelper.delete(TABLE_USER_CART, SKU + "=?",
+                new String[]{cartDO.getSku()});
     }
 
     public void updateCartItem(CartDO cartDO) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(UPC, cartDO.getUpc());
+        contentValues.put(SKU, cartDO.getSku());
         contentValues.put(NO_OF_UNIT, cartDO.getNoOfUnits());
-        baseDBHelper.update(TABLE_USER_CART, contentValues, UPC + "=?",
-                new String[]{cartDO.getUpc()});
+        baseDBHelper.update(TABLE_USER_CART, contentValues, SKU + "=?",
+                new String[]{cartDO.getSku()});
     }
 
     public Cursor getCartItems(){
-        String sql="select " +UPC+","+NO_OF_UNIT +" from "+TABLE_USER_CART;
+        String sql="select " +SKU+","+NO_OF_UNIT +" from "+TABLE_USER_CART;
         return baseDBHelper.executeRawQuery(sql,null);
     }
 
     public Cursor getCartItem(String upc){
-        String sql="select " +UPC+","+NO_OF_UNIT +" from "+TABLE_USER_CART+" where "+UPC+"='"+upc+"'";
+        String sql="select " +SKU+","+NO_OF_UNIT +" from "+TABLE_USER_CART+" where "+SKU+"='"+upc+"'";
         return baseDBHelper.executeRawQuery(sql,null);
     }
 

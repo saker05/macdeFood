@@ -32,14 +32,21 @@ public class CartManager {
 
     public int noOfItemInCart(){
         Cursor cursor=cartDAO.getCartItems();
-        return cursor.getCount();
+        cursor.moveToFirst();
+
+        int totalItemInCart=0;
+        while (cursor.isAfterLast() == false){
+            totalItemInCart += cursor.getInt(1);
+            cursor.moveToNext();
+        }
+        return totalItemInCart;
     }
 
-    public void insertByOne(String upc) {
-        CartDO cartDO=getCartDOfromCursor(cartDAO.getCartItem(upc));
+    public void insertByOne(String sku) {
+        CartDO cartDO=getCartDOfromCursor(cartDAO.getCartItem(sku));
         if(cartDO==null){
             cartDO=new CartDO();
-            cartDO.setUpc(upc);
+            cartDO.setSku(sku);
             cartDO.setNoOfUnits(1);
             cartDAO.insertCartItem(cartDO);
         }else{
@@ -48,8 +55,8 @@ public class CartManager {
         }
     }
 
-    public void removeByOne(String upc){
-        CartDO cartDO=getCartDOfromCursor(cartDAO.getCartItem(upc));
+    public void removeByOne(String sku){
+        CartDO cartDO=getCartDOfromCursor(cartDAO.getCartItem(sku));
         if(cartDO!=null){
             int noOfItem=cartDO.getNoOfUnits();
             if(noOfItem<=1){
@@ -61,8 +68,8 @@ public class CartManager {
         }
     }
 
-    public CartDO getCartItem(String upc){
-        return getCartDOfromCursor(cartDAO.getCartItem(upc));
+    public CartDO getCartItem(String sku){
+        return getCartDOfromCursor(cartDAO.getCartItem(sku));
     }
 
     public void deleteAllCartItems(){
@@ -76,7 +83,7 @@ public class CartManager {
         while (cursor.isAfterLast() == false){
             CartDO cartDO=new CartDO();
             cartDO.setNoOfUnits(cursor.getInt(1));
-            cartDO.setUpc(cursor.getString(0));
+            cartDO.setSku(cursor.getString(0));
             cartDOs.add(cartDO);
             cursor.moveToNext();
         }
@@ -89,7 +96,7 @@ public class CartManager {
         while (cursor.isAfterLast() == false){
             cartDO=new CartDO();
             cartDO.setNoOfUnits(cursor.getInt(1));
-            cartDO.setUpc(cursor.getString(0));
+            cartDO.setSku(cursor.getString(0));
             break;
         }
         return cartDO;

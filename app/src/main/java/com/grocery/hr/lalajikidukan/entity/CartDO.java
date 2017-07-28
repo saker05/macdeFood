@@ -6,15 +6,15 @@ package com.grocery.hr.lalajikidukan.entity;
 
 public class CartDO {
 
-    private String upc;
+    private String sku;
     private Integer noOfUnits;
 
-    public String getUpc() {
-        return upc;
+    public String getSku() {
+        return sku;
     }
 
-    public void setUpc(String upc) {
-        this.upc = upc;
+    public void setSku(String sku) {
+        this.sku = sku;
     }
 
     public Integer getNoOfUnits() {
@@ -28,7 +28,7 @@ public class CartDO {
     @Override
     public String toString() {
         return "CartDO{" +
-                "upc='" + upc + '\'' +
+                "sku='" + sku + '\'' +
                 ", noOfUnits=" + noOfUnits +
                 '}';
     }

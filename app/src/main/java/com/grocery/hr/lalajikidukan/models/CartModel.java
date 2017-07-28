@@ -7,11 +7,16 @@ package com.grocery.hr.lalajikidukan.models;
 public class CartModel {
 
     private String upc;
+    private String sku;
     private String name;
+    private String type;
     private String status;
     private int noOfUnits;
-    private Integer unitQuantityInGm; // if null, product is in piece
-    private int unitAmount;
+    private int unitPrice;
+    private String description;
+    private int categoryId;
+    private String imageUrl;
+    private int discountPercent;
 
     public String getUpc() {
         return upc;
@@ -21,12 +26,28 @@ public class CartModel {
         this.upc = upc;
     }
 
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getStatus() {
@@ -45,26 +66,62 @@ public class CartModel {
         this.noOfUnits = noOfUnits;
     }
 
-    public Integer getUnitQuantityInGm() {
-        return unitQuantityInGm;
+    public int getUnitPrice() {
+        return unitPrice;
     }
 
-    public void setUnitQuantityInGm(Integer unitQuantityInGm) {
-        this.unitQuantityInGm = unitQuantityInGm;
+    public void setUnitPrice(int unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
-    public int getUnitAmount() {
-        return unitAmount;
+    public String getDescription() {
+        return description;
     }
 
-    public void setUnitAmount(int unitAmount) {
-        this.unitAmount = unitAmount;
+    public void setDescription(String description) {
+        this.description = description;
     }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public int getDiscountPercent() {
+        return discountPercent;
+    }
+
+    public void setDiscountPercent(int discountPercent) {
+        this.discountPercent = discountPercent;
+    }
+
 
     @Override
     public String toString() {
-        return "CartModel [upc=" + upc + ", name=" + name + ", status=" + status + ", noOfUnits=" + noOfUnits
-                + ", unitQuantityInGm=" + unitQuantityInGm + ", unitAmount=" + unitAmount + "]";
+        return "CartModel{" +
+                "upc='" + upc + '\'' +
+                ", sku='" + sku + '\'' +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", status='" + status + '\'' +
+                ", noOfUnits=" + noOfUnits +
+                ", unitPrice=" + unitPrice +
+                ", description='" + description + '\'' +
+                ", categoryId=" + categoryId +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", discountPercent=" + discountPercent +
+                '}';
     }
 
     @Override
@@ -74,12 +131,12 @@ public class CartModel {
 
         CartModel cartModel = (CartModel) o;
 
-        return upc.equals(cartModel.upc);
+        return sku.equals(cartModel.sku);
 
     }
 
     @Override
     public int hashCode() {
-        return upc.hashCode();
+        return sku.hashCode();
     }
 }

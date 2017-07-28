@@ -41,7 +41,7 @@ public interface AppConstants {
         public static final String ANONYMOUS_TOKEN_PATH = "/fcmtoken/anonymous";
         public static final String TOKEN_PATH = "/fcmtoken";
         public static final String ADD_CART = "/cart";
-        public static final String CART_PRODUCT_INFO = "/cart/productInfoForNotLoggedInUser";
+        public static final String CART_PRODUCT_INFO = "/cart/anonymous";
         public static final String GET_CATEGORY = "/category";
         public static final String GET_PRODUCT = "/category/?/products";
         public static final String GET_SHIPPING_DETAIL = "/shipping";

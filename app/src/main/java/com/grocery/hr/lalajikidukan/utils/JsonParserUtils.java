@@ -351,12 +351,13 @@ public class JsonParserUtils {
                 cartModel.setName(cart.getString("name"));
                 cartModel.setNoOfUnits(cart.getInt("noOfUnits"));
                 cartModel.setStatus(cart.getString("status"));
-                cartModel.setUnitAmount(cart.getInt("unitAmount"));
-                if (cart.isNull("unitQuantityInGm")) {
-                    cartModel.setUnitQuantityInGm(null);
-                } else {
-                    cartModel.setUnitQuantityInGm(cart.getInt("unitQuantityInGm"));
-                }
+                cartModel.setUnitPrice(cart.getInt("price"));
+                cartModel.setSku(cart.getString("sku"));
+                cartModel.setDiscountPercent(cart.getInt("discountPercent"));
+                cartModel.setCategoryId(cart.getInt("categoryId"));
+                cartModel.setDescription(cart.getString("description"));
+                cartModel.setType(cart.getString("type"));
+                cartModel.setImageUrl(cart.getString("imageUrl"));
                 cartModel.setUpc(cart.getString("upc"));
                 cartModelList.add(cartModel);
             }
