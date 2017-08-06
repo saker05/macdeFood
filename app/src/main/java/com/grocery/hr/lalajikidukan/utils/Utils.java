@@ -217,7 +217,7 @@ public class Utils {
         List<CartModel> cartModelList = new ArrayList<>();
         for (CartDO cartDO : cartDOs) {
             CartModel cartModel = new CartModel();
-            cartModel.setUpc(cartDO.getUpc());
+            cartModel.setSku(cartDO.getSku());
             cartModel.setNoOfUnits(cartDO.getNoOfUnits());
             cartModelList.add(cartModel);
         }

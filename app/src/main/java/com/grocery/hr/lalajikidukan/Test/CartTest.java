@@ -11,7 +11,7 @@ import java.util.List;
 
 public class CartTest {
 
-    public static List<CartModel> getCartItems(){
+   /* public static List<CartModel> getCartItems(){
         CartModel cartModel=new CartModel();
         cartModel.setUpc("abc");
         cartModel.setStatus("AVAILABLE");
@@ -30,6 +30,6 @@ public class CartTest {
         cartModelList.add(cartModel);
         cartModelList.add(cartModel2);
         return cartModelList;
-    }
+    }*/
 
 }

@@ -37,6 +37,7 @@ public class BaseDBHelper extends SQLiteOpenHelper implements DBTables {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
     }
 
     public synchronized boolean insert(ContentValues values, String tableName) {

@@ -89,8 +89,8 @@ public class CartDAO {
         return baseDBHelper.executeRawQuery(sql,null);
     }
 
-    public Cursor getCartItem(String upc){
-        String sql="select " +SKU+","+NO_OF_UNIT +" from "+TABLE_USER_CART+" where "+SKU+"='"+upc+"'";
+    public Cursor getCartItem(String sku){
+        String sql="select " +SKU+","+NO_OF_UNIT +" from "+TABLE_USER_CART+" where "+SKU+"='"+sku+"'";
         return baseDBHelper.executeRawQuery(sql,null);
     }
 

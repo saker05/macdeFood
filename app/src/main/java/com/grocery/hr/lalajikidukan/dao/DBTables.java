@@ -6,7 +6,7 @@ package com.grocery.hr.lalajikidukan.dao;
 
 public interface DBTables  {
 
-    String DATABASE_NAME = "groceries";
+    String DATABASE_NAME = "groceries.db";
 
     int DATABASE_VERSION = 1;
 
