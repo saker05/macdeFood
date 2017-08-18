@@ -26,9 +26,12 @@ import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.adapters.HighlighterAutoSwipeAdapter;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
+import com.grocery.hr.lalajikidukan.manager.CategoryManager;
 import com.grocery.hr.lalajikidukan.manager.PicassoManager;
+import com.grocery.hr.lalajikidukan.manager.ProductManager;
 import com.grocery.hr.lalajikidukan.models.BaseResponse;
 import com.grocery.hr.lalajikidukan.models.CategoryModel;
+import com.grocery.hr.lalajikidukan.models.HomePageModel;
 import com.grocery.hr.lalajikidukan.models.ProductModel;
 import com.grocery.hr.lalajikidukan.preferences.AppPrefs;
 import com.grocery.hr.lalajikidukan.utils.CloudinaryUtility;
@@ -55,12 +58,15 @@ public class HomeFragment extends Fragment {
     private CategoryAdapter mCategoryAdapter;
     private List<ProductModel> highlightedProductItems;
     private List<CategoryModel> categoryItems;
+    private HomePageModel homePageModel;
     private Handler mHandler;
     private Utils mUtils;
-    HighlighterAutoSwipeAdapter mCustomPagerAdapter;
+    private HighlighterAutoSwipeAdapter mCustomPagerAdapter;
     private PicassoManager picassoManager;
-    AppPrefs appPrefs;
-    Timer timer;
+    private AppPrefs appPrefs;
+    private Timer timer;
+    private CategoryManager categoryManager;
+    private ProductManager productManager;
 
 
     // Xml field
@@ -92,14 +98,16 @@ public class HomeFragment extends Fragment {
         mHandler = new Handler();
         timer = new Timer();
         picassoManager = PicassoManager.getInstance();
-        appPrefs=AppPrefs.getInstance();
+        categoryManager = CategoryManager.getInstance(getContext());
+        productManager = ProductManager.getInstance(getContext());
+        appPrefs = AppPrefs.getInstance();
         setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if (!mUtils.isDeviceOnline(getContext())) {
+        if (!mUtils.isDeviceOnline(getContext()) && !   appPrefs.isCategoryAndHighLightedProductsLoadedInSQLLite()) {
             return inflater.inflate(R.layout.fragment_no_internet_connection, container, false);
         } else {
             return inflater.inflate(R.layout.fragment_home, container, false);
@@ -119,14 +127,14 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (mUtils.isDeviceOnline(getContext())) {
+        if (!mUtils.isDeviceOnline(getContext()) && !   appPrefs.isCategoryAndHighLightedProductsLoadedInSQLLite()) {
+            mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+            setUpToolbar();
+        }else{
             ButterKnife.bind(this, view);
             mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
             setUpToolbar();
             setUpViews();
-        } else {
-            mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-            setUpToolbar();
         }
     }
 
@@ -146,7 +154,6 @@ public class HomeFragment extends Fragment {
     }
 
     public void setUpViews() {
-
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerCategory.setLayoutManager(linearLayoutManager);
@@ -154,13 +161,16 @@ public class HomeFragment extends Fragment {
     }
 
     public void baseGetCategoryAndHighlihtedProducts() {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                new GetCategories().execute();
-                new GetHighlightedProducts().execute();
-            }
-        });
+        if(appPrefs.isCategoryAndHighLightedProductsLoadedInSQLLite()==true){
+            GetHomePageDataFromLocalDB();
+        }else {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    new GetHomePageData().execute();
+                }
+            });
+        }
     }
 
 
@@ -168,7 +178,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         public void run() {
-            if(getActivity()==null){
+            if (getActivity() == null) {
                 return;
             }
             getActivity().runOnUiThread(new Runnable() {
@@ -258,12 +268,12 @@ public class HomeFragment extends Fragment {
     }
 
 
-    class GetHighlightedProducts extends AsyncTask<Void, Void, String> {
+    class GetHomePageData extends AsyncTask<Void, Void, String> {
+
         @Override
         protected String doInBackground(Void... params) {
             try {
-                return mUtils.getFromServer(AppConstants.Url.BASE_URL +
-                        AppConstants.Url.GET_HIGHLIGHTED_PRODUCT, null);
+                return mUtils.getFromServer(AppConstants.Url.BASE_URL + AppConstants.Url.GET_HOME_PAGE, null);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -273,16 +283,26 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Log.e(TAG, "GetHighLightedProduct::onGetExecte(): result is: " + result);
+            Log.e(TAG, "GetHomePageData::onGetExecte(): result is: " + result);
             if ((result != null && result.trim().length() != 0)) {
                 BaseResponse baseResponse = JsonParserUtils.getBaseResponse(result);
                 if (baseResponse != null && baseResponse.getResponseCode() >= 400 &&
                         baseResponse.getResponseCode() < 500) {
                     showSnackbar(baseResponse.getResponseMessage() + " " + getString(R.string.complaint_to_admin));
                 } else {
-                    highlightedProductItems = JsonParserUtils.productParser(result);
-                    mCustomPagerAdapter = new HighlighterAutoSwipeAdapter(getActivity(), highlightedProductItems);
-                    if(!appPrefs.isHighligherAutoSwiperThreadIsRunning()){
+                    homePageModel = JsonParserUtils.homePageParser(result);
+                    categoryItems = homePageModel.getCategoryModelList();
+                    highlightedProductItems = homePageModel.getProductModelList();
+
+                    categoryManager.insertCategories(categoryItems);
+                    productManager.insertHighLightedProduct(highlightedProductItems);
+                    appPrefs.setCategoryAndHighLightedProductsLoadedInSQLLite(true);
+
+                    mRecyclerCategory.setAdapter(mCategoryAdapter);
+                    mCategoryAdapter.notifyDataSetChanged();
+
+                    mCustomPagerAdapter = new HighlighterAutoSwipeAdapter(getActivity(), homePageModel.getProductModelList());
+                    if (!appPrefs.isHighligherAutoSwiperThreadIsRunning()) {
                         timer.schedule(new MyTimerTask(), 2000, 4000);
                         appPrefs.setHighligherAutoSwiperThreadIsRunning(true);
                     }
@@ -291,41 +311,24 @@ public class HomeFragment extends Fragment {
             } else {
                 showSnackbar(getString(R.string.cant_connect_to_server));
             }
+            mSpinner.setVisibility(View.GONE);
         }
     }
 
+    public void GetHomePageDataFromLocalDB() {
+        categoryItems = categoryManager.getAllCategories();
+        highlightedProductItems = productManager.getAllHighLightedProducts();
 
-    class GetCategories extends AsyncTask<Void, Void, String> {
+        mRecyclerCategory.setAdapter(mCategoryAdapter);
+        mCategoryAdapter.notifyDataSetChanged();
 
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                return mUtils.getFromServer(AppConstants.Url.BASE_URL + AppConstants.Url.GET_CATEGORY, null);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
+        mCustomPagerAdapter = new HighlighterAutoSwipeAdapter(getActivity(), homePageModel.getProductModelList());
+        if (!appPrefs.isHighligherAutoSwiperThreadIsRunning()) {
+            timer.schedule(new MyTimerTask(), 2000, 4000);
+            appPrefs.setHighligherAutoSwiperThreadIsRunning(true);
         }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            Log.e(TAG, "GetCategories::onGetExecte(): result is: " + result);
-            if ((result != null && result.trim().length() != 0)) {
-                BaseResponse baseResponse = JsonParserUtils.getBaseResponse(result);
-                if (baseResponse != null && baseResponse.getResponseCode() >= 400 &&
-                        baseResponse.getResponseCode() < 500) {
-                    showSnackbar(baseResponse.getResponseMessage() + " " + getString(R.string.complaint_to_admin));
-                } else {
-                    categoryItems = JsonParserUtils.categoryParser(result);
-                    mRecyclerCategory.setAdapter(mCategoryAdapter);
-                    mCategoryAdapter.notifyDataSetChanged();
-                }
-            } else {
-                showSnackbar(getString(R.string.cant_connect_to_server));
-            }
-            mSpinner.setVisibility(View.GONE);
-        }
+        mViewPager.setAdapter(mCustomPagerAdapter);
+        mSpinner.setVisibility(View.GONE);
     }
 
     public void showSnackbar(String message) {

@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -29,11 +30,14 @@ import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.constants.AppConstants;
 import com.grocery.hr.lalajikidukan.entity.CartDO;
 import com.grocery.hr.lalajikidukan.manager.CartManager;
+import com.grocery.hr.lalajikidukan.manager.PicassoManager;
 import com.grocery.hr.lalajikidukan.models.BaseResponse;
 import com.grocery.hr.lalajikidukan.models.CartModel;
+import com.grocery.hr.lalajikidukan.models.CartPageModel;
 import com.grocery.hr.lalajikidukan.models.ShippingModel;
 import com.grocery.hr.lalajikidukan.preferences.AppSharedPreference;
 import com.grocery.hr.lalajikidukan.service.CartService;
+import com.grocery.hr.lalajikidukan.utils.CloudinaryUtility;
 import com.grocery.hr.lalajikidukan.utils.JsonParserUtils;
 import com.grocery.hr.lalajikidukan.utils.Utils;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
@@ -58,8 +62,8 @@ public class CartFragment extends Fragment {
     private CartManager cartManager;
     private String cartModelJson;
     private CartService cartService;
-    private boolean isCartLoaded = false;
-    private boolean isShippingDetailLoaded = false;
+    private CartPageModel cartPageModel;
+    private PicassoManager picassoManager;
 
     //XML View
 
@@ -101,6 +105,7 @@ public class CartFragment extends Fragment {
         cartManager = CartManager.getInstance(getContext());
         mAdapter = new CartAdapter();
         cartService = CartService.getInstance(getContext());
+        picassoManager = PicassoManager.getInstance();
         setHasOptionsMenu(true);
     }
 
@@ -193,8 +198,7 @@ public class CartFragment extends Fragment {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                new GetCart().execute();
-                new GetShippingDetail().execute();
+                new GetCartPageData().execute();
             }
         });
     }
@@ -211,13 +215,16 @@ public class CartFragment extends Fragment {
         @Override
         public void onBindViewHolder(CartViewHolder holder, int position) {
             CartModel item = cartItems.get(position);
+            String imageUrl = CloudinaryUtility.getResizeImageUrl(1000, 1000, item.getImageUrl());
+            picassoManager.downloadImage(getContext(), imageUrl, holder.getLogo());
+
            /* Picasso.with(mActivity)
                     .load(R.drawable.placeholder)
                     .into(holder.getLogo());*/
             holder.getName().setText(item.getName());
             // holder.getDeliveryTime().setText(item.getDeliveryTime());
             holder.getQtyRate().setText(String.valueOf(
-                    item.getUnitPrice()
+                    item.getPrice()
             ));
             holder.getMunits().setText(String.valueOf(
                     item.getNoOfUnits()
@@ -242,9 +249,9 @@ public class CartFragment extends Fragment {
 
 
     class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-/*
+
         @BindView(R.id.imageView)
-       AppCompatImageView mLogo;*/
+       AppCompatImageView mLogo;
 
         @BindView(R.id.content)
         AppCompatTextView mcontent;
@@ -277,7 +284,7 @@ public class CartFragment extends Fragment {
         @OnClick(R.id.cart_plus)
         public void onPlusClick() {
             CartModel item = cartItems.get(getAdapterPosition());
-            cartManager.insertByOne(item.getUpc());
+            cartManager.insertByOne(item.getSku());
             item.setNoOfUnits(item.getNoOfUnits() + 1);
             refreshBottomDetail();
 
@@ -288,7 +295,7 @@ public class CartFragment extends Fragment {
         @OnClick(R.id.cart_minus)
         public void onMinusClick() {
             CartModel item = cartItems.get(getAdapterPosition());
-            cartManager.removeByOne(item.getUpc());
+            cartManager.removeByOne(item.getSku());
             if (item.getNoOfUnits() == 1) {
                 cartItems.remove(getAdapterPosition());
             } else {
@@ -299,9 +306,9 @@ public class CartFragment extends Fragment {
         }
 
 
-       /* public AppCompatImageView getLogo() {
+        public AppCompatImageView getLogo() {
             return mLogo;
-        }*/
+        }
 
         public AppCompatTextView getName() {
             return mcontent;
@@ -326,7 +333,7 @@ public class CartFragment extends Fragment {
     }
 
 
-    class GetShippingDetail extends AsyncTask<Void, Void, String> {
+    /*class GetShippingDetail extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... params) {
@@ -360,10 +367,10 @@ public class CartFragment extends Fragment {
             isShippingDetailLoaded = true;
             hideSpinner();
         }
-    }
+    }*/
 
 
-    class GetCart extends AsyncTask<Void, Void, String> {
+    /*class GetCart extends AsyncTask<Void, Void, String> {
 
         @Override
         protected void onPreExecute() {
@@ -403,7 +410,7 @@ public class CartFragment extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             Log.e(TAG, "GetCart::onPostExecute(): result is: " + result);
-            if ((cartModelJson == null || cartModelJson.isEmpty()) ||
+                if ((cartModelJson == null || cartModelJson.isEmpty()) ||
                     (result != null && result.trim().length() != 0)) {
                 BaseResponse baseResponse = JsonParserUtils.getBaseResponse(result);
                 if (baseResponse != null && baseResponse.getResponseCode() == 403) {
@@ -419,10 +426,77 @@ public class CartFragment extends Fragment {
             } else {
                 showSnackbar(getString(R.string.cant_connect_to_server));
             }
-            isCartLoaded = true;
+            hideSpinner();
+        }
+    }*/
+
+
+    class GetCartPageData extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            List<CartDO> cartDOs = cartManager.getCartItems();
+            List<CartModel> cartModelList = mUtils.convertCartDosTOCartModel(cartDOs);
+            if (cartModelList != null && !cartModelList.isEmpty()) {
+                cartModelJson = gson.toJson(cartModelList);
+            }
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            if (cartModelJson == null || cartModelJson.isEmpty()) {
+                return null;
+            } else if (!mUtils.isUserLoggedIn(getContext())) {
+                try {
+                    return mUtils.postToServer(AppConstants.Url.BASE_URL +
+                            AppConstants.Url.GET_CART_PAGE_ANONYMOUS, null, cartModelJson);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            } else {
+                try {
+                    return mUtils.postToServer(AppConstants.Url.BASE_URL + AppConstants.Url.GET_CART_PAGE,
+                            mUtils.getUerPasswordMap(getContext()), cartModelJson);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.e(TAG, "GetCart::onPostExecute(): result is: " + result);
+            if ((cartModelJson == null || cartModelJson.isEmpty()) ||
+                    (result != null && result.trim().length() != 0)) {
+                BaseResponse baseResponse = JsonParserUtils.getBaseResponse(result);
+                if (baseResponse != null && baseResponse.getResponseCode() == 403) {
+                    showSnackbar(getString(R.string.forbidden));
+                } else if (baseResponse != null && baseResponse.getResponseCode() >= 400 &&
+                        baseResponse.getResponseCode() < 500) {
+                    showSnackbar(baseResponse.getResponseMessage() + " " + getString(R.string.complaint_to_admin));
+                } else {
+                    cartPageModel = JsonParserUtils.cartPageParser(result);
+                    cartItems=cartPageModel.getCartModelList();
+                    shippingDetail=cartPageModel.getShippingModel();
+
+                    mCartList.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+
+                    AppSharedPreference.putString(getContext(), AppConstants.User.SHIPPING_DETAIL, result);
+                    refreshBottomDetail();
+                }
+            } else {
+                showSnackbar(getString(R.string.cant_connect_to_server));
+            }
             hideSpinner();
         }
     }
+
 
     public void refreshBottomDetail() {
         if (cartItems == null || cartItems.size() == 0) {
@@ -442,9 +516,7 @@ public class CartFragment extends Fragment {
     }
 
     private void hideSpinner() {
-        if (isCartLoaded && isShippingDetailLoaded) {
             spinner.setVisibility(View.GONE);
-        }
     }
 
     private void showSnackbar(String message) {

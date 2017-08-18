@@ -257,7 +257,7 @@ public class ProductFragment extends Fragment {
         @OnClick(R.id.image_plus)
         public void onPlusClick() {
             ProductModel product = productItems.get(getAdapterPosition());
-            cartManager.insertByOne(product.getUpc());
+            cartManager.insertByOne(product.getProductVariants().get(0).getSku());
             product.setNoOfItemInCart(product.getNoOfItemInCart() + 1);
             mActivity.showCart();
             mAdapter.notifyDataSetChanged();
@@ -266,7 +266,7 @@ public class ProductFragment extends Fragment {
         @OnClick(R.id.image_minus)
         public void onMinusClick() {
             ProductModel product = productItems.get(getAdapterPosition());
-            cartManager.removeByOne(product.getUpc());
+            cartManager.removeByOne(product.getProductVariants().get(0).getSku());
             if (product.getNoOfItemInCart() > 0) {
                 product.setNoOfItemInCart(product.getNoOfItemInCart() - 1);
             }
@@ -276,10 +276,10 @@ public class ProductFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            ProductModel product = productItems.get(getAdapterPosition());
+            /*ProductModel product = productItems.get(getAdapterPosition());
             mActivity.getSupportFragmentManager().beginTransaction().replace(
                     R.id.flContentMain, ProductDescriptionFragment.newInstance(product)
-                    , ProductDescriptionFragment.TAG).addToBackStack(null).commit();
+                    , ProductDescriptionFragment.TAG).addToBackStack(null).commit();*/
         }
 
         public AppCompatImageView getLogo() {

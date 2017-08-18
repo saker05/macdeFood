@@ -11,10 +11,14 @@ public interface DBTables  {
     int DATABASE_VERSION = 1;
 
     String[] DB_TABLE_NAMES = new String[]{
-             CartDAO.TABLE_USER_CART
+             CartDAO.TABLE_USER_CART,
+             CategoryDAO.TABLE_CATEGORY,
+             ProductDAO.TABLE_PRODUCT
     };
 
     String[] DB_SQL_CREATE_TABLE_QUERIES = new String[]{
-             CartDAO.CREATE_USER_CART_TABLE
+             CartDAO.CREATE_USER_CART_TABLE,
+             CategoryDAO.CREATE_CATEGORY_TABLE,
+              ProductDAO.CREATE_PRODUCT_TABLE
     };
 }

@@ -8,14 +8,15 @@ public class AppPrefs {
 
     public static final String TAG = AppPrefs.class.getSimpleName();
 
-    private  String LastLocation = null;
-    private  Boolean running = false;
-    private  int  activityDrawerItemPosition=0;
-    private  boolean isHighligherAutoSwiperThreadIsRunning=false;
+    private String LastLocation = null;
+    private Boolean running = false;
+    private int activityDrawerItemPosition = 0;
+    private boolean isHighligherAutoSwiperThreadIsRunning = false;
+    private boolean isCategoryAndHighLightedProductsLoadedInSQLLite = false;
 
     private static AppPrefs instance;
 
-    private AppPrefs(){
+    private AppPrefs() {
 
     }
 
@@ -27,9 +28,9 @@ public class AppPrefs {
         this.activityDrawerItemPosition = activityDrawerItemPosition;
     }
 
-    public static AppPrefs getInstance(){
-        if(instance==null){
-            instance=new AppPrefs();
+    public static AppPrefs getInstance() {
+        if (instance == null) {
+            instance = new AppPrefs();
         }
         return instance;
     }
@@ -48,6 +49,14 @@ public class AppPrefs {
 
     public void setHighligherAutoSwiperThreadIsRunning(boolean highligherAutoSwiperThreadIsRunning) {
         isHighligherAutoSwiperThreadIsRunning = highligherAutoSwiperThreadIsRunning;
+    }
+
+    public boolean isCategoryAndHighLightedProductsLoadedInSQLLite() {
+        return isCategoryAndHighLightedProductsLoadedInSQLLite;
+    }
+
+    public void setCategoryAndHighLightedProductsLoadedInSQLLite(boolean categoryAndHighLightedProductsLoadedInSQLLite)  {
+        isCategoryAndHighLightedProductsLoadedInSQLLite = categoryAndHighLightedProductsLoadedInSQLLite;
     }
 
     public void setLastLocation(String lastLocation) {

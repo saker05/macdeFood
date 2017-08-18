@@ -37,15 +37,15 @@ public interface AppConstants {
 
     public interface Url {
         public static final String BASE_URL = "http://35.167.220.58:8080/groceryApp";
-        //public static final String BASE_URL = "http://192.168.43.125:8080/groceryApp";
+        //public static final String BASE_URL = "http://192.168.1.3:8080/groceryApp";
         public static final String ANONYMOUS_TOKEN_PATH = "/fcmtoken/anonymous";
         public static final String TOKEN_PATH = "/fcmtoken";
         public static final String ADD_CART = "/cart";
         public static final String CART_PRODUCT_INFO = "/cart/anonymous";
-        public static final String GET_CATEGORY = "/category";
+        //public static final String GET_CATEGORY = "/category";
         public static final String GET_PRODUCT = "/category/?/products";
         public static final String GET_SHIPPING_DETAIL = "/shipping";
-        public static final String GET_HIGHLIGHTED_PRODUCT = "/product/highlighted";
+        //public static final String GET_HIGHLIGHTED_PRODUCT = "/product/highlighted";
         public static final String GET_ADDRESS = "/user/address";
         public static final String ADD_NEW_ADDRESS = "/user/address";
         public static final String EDIT_ADDRESS = "/user/address";
@@ -59,6 +59,8 @@ public interface AppConstants {
         public static final String UPDATE_ORDER_STATUS="/order/+?status=#";
         public static final String APP_UPDATE_STATUS= "/app/updatestatus?appVersion=+&osVersion=*";
         public static final String GET_HOME_PAGE = "/app/homepage";
+        public static final String GET_CART_PAGE = "/app/cartpage";
+        public static final String GET_CART_PAGE_ANONYMOUS= "/app/cartpage/anonymous";
     }
 
     public interface Cloudinary {

@@ -12,7 +12,7 @@ public class CartModel {
     private String type;
     private String status;
     private int noOfUnits;
-    private int unitPrice;
+    private int price;
     private String description;
     private int categoryId;
     private String imageUrl;
@@ -66,12 +66,12 @@ public class CartModel {
         this.noOfUnits = noOfUnits;
     }
 
-    public int getUnitPrice() {
-        return unitPrice;
+    public int getPrice() {
+        return price;
     }
 
-    public void setUnitPrice(int unitPrice) {
-        this.unitPrice = unitPrice;
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public String getDescription() {
@@ -116,7 +116,7 @@ public class CartModel {
                 ", type='" + type + '\'' +
                 ", status='" + status + '\'' +
                 ", noOfUnits=" + noOfUnits +
-                ", unitPrice=" + unitPrice +
+                ", price=" + price +
                 ", description='" + description + '\'' +
                 ", categoryId=" + categoryId +
                 ", imageUrl='" + imageUrl + '\'' +

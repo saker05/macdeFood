@@ -14,7 +14,9 @@ import com.grocery.hr.lalajikidukan.MainActivity;
 import com.grocery.hr.lalajikidukan.R;
 import com.grocery.hr.lalajikidukan.fragments.HomeFragment;
 import com.grocery.hr.lalajikidukan.fragments.ProductDescriptionFragment;
+import com.grocery.hr.lalajikidukan.fragments.ProductFragment;
 import com.grocery.hr.lalajikidukan.manager.PicassoManager;
+import com.grocery.hr.lalajikidukan.models.CategoryModel;
 import com.grocery.hr.lalajikidukan.models.ProductModel;
 import com.grocery.hr.lalajikidukan.utils.CloudinaryUtility;
 
@@ -67,8 +69,10 @@ public class HighlighterAutoSwipeAdapter extends PagerAdapter {
             @Override
             public void onClick(View v) {
                 ((MainActivity) ctx).getSupportFragmentManager().beginTransaction().replace(
-                        R.id.flContentMain, ProductDescriptionFragment.newInstance(highlightedProductItems.get(position))
-                        , ProductDescriptionFragment.TAG).addToBackStack(null).commit();
+                        R.id.flContentMain, ProductFragment
+                                .newInstance(highlightedProductItems.get(position).getCategoryId())
+                        , ProductFragment.TAG).addToBackStack(null).commit();
+
             }
         });
         return itemview;

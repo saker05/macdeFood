@@ -351,7 +351,7 @@ public class JsonParserUtils {
                 cartModel.setName(cart.getString("name"));
                 cartModel.setNoOfUnits(cart.getInt("noOfUnits"));
                 cartModel.setStatus(cart.getString("status"));
-                cartModel.setUnitPrice(cart.getInt("price"));
+                cartModel.setPrice(cart.getInt("price"));
                 cartModel.setSku(cart.getString("sku"));
                 cartModel.setDiscountPercent(cart.getInt("discountPercent"));
                 cartModel.setCategoryId(cart.getInt("categoryId"));

@@ -6,6 +6,7 @@ import com.grocery.hr.lalajikidukan.entity.CartDO;
 import com.grocery.hr.lalajikidukan.manager.CartManager;
 import com.grocery.hr.lalajikidukan.models.CartModel;
 import com.grocery.hr.lalajikidukan.models.ProductModel;
+import com.grocery.hr.lalajikidukan.models.ProductVariantsModel;
 
 import java.util.List;
 
@@ -34,10 +35,14 @@ public class ProductService {
     public  void syncProductCountWithCartCount(List<ProductModel> productItems){
         if(productItems!=null){
             for(ProductModel product:productItems){
-                CartDO cart=cartManager.getCartItem(product.getUpc());
-                if(cart!=null){
-                    product.setNoOfItemInCart(cart.getNoOfUnits());
+                int count=0;
+                for(ProductVariantsModel productVariantsModel:product.getProductVariants()){
+                    CartDO cart=cartManager.getCartItem(productVariantsModel.getSku());
+                    if(cart!=null){
+                        count += cart.getNoOfUnits();
+                    }
                 }
+                product.setNoOfItemInCart(count);
             }
         }
     }

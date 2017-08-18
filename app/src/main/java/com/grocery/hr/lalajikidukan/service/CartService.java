@@ -49,7 +49,7 @@ public class CartService {
         int totalPrice = 0;
         for (CartModel cartModel : cartModels) {
             if (cartModel.getStatus().equals(AppConstants.ProductStatusEnum.AVAILABLE)) {
-                totalPrice += (cartModel.getUnitPrice() * cartModel.getNoOfUnits());
+                totalPrice += (cartModel.getPrice() * cartModel.getNoOfUnits());
             }
 
         }
