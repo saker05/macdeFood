@@ -481,9 +481,10 @@ public class CartFragment extends Fragment {
                     showSnackbar(baseResponse.getResponseMessage() + " " + getString(R.string.complaint_to_admin));
                 } else {
                     cartPageModel = JsonParserUtils.cartPageParser(result);
-                    cartItems=cartPageModel.getCartModelList();
-                    shippingDetail=cartPageModel.getShippingModel();
-
+                    if(cartPageModel!=null){
+                        cartItems=cartPageModel.getCartModelList();
+                        shippingDetail=cartPageModel.getShippingModel();
+                    }
                     mCartList.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
 
