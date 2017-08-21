@@ -127,7 +127,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (!mUtils.isDeviceOnline(getContext()) && !   appPrefs.isCategoryAndHighLightedProductsLoadedInSQLLite()) {
+        if (!mUtils.isDeviceOnline(getContext()) && !appPrefs.isCategoryAndHighLightedProductsLoadedInSQLLite()) {
             mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
             setUpToolbar();
         }else{
